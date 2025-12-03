@@ -3,12 +3,15 @@ SAM 3D Quiz Web Application
 A multiple choice quiz webapp built with Flask with SQLite persistence.
 """
 
+import atexit
 import json
 import random
+import socket
 import sqlite3
 from pathlib import Path
 
 from flask import Flask, g, redirect, render_template, request, session, url_for
+from zeroconf import IPVersion, ServiceInfo, Zeroconf
 
 app = Flask(__name__)
 app.secret_key = "sam3d-quiz-secret-key-2024"
@@ -274,9 +277,103 @@ def reset():
     return redirect(url_for("dashboard"))
 
 
+def get_local_ip():
+    """Get the local IP address of this machine."""
+    try:
+        # Create a socket to determine the local IP
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return "127.0.0.1"
+
+
+def get_tailscale_ip():
+    """Get the Tailscale IP if available."""
+    import subprocess
+    try:
+        result = subprocess.run(
+            ["tailscale", "ip", "-4"],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+        if result.returncode == 0:
+            return result.stdout.strip()
+    except Exception:
+        pass
+    return None
+
+
+def register_mdns(hostname: str, port: int):
+    """Register the webapp with mDNS so it's accessible as hostname.local"""
+    local_ip = get_local_ip()
+    ip_bytes = socket.inet_aton(local_ip)
+    
+    # Create zeroconf instance with IPv4 only for better iOS compatibility
+    zeroconf = Zeroconf(ip_version=IPVersion.V4Only)
+    
+    # Register HTTP service - this helps with service discovery
+    http_service = ServiceInfo(
+        "_http._tcp.local.",
+        f"{hostname}._http._tcp.local.",
+        addresses=[ip_bytes],
+        port=port,
+        properties={"path": "/"},
+        server=f"{hostname}.local.",
+    )
+    
+    # Also register a "workstation" service which better advertises the hostname
+    # This is what macOS uses and iOS recognizes well
+    workstation_service = ServiceInfo(
+        "_workstation._tcp.local.",
+        f"{hostname}._workstation._tcp.local.",
+        addresses=[ip_bytes],
+        port=port,
+        properties={},
+        server=f"{hostname}.local.",
+    )
+    
+    # Register both services
+    zeroconf.register_service(http_service)
+    zeroconf.register_service(workstation_service)
+    
+    print(f"\n{'='*50}")
+    print(f"🌐 mDNS registered: http://{hostname}.local:{port}")
+    print(f"📍 Local IP: http://{local_ip}:{port}")
+    print(f"💡 On iOS, try: http://{hostname}.local:{port}")
+    print(f"   Or directly: http://{local_ip}:{port}")
+    print(f"{'='*50}\n")
+    
+    # Cleanup on exit
+    def cleanup():
+        print("\n🔌 Unregistering mDNS services...")
+        zeroconf.unregister_service(http_service)
+        zeroconf.unregister_service(workstation_service)
+        zeroconf.close()
+    
+    atexit.register(cleanup)
+    return zeroconf
+
+
 def main():
     """Entry point for uv run."""
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    hostname = "thangquiz"
+    port = 5000
+    
+    # Register mDNS service (for local network)
+    register_mdns(hostname, port)
+    
+    # Show Tailscale IP if available
+    tailscale_ip = get_tailscale_ip()
+    if tailscale_ip:
+        print(f"🔗 Tailscale: http://{tailscale_ip}:{port}")
+        print(f"{'='*50}\n")
+    
+    # Run the Flask app
+    app.run(debug=True, host="0.0.0.0", port=port, use_reloader=False)
 
 
 if __name__ == "__main__":
