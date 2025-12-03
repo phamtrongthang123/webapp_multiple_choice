@@ -1,0 +1,1402 @@
+[
+  {
+    "id": 1,
+    "source": "SAM 3D Body",
+    "context": "Input: Single RGB image of a human\nGoal: Recover full-body 3D mesh",
+    "question": "What approach does SAM 3D Body use?",
+    "options": {
+      "A": "Multi-view stereo reconstruction requiring multiple cameras",
+      "B": "Encoder-decoder architecture with promptable inference",
+      "C": "Template fitting without learning",
+      "D": "Depth sensor fusion"
+    },
+    "answer": "B",
+    "explanation": "Approach: Encoder-decoder architecture with promptable inference. This allows the model to learn robust representations from single images while supporting user guidance through prompts (2D keypoints, masks), trading off full automation for improved accuracy in challenging cases where user input can resolve ambiguities."
+  },
+  {
+    "id": 2,
+    "source": "SAM 3D Body",
+    "context": "Input: Existing parametric human models (SMPL, SMPL-X)\nGoal: Better represent skeletal structure and surface shape independently",
+    "question": "What did the researchers introduce?",
+    "options": {
+      "A": "A modified version of SMPL",
+      "B": "Momentum Human Rig (MHR)",
+      "C": "A neural implicit representation",
+      "D": "A voxel-based model"
+    },
+    "answer": "B",
+    "explanation": "Approach: Momentum Human Rig (MHR) that decouples skeletal structure and surface shape. Traditional representations like SMPL couple skeleton and shape, making it harder to generalize across different body types and poses. MHR trades increased model complexity for improved accuracy and interpretability."
+  },
+  {
+    "id": 3,
+    "source": "SAM 3D Body",
+    "context": "Input: Need for model that works in diverse real-world conditions\nGoal: Ensure robustness across varied poses and imaging conditions",
+    "question": "What strategy does the data engine employ?",
+    "options": {
+      "A": "Use only high-quality studio images",
+      "B": "Generate purely synthetic data",
+      "C": "Efficiently select and process data for diversity, including unusual poses and rare imaging conditions",
+      "D": "Random sampling from existing datasets"
+    },
+    "answer": "C",
+    "explanation": "Approach: Data engine that efficiently selects diverse data including unusual poses and rare imaging conditions. Models trained only on common poses fail in real-world scenarios. This approach trades higher annotation costs for significantly better generalization, ensuring the model doesn't just memorize common patterns."
+  },
+  {
+    "id": 4,
+    "source": "SAM 3D Body",
+    "context": "Input: Raw images without annotations\nGoal: Create high-quality training data at scale",
+    "question": "What annotation strategy does SAM 3D Body use?",
+    "options": {
+      "A": "Pure manual annotation by humans",
+      "B": "Fully automatic pseudo-labeling",
+      "C": "Multi-stage pipeline combining manual annotation, differentiable optimization, multi-view geometry, and dense keypoint detection",
+      "D": "Transfer learning from 2D pose datasets only"
+    },
+    "answer": "C",
+    "explanation": "Approach: Multi-stage annotation pipeline using various complementary techniques. Pure manual annotation doesn't scale and pure automatic methods aren't accurate enough. This hybrid approach trades pipeline complexity for both scale and quality, leveraging each method's strengths."
+  },
+  {
+    "id": 5,
+    "source": "SAM 3D Body",
+    "context": "Input: Desire for user control over reconstruction\nGoal: Allow users to guide inference when automatic results need refinement",
+    "question": "What feature does 3DB include?",
+    "options": {
+      "A": "Fully automatic with no user interaction",
+      "B": "Auxiliary prompts including 2D keypoints and masks",
+      "C": "Text-based descriptions only",
+      "D": "Voice commands"
+    },
+    "answer": "B",
+    "explanation": "Approach: Support for auxiliary prompts (2D keypoints and masks) similar to SAM family. Fully automatic methods can fail on ambiguous or challenging cases. This trades simplicity for versatility, allowing users to correct errors by providing additional hints while maintaining automatic capability."
+  },
+  {
+    "id": 6,
+    "source": "SAM 3D Body",
+    "context": "Input: Need to evaluate model performance comprehensively\nGoal: Understand model behavior across different scenarios",
+    "question": "How is the evaluation dataset organized?",
+    "options": {
+      "A": "Single aggregated benchmark score",
+      "B": "Random test set only",
+      "C": "Organized by pose and appearance categories",
+      "D": "Only synthetic test cases"
+    },
+    "answer": "C",
+    "explanation": "Approach: Evaluation dataset organized by pose and appearance categories. Aggregated metrics hide specific failure modes. This organization trades simple single-number metrics for nuanced understanding, enabling researchers to identify exactly where the model excels or struggles."
+  },
+  {
+    "id": 7,
+    "source": "SAM 3D Body",
+    "context": "Input: Challenge of occluded body parts in images\nGoal: Recover complete 3D mesh even with missing information",
+    "question": "How does SAM 3D Body handle occlusions?",
+    "options": {
+      "A": "Requires all body parts to be visible",
+      "B": "Uses learned priors and context to infer occluded parts",
+      "C": "Marks occluded regions as invalid",
+      "D": "Only works with full-body visibility"
+    },
+    "answer": "B",
+    "explanation": "Approach: Leverages learned priors from diverse training data to infer occluded geometry. Real-world images often have occlusions (objects, other people, self-occlusion). The model trades perfect accuracy in visible regions for reasonable complete body estimates, using statistical knowledge of human body structure."
+  },
+  {
+    "id": 8,
+    "source": "SAM 3D Body",
+    "context": "Input: Existing HMR methods' limited pose coverage\nGoal: Work reliably on unusual and extreme poses",
+    "question": "What data collection priority does 3DB emphasize?",
+    "options": {
+      "A": "Only common standing poses",
+      "B": "Balanced dataset with equal representation",
+      "C": "Actively collecting unusual poses and rare imaging conditions",
+      "D": "Focus on athletic poses only"
+    },
+    "answer": "C",
+    "explanation": "Approach: Data engine actively seeks unusual poses and rare conditions. Models fail on out-of-distribution poses if trained only on common ones. This trades training efficiency (harder to find/annotate rare poses) for robustness, ensuring the model generalizes beyond typical scenarios."
+  },
+  {
+    "id": 9,
+    "source": "SAM 3D Body",
+    "context": "Input: Trade-off between model size and performance\nGoal: Achieve state-of-the-art results",
+    "question": "What does SAM 3D Body prioritize?",
+    "options": {
+      "A": "Smallest possible model size",
+      "B": "Fastest inference speed only",
+      "C": "Superior performance and generalization",
+      "D": "Lowest memory footprint"
+    },
+    "answer": "C",
+    "explanation": "Approach: Encoder-decoder architecture optimized for accuracy and robustness. While model efficiency matters, SAM 3D Body prioritizes generalization and accuracy over extreme compression. It trades some computational cost for substantially better performance across diverse conditions."
+  },
+  {
+    "id": 10,
+    "source": "SAM 3D Body",
+    "context": "Input: Need for both body pose and hand details\nGoal: Capture fine-grained hand articulation",
+    "question": "What optional component does 3DB include?",
+    "options": {
+      "A": "Facial expression decoder",
+      "B": "Hand decoder for refinement",
+      "C": "Foot pose estimator",
+      "D": "Hair geometry module"
+    },
+    "answer": "B",
+    "explanation": "Approach: Optional hand decoder that can refine hand pose details. Hands are complex with many degrees of freedom. The optional design trades model simplicity for flexibility—users can enable detailed hand recovery when needed without always incurring the computational cost."
+  },
+  {
+    "id": 11,
+    "source": "SAM 3D Body",
+    "context": "Input: Requirement for reproducible research\nGoal: Enable community to build upon this work",
+    "question": "What is the release strategy for SAM 3D Body?",
+    "options": {
+      "A": "Proprietary and closed-source",
+      "B": "API access only",
+      "C": "Open-source code, weights, and datasets",
+      "D": "Academic license with restrictions"
+    },
+    "answer": "C",
+    "explanation": "Approach: Full open-source release including model, MHR, code, and datasets. Open research accelerates progress but requires engineering effort for public release. Meta trades competitive advantage for community advancement, aligning with open science principles."
+  },
+  {
+    "id": 12,
+    "source": "SAM 3D Body",
+    "context": "Input: Diverse encoder backbones available (ResNet, ViT, etc.)\nGoal: Leverage best visual representations",
+    "question": "What encoder options does 3DB support?",
+    "options": {
+      "A": "Only ResNet architectures",
+      "B": "ViT and DINOv3 among others",
+      "C": "Custom proprietary encoder only",
+      "D": "MobileNet exclusively for efficiency"
+    },
+    "answer": "B",
+    "explanation": "Approach: Support for modern vision transformers like ViT and DINOv3. Different encoders offer different trade-offs (speed vs. accuracy, generalization vs. specialization). Supporting multiple encoders trades implementation complexity for flexibility in deployment scenarios."
+  },
+  {
+    "id": 13,
+    "source": "SAM 3D Body",
+    "context": "Input: Challenge of ground truth 3D data acquisition\nGoal: Create reliable training labels without expensive motion capture",
+    "question": "What techniques does the annotation pipeline combine?",
+    "options": {
+      "A": "Motion capture only",
+      "B": "Manual annotation only",
+      "C": "Differentiable optimization and multi-view geometry alongside manual annotation",
+      "D": "Synthetic generation exclusively"
+    },
+    "answer": "C",
+    "explanation": "Approach: Hybrid pipeline combining manual keypoints, optimization, and multi-view constraints. Motion capture doesn't scale to in-the-wild images, but pure manual annotation lacks 3D precision. This trades pipeline complexity for scalable, accurate annotations that work on diverse real-world imagery."
+  },
+  {
+    "id": 14,
+    "source": "SAM 3D Body",
+    "context": "Input: Comparison with prior state-of-the-art methods\nGoal: Validate improvements objectively",
+    "question": "What evaluation approaches does the paper use?",
+    "options": {
+      "A": "Quantitative metrics only",
+      "B": "User studies only",
+      "C": "Both qualitative user preference studies and traditional quantitative analysis",
+      "D": "Synthetic benchmarks exclusively"
+    },
+    "answer": "C",
+    "explanation": "Approach: Combined qualitative and quantitative evaluation. Quantitative metrics don't always correlate with visual quality, and user studies lack precision. Using both trades evaluation complexity for comprehensive validation that captures both measurable accuracy and perceptual quality."
+  },
+  {
+    "id": 15,
+    "source": "SAM 3D Body",
+    "context": "Input: Inference on images with challenging viewpoints\nGoal: Robust reconstruction regardless of camera angle",
+    "question": "How does 3DB handle extreme viewpoints?",
+    "options": {
+      "A": "Requires frontal views only",
+      "B": "Trained on diverse viewpoints to generalize",
+      "C": "Uses camera calibration information",
+      "D": "Restricts to standard perspectives"
+    },
+    "answer": "B",
+    "explanation": "Approach: Training on diverse viewpoints including challenging angles. Real-world photos come from arbitrary viewpoints. Training on diverse views trades annotation difficulty (harder to get ground truth for unusual angles) for practical robustness in uncontrolled settings."
+  },
+  {
+    "id": 16,
+    "source": "SAM 3D Body",
+    "context": "Input: Need to segment human from background\nGoal: Accurate mesh recovery without background interference",
+    "question": "What auxiliary input can help with this?",
+    "options": {
+      "A": "Depth maps",
+      "B": "Mask prompts",
+      "C": "Semantic labels for all pixels",
+      "D": "3D bounding boxes"
+    },
+    "answer": "B",
+    "explanation": "Approach: Optional mask prompts for segmentation guidance. Automatic segmentation can fail in cluttered scenes. Allowing optional mask prompts trades fully automatic operation for improved accuracy when users can provide simple segmentation hints."
+  },
+  {
+    "id": 17,
+    "source": "SAM 3D Body",
+    "context": "Input: Dense keypoint detection technology advancement\nGoal: Leverage this for better annotations",
+    "question": "What role does dense keypoint detection play?",
+    "options": {
+      "A": "Not used in the pipeline",
+      "B": "Part of the multi-stage annotation pipeline",
+      "C": "Only for evaluation",
+      "D": "Replacement for all other methods"
+    },
+    "answer": "B",
+    "explanation": "Approach: Integrate dense keypoint detection into annotation pipeline. Dense keypoints provide rich spatial information beyond sparse manual annotations. Including them trades pipeline simplicity for annotation richness, helping constrain 3D reconstruction better than sparse keypoints alone."
+  },
+  {
+    "id": 18,
+    "source": "SAM 3D Body",
+    "context": "Input: Desire to understand skeletal motion separately from body shape\nGoal: Better interpretability and control",
+    "question": "Why does MHR decouple skeleton and shape?",
+    "options": {
+      "A": "To reduce model size",
+      "B": "For improved accuracy and interpretability",
+      "C": "To speed up inference",
+      "D": "To simplify training"
+    },
+    "answer": "B",
+    "explanation": "Approach: Separate skeletal (pose) and shape parameters in MHR. Coupled representations conflate pose and shape errors, making debugging and refinement harder. Decoupling trades model simplicity for clearer attribution of errors and better control over each aspect independently."
+  },
+  {
+    "id": 19,
+    "source": "SAM 3D Body",
+    "context": "Input: Limited computational resources for some users\nGoal: Make model accessible",
+    "question": "What inference options might be considered?",
+    "options": {
+      "A": "Only high-end GPU support",
+      "B": "Various backbone options with different speed/accuracy trade-offs",
+      "C": "Cloud-only execution",
+      "D": "Fixed single configuration"
+    },
+    "answer": "B",
+    "explanation": "Approach: Multiple encoder options allowing speed/accuracy trade-offs. Different applications have different resource constraints. Offering multiple backbone choices trades maintenance burden (supporting multiple configs) for accessibility across diverse hardware and latency requirements."
+  },
+  {
+    "id": 20,
+    "source": "SAM 3D Body",
+    "context": "Input: Web-based accessibility for non-technical users\nGoal: Allow anyone to test the technology",
+    "question": "What platform is provided?",
+    "options": {
+      "A": "Command-line only",
+      "B": "Web demo at Meta AI Demos",
+      "C": "Mobile app exclusively",
+      "D": "No public interface"
+    },
+    "answer": "B",
+    "explanation": "Approach: Browser-accessible web demo alongside research release. Research code is often unusable by non-experts. Providing a web demo trades development effort for broader accessibility, enabling designers, artists, and researchers without ML expertise to explore the technology."
+  },
+  {
+    "id": 21,
+    "source": "SAM 3D Body",
+    "context": "Input: Model training on large-scale diverse data\nGoal: Strong generalization to unseen scenarios",
+    "question": "What is the data philosophy?",
+    "options": {
+      "A": "Quality over quantity",
+      "B": "Quantity over quality",
+      "C": "Balance of scale with high-quality diverse annotations",
+      "D": "Synthetic data only"
+    },
+    "answer": "C",
+    "explanation": "Approach: Large-scale data with high-quality annotations and diversity emphasis. Pure quantity without quality leads to learning biases; small high-quality datasets don't generalize. This trades annotation cost for models that work reliably across the long tail of real-world conditions."
+  },
+  {
+    "id": 22,
+    "source": "SAM 3D Body",
+    "context": "Input: Existing benchmarks may not cover all scenarios\nGoal: Enable detailed performance analysis",
+    "question": "Why create a new evaluation dataset?",
+    "options": {
+      "A": "Existing datasets were unavailable",
+      "B": "To enable nuanced analysis organized by pose and appearance categories",
+      "C": "To make comparison easier",
+      "D": "For marketing purposes"
+    },
+    "answer": "B",
+    "explanation": "Approach: Custom evaluation set organized by specific categories. Standard benchmarks aggregate diverse scenarios into single metrics, hiding specific weaknesses. Creating a categorized dataset trades benchmark simplicity for diagnostic power, revealing exactly where models succeed or fail."
+  },
+  {
+    "id": 23,
+    "source": "SAM 3D Body",
+    "context": "Input: Desire for interpretability in predictions\nGoal: Understand what the model is predicting",
+    "question": "How does parametric representation help?",
+    "options": {
+      "A": "It doesn't aid interpretability",
+      "B": "MHR's decoupled structure makes pose and shape parameters interpretable",
+      "C": "Only through visualization",
+      "D": "Requires post-processing"
+    },
+    "answer": "B",
+    "explanation": "Approach: MHR's explicit separation of pose and shape parameters. Black-box 3D representations (implicit fields, point clouds) are hard to interpret or edit. Parametric models trade expressiveness for interpretability, allowing direct manipulation of meaningful parameters like joint angles."
+  },
+  {
+    "id": 24,
+    "source": "SAM 3D Body",
+    "context": "Input: Challenge of hand pose complexity (27+ DoF)\nGoal: Capture detailed hand articulation",
+    "question": "Why is hand recovery particularly challenging?",
+    "options": {
+      "A": "Hands are always occluded",
+      "B": "High degrees of freedom with small size in images",
+      "C": "Lack of training data",
+      "D": "Camera limitations"
+    },
+    "answer": "B",
+    "explanation": "Approach: Dedicated optional hand decoder for fine-grained recovery. Hands have many joints in a small image region, making them harder than body pose. The optional hand module trades computational cost for detail, letting users choose whether to invest in precise hand recovery."
+  },
+  {
+    "id": 25,
+    "source": "SAM 3D Body",
+    "context": "Input: Research vs. production deployment needs\nGoal: Balance research exploration and practical usability",
+    "question": "What does the open-source release enable?",
+    "options": {
+      "A": "Only academic research",
+      "B": "Both research advancement and practical applications",
+      "C": "Commercial use only",
+      "D": "Internal Meta use exclusively"
+    },
+    "answer": "B",
+    "explanation": "Approach: Open-source release under SAM License with code, weights, and datasets. Pure research releases may lack engineering for deployment; production-only releases limit innovation. Open-sourcing trades control for ecosystem growth, enabling both academic advancement and practical applications."
+  },
+  {
+    "id": 26,
+    "source": "SAM 3D Body",
+    "context": "Input: Models trained on specific datasets often fail on others\nGoal: Robust performance across different data sources",
+    "question": "How does 3DB achieve generalization?",
+    "options": {
+      "A": "Training on single high-quality dataset",
+      "B": "Diverse training data with unusual poses and rare conditions",
+      "C": "Domain adaptation techniques only",
+      "D": "Synthetic-to-real transfer"
+    },
+    "answer": "B",
+    "explanation": "Approach: Intentionally diverse training data covering edge cases. Models memorize dataset biases if trained on narrow distributions. Seeking diversity trades annotation difficulty (finding and labeling rare cases) for models that maintain performance on novel in-the-wild images."
+  },
+  {
+    "id": 27,
+    "source": "SAM 3D Body",
+    "context": "Input: Single image lacks depth information\nGoal: Recover accurate 3D structure",
+    "question": "What does the model rely on?",
+    "options": {
+      "A": "Depth sensors",
+      "B": "Learned priors about human body structure and appearance cues",
+      "C": "Multiple views synthesized from one",
+      "D": "Explicit depth prediction"
+    },
+    "answer": "B",
+    "explanation": "Approach: Learning from diverse single-view training data to infer 3D from 2D cues. Single images are inherently ambiguous about depth. The model trades perfect accuracy (impossible from one view) for reasonable estimates based on learned human body statistics and visual cues like foreshortening."
+  },
+  {
+    "id": 28,
+    "source": "SAM 3D Body",
+    "context": "Input: Need to validate against human perception\nGoal: Ensure reconstructions look correct to humans",
+    "question": "Why include user preference studies?",
+    "options": {
+      "A": "To replace quantitative metrics",
+      "B": "Quantitative metrics don't always capture perceptual quality",
+      "C": "For marketing purposes",
+      "D": "Because ground truth is unavailable"
+    },
+    "answer": "B",
+    "explanation": "Approach: User preference studies alongside quantitative benchmarks. Metrics like vertex error may not correlate with visual quality—small misalignments might score poorly but look fine, or vice versa. User studies trade objectivity for ecological validity, ensuring results matter to humans."
+  },
+  {
+    "id": 29,
+    "source": "SAM 3D Body",
+    "context": "Input: Differentiable optimization for fitting meshes\nGoal: Refine mesh to match image observations",
+    "question": "How does optimization help annotation?",
+    "options": {
+      "A": "It doesn't; only used at inference",
+      "B": "Part of annotation pipeline to fit parametric models to observations",
+      "C": "Only for synthetic data",
+      "D": "Replaces manual annotation entirely"
+    },
+    "answer": "B",
+    "explanation": "Approach: Differentiable optimization to fit MHR to multi-view and keypoint observations. Manual 3D annotation is nearly impossible and imprecise. Optimization trades computational cost for accurate 3D fits that respect image evidence, converting 2D observations into consistent 3D annotations."
+  },
+  {
+    "id": 30,
+    "source": "SAM 3D Body",
+    "context": "Input: Multi-view geometry constraints from multiple viewpoints\nGoal: Improve 3D annotation consistency",
+    "question": "Why use multi-view geometry?",
+    "options": {
+      "A": "Single views are always sufficient",
+      "B": "To constrain 3D reconstruction using geometric consistency across views",
+      "C": "Only for evaluation",
+      "D": "To generate synthetic data"
+    },
+    "answer": "B",
+    "explanation": "Approach: Leverage multi-view constraints where available during annotation. Single-view 3D annotation is ambiguous; multi-view geometry provides hard constraints. This trades data collection complexity (requiring multi-view footage) for annotation accuracy where geometric consistency resolves depth ambiguity."
+  },
+  {
+    "id": 31,
+    "source": "SAM 3D Body",
+    "context": "Input: Need for real-time or near-real-time performance\nGoal: Enable interactive applications",
+    "question": "What inference speed considerations exist?",
+    "options": {
+      "A": "Only batch processing supported",
+      "B": "Different backbone options provide speed/accuracy trade-offs",
+      "C": "Real-time is impossible",
+      "D": "Speed is not considered"
+    },
+    "answer": "B",
+    "explanation": "Approach: Flexible architecture supporting different encoder backbones. Applications range from offline high-quality reconstruction to real-time AR. Supporting multiple backbones trades engineering complexity for deployment flexibility, letting users choose their speed/accuracy point."
+  },
+  {
+    "id": 32,
+    "source": "SAM 3D Body",
+    "context": "Input: Foot pose is often neglected in HMR methods\nGoal: Complete full-body reconstruction including feet",
+    "question": "Why explicitly model feet?",
+    "options": {
+      "A": "Feet don't matter for most applications",
+      "B": "Complete body model including feet improves ground contact and realism",
+      "C": "Only for animation purposes",
+      "D": "To increase model size"
+    },
+    "answer": "B",
+    "explanation": "Approach: Full-body mesh including explicit foot modeling. Ignoring feet leads to unrealistic floating or ground penetration. Explicitly modeling feet trades model complexity for physical plausibility, crucial for applications requiring ground contact like AR placement or animation."
+  },
+  {
+    "id": 33,
+    "source": "SAM 3D Body",
+    "context": "Input: SAM family's success in promptable segmentation\nGoal: Apply similar principles to 3D HMR",
+    "question": "How does 3DB adapt SAM's philosophy?",
+    "options": {
+      "A": "Uses identical architecture",
+      "B": "Adopts promptable inference with optional user guidance",
+      "C": "Only uses the name",
+      "D": "No connection to SAM"
+    },
+    "answer": "B",
+    "explanation": "Approach: Encoder-decoder with optional prompt support (keypoints, masks). SAM showed that prompts improve model utility by letting users correct errors. Adapting this trades simpler automatic-only design for interactive capability, maintaining SAM's principle of user-guidable foundation models."
+  },
+  {
+    "id": 34,
+    "source": "SAM 3D Body",
+    "context": "Input: Challenge of ambiguous poses from single views\nGoal: Resolve ambiguity when automatic inference struggles",
+    "question": "What mechanism helps with ambiguity?",
+    "options": {
+      "A": "Multiple model runs",
+      "B": "User-provided prompts like keypoints",
+      "C": "Longer inference time",
+      "D": "Ensemble methods"
+    },
+    "answer": "B",
+    "explanation": "Approach: Optional prompt-based guidance when automatic results need refinement. Some poses are inherently ambiguous from one view (e.g., arm behind back vs. in front). Prompts trade convenience (fully automatic) for accuracy, letting users disambiguate through simple hints like keypoint positions."
+  },
+  {
+    "id": 35,
+    "source": "SAM 3D Body",
+    "context": "Input: Existing datasets like COCO, 3DPW\nGoal: Build upon while extending coverage",
+    "question": "How does 3DB dataset relate to prior work?",
+    "options": {
+      "A": "Completely independent",
+      "B": "Extends coverage with diverse poses and rare conditions",
+      "C": "Subset of existing datasets",
+      "D": "Synthetic only"
+    },
+    "answer": "B",
+    "explanation": "Approach: New dataset emphasizing diversity and edge cases. Standard datasets over-represent common poses and conditions. Creating a new diverse dataset trades collection effort for better coverage of the long tail, improving robustness on challenging real-world scenarios."
+  },
+  {
+    "id": 36,
+    "source": "SAM 3D Body",
+    "context": "Input: Model deployment in production systems\nGoal: Reliable performance across users",
+    "question": "What robustness aspects are prioritized?",
+    "options": {
+      "A": "Only accuracy on benchmarks",
+      "B": "Consistent performance across diverse in-the-wild conditions",
+      "C": "Perfect accuracy in controlled settings",
+      "D": "Speed above all else"
+    },
+    "answer": "B",
+    "explanation": "Approach: Training and evaluation emphasizing diverse, challenging, in-the-wild conditions. Benchmark performance doesn't guarantee real-world reliability. Prioritizing diverse conditions trades benchmark optimization for practical robustness, ensuring the model works for actual users across varied scenarios."
+  },
+  {
+    "id": 37,
+    "source": "SAM 3D Body",
+    "context": "Input: Balance between model capacity and overfitting\nGoal: Learn generalizable representations",
+    "question": "What regularization approaches might be used?",
+    "options": {
+      "A": "No regularization needed",
+      "B": "Diverse data acts as implicit regularization",
+      "C": "Only dropout",
+      "D": "Extreme data augmentation"
+    },
+    "answer": "B",
+    "explanation": "Approach: Diverse training data covering wide distribution of poses and conditions. Explicit regularization (dropout, weight decay) has limited effect if data is narrow. Diverse data trades collection cost for natural regularization, forcing the model to learn robust features that generalize rather than memorize."
+  },
+  {
+    "id": 38,
+    "source": "SAM 3D Body",
+    "context": "Input: Need for ablation studies\nGoal: Understand contribution of each component",
+    "question": "What analysis does rigorous evaluation require?",
+    "options": {
+      "A": "Only final model results",
+      "B": "Component-wise analysis of architecture choices",
+      "C": "Single benchmark number",
+      "D": "Visual results only"
+    },
+    "answer": "B",
+    "explanation": "Approach: Systematic evaluation of design choices (MHR, prompts, data strategy). Without ablations, it's unclear which innovations matter. This trades evaluation effort for scientific rigor, enabling future work to build on validated components rather than the whole system."
+  },
+  {
+    "id": 39,
+    "source": "SAM 3D Body",
+    "context": "Input: Continuous improvement of the model\nGoal: Update model as new data becomes available",
+    "question": "How does open-source release support this?",
+    "options": {
+      "A": "It doesn't",
+      "B": "Community can contribute improvements and adaptations",
+      "C": "Only Meta can update",
+      "D": "Model is frozen"
+    },
+    "answer": "B",
+    "explanation": "Approach: Open-source release enabling community contributions. Closed models improve only through original authors. Open-sourcing trades control for community innovation, allowing researchers worldwide to adapt, improve, and extend the work for diverse applications."
+  },
+  {
+    "id": 40,
+    "source": "SAM 3D Body",
+    "context": "Input: Different applications need different accuracy levels\nGoal: Flexible deployment for varied use cases",
+    "question": "What flexibility does the system provide?",
+    "options": {
+      "A": "Single fixed configuration",
+      "B": "Multiple backbone options and optional components",
+      "C": "Requires retraining for each application",
+      "D": "No flexibility"
+    },
+    "answer": "B",
+    "explanation": "Approach: Modular design with configurable encoders and optional hand refinement. AR apps might need speed while film production needs accuracy. Flexible architecture trades simplicity (single config) for adaptability, letting users configure the system for their specific accuracy/speed/detail requirements."
+  },
+  {
+    "id": 41,
+    "source": "SAM 3D Body",
+    "context": "Input: Learning from both posed and in-the-wild data\nGoal: Balance controlled accuracy with real-world diversity",
+    "question": "What data mixture strategy is employed?",
+    "options": {
+      "A": "Only studio data",
+      "B": "Only in-the-wild data",
+      "C": "Combination of controlled and in-the-wild sources",
+      "D": "Purely synthetic data"
+    },
+    "answer": "C",
+    "explanation": "Approach: Mixed training data from controlled and in-the-wild sources. Controlled data provides ground truth accuracy but limited diversity; wild data has diversity but noisy labels. Mixing both trades annotation complexity for models that are both accurate and robust."
+  },
+  {
+    "id": 42,
+    "source": "SAM 3D Body",
+    "context": "Input: Computational cost of training large-scale models\nGoal: Achieve strong performance efficiently",
+    "question": "What efficiency considerations exist?",
+    "options": {
+      "A": "Training cost is ignored",
+      "B": "Efficient architecture and data selection strategy",
+      "C": "Minimal training only",
+      "D": "No efficiency measures"
+    },
+    "answer": "B",
+    "explanation": "Approach: Data engine that efficiently selects informative samples, efficient architectures. Training on all possible data is wasteful. Strategic data selection and efficient architectures trade curation effort for faster convergence and lower computational cost while maintaining performance."
+  },
+  {
+    "id": 43,
+    "source": "SAM 3D Body",
+    "context": "Input: Comparison with implicit 3D representations (NeRF, etc.)\nGoal: Choose appropriate representation for HMR",
+    "question": "Why use parametric mesh representation?",
+    "options": {
+      "A": "Implicit is always better",
+      "B": "Parametric meshes are interpretable, editable, and compatible with graphics pipelines",
+      "C": "Meshes are easier to overfit",
+      "D": "Technical limitations only"
+    },
+    "answer": "B",
+    "explanation": "Approach: Parametric MHR mesh representation over implicit fields. Implicit representations are flexible but hard to edit or use in game engines. Parametric meshes trade expressiveness for compatibility with existing pipelines, interpretability, and efficient rendering in real-time applications."
+  },
+  {
+    "id": 44,
+    "source": "SAM 3D Body",
+    "context": "Input: Handling self-contact and extreme articulation\nGoal: Realistic pose recovery even in complex configurations",
+    "question": "What helps with extreme poses?",
+    "options": {
+      "A": "Pose restrictions",
+      "B": "Diverse training data including unusual articulations",
+      "C": "Physical simulation",
+      "D": "Multiple models"
+    },
+    "answer": "B",
+    "explanation": "Approach: Training data actively including extreme and unusual poses. Models fail on rare poses not seen during training. Actively collecting extreme articulations trades data collection difficulty for robustness to yoga poses, dance, sports, and other complex movements."
+  },
+  {
+    "id": 45,
+    "source": "SAM 3D Body",
+    "context": "Input: Uncertainty in single-image 3D reconstruction\nGoal: Communicate model confidence",
+    "question": "How might uncertainty be represented?",
+    "options": {
+      "A": "Not addressed",
+      "B": "Probabilistic outputs or confidence scores",
+      "C": "Binary success/failure",
+      "D": "Multiple deterministic predictions"
+    },
+    "answer": "B",
+    "explanation": "Approach: Potential for confidence estimation in predictions. Single-view 3D is inherently uncertain (e.g., depth ambiguity). Probabilistic outputs trade simpler deterministic predictions for honest uncertainty quantification, helping downstream applications make informed decisions."
+  },
+  {
+    "id": 46,
+    "source": "SAM 3D Body",
+    "context": "Input: Integration with other vision systems\nGoal: Use in broader pipelines",
+    "question": "What integration considerations exist?",
+    "options": {
+      "A": "Standalone only",
+      "B": "Compatible with standard formats and can combine with SAM 3D Objects",
+      "C": "Proprietary interfaces only",
+      "D": "No integration support"
+    },
+    "answer": "B",
+    "explanation": "Approach: Standard output formats and documented combination with SAM 3D Objects. Isolated models have limited utility. Providing integration examples (combining with SAM 3D Objects) and standard formats trades documentation effort for ecosystem compatibility, enabling complex pipelines."
+  },
+  {
+    "id": 47,
+    "source": "SAM 3D Body",
+    "context": "Input: Privacy concerns with human imagery\nGoal: Responsible deployment",
+    "question": "What considerations might apply?",
+    "options": {
+      "A": "No privacy considerations",
+      "B": "Model processes images locally without storing data",
+      "C": "All images sent to cloud",
+      "D": "Privacy is not mentioned"
+    },
+    "answer": "B",
+    "explanation": "Approach: Local inference capability without required cloud processing. Human body reconstruction raises privacy concerns. Supporting local inference trades convenience (cloud-only service) for privacy, letting sensitive applications run without transmitting personal imagery."
+  },
+  {
+    "id": 48,
+    "source": "SAM 3D Body",
+    "context": "Input: Long-term maintenance of released code\nGoal: Sustainable research artifact",
+    "question": "What supports sustainability?",
+    "options": {
+      "A": "No maintenance plan",
+      "B": "Open-source community and institutional backing",
+      "C": "Single maintainer",
+      "D": "Proprietary maintenance"
+    },
+    "answer": "B",
+    "explanation": "Approach: Open-source release with Meta's institutional support. Research code often becomes unmaintained. Community involvement plus institutional backing trades initial release effort for long-term sustainability, ensuring the work remains usable as dependencies evolve."
+  },
+  {
+    "id": 49,
+    "source": "SAM 3D Body",
+    "context": "Input: Temporal consistency for video applications\nGoal: Smooth reconstruction across frames",
+    "question": "What consideration exists for video?",
+    "options": {
+      "A": "Only single images supported",
+      "B": "Architecture could be extended with temporal modeling",
+      "C": "Video is not applicable",
+      "D": "Requires retraining"
+    },
+    "answer": "B",
+    "explanation": "Approach: Single-image model that could be extended with temporal components. Single-image models are simpler but may have temporal jitter. Focusing on single-image first trades immediate temporal smoothness for modular design, enabling frame-by-frame or future temporal extensions."
+  },
+  {
+    "id": 50,
+    "source": "SAM 3D Body",
+    "context": "Input: Balance research novelty and practical impact\nGoal: Contribute meaningfully to both science and applications",
+    "question": "What is the overall philosophy?",
+    "options": {
+      "A": "Pure research focus",
+      "B": "Only practical applications",
+      "C": "Strong performance with open release enabling both research and applications",
+      "D": "Benchmark optimization only"
+    },
+    "answer": "C",
+    "explanation": "Approach: State-of-the-art research with full open-source release (code, models, data). Research-only work has limited impact; application-only work doesn't advance science. Combining strong research contributions with open release trades simplicity for maximal impact, serving both academic and practical communities."
+  },
+  {
+    "id": 51,
+    "source": "SAM 3D Objects",
+    "context": "Input: Previous models trained on isolated synthetic objects\nGoal: Reconstruct 3D from real-world cluttered scenes",
+    "question": "Why do previous image-to-3D models struggle with natural scene images?",
+    "options": {
+      "A": "They require too much GPU memory",
+      "B": "They are trained on isolated objects and struggle with occlusion and clutter",
+      "C": "They only work with synthetic images",
+      "D": "They cannot process high-resolution images"
+    },
+    "answer": "B",
+    "explanation": "These models fail because they lack training on occluded/cluttered scenes. Training on clean, centered objects doesn't transfer to images where objects are distant, partially visible, or surrounded by visual noise—the distribution shift is too large."
+  },
+  {
+    "id": 52,
+    "source": "SAM 3D Objects",
+    "context": "Input: A single 2D image with ambiguous depth\nGoal: Recover 3D shape without multiple views",
+    "question": "What makes the \"familiar object\" cue important for single-image 3D reconstruction?",
+    "options": {
+      "A": "It allows faster processing",
+      "B": "Recognition of known object types enables inference of their 3D structure",
+      "C": "It reduces memory requirements",
+      "D": "It improves color accuracy"
+    },
+    "answer": "B",
+    "explanation": "Leverage recognition to infer structure. If we recognize a chair, we can infer it has legs, a seat, and a back—even parts we can't see. Recognition fills in geometric priors that pure geometry cannot provide from one view."
+  },
+  {
+    "id": 53,
+    "source": "SAM 3D Objects",
+    "context": "Input: Need for large-scale 3D annotations\nGoal: Collect millions of 3D training samples",
+    "question": "Why can't generalist human annotators directly create 3D shape ground truth?",
+    "options": {
+      "A": "They don't have access to computers",
+      "B": "Creating 3D meshes requires specialized skills that take hours even for trained artists",
+      "C": "3D software is too expensive",
+      "D": "There are copyright restrictions"
+    },
+    "answer": "B",
+    "explanation": "The trade-off is annotation quality vs. scalability—skilled 3D artists take hours per mesh, making it impossible to scale to millions of samples with direct creation."
+  },
+  {
+    "id": 54,
+    "source": "SAM 3D Objects",
+    "context": "Input: Initial weak model and limited training data\nGoal: Continuously improve both model and data quality",
+    "question": "What is the \"virtuous cycle\" in SAM 3D's data engine?",
+    "options": {
+      "A": "A type of neural network architecture",
+      "B": "Model improvements lead to better annotations, which further improve the model",
+      "C": "A data augmentation technique",
+      "D": "A loss function optimization method"
+    },
+    "answer": "B",
+    "explanation": "Use improved model to generate better candidates for annotation. This creates a positive feedback loop—better models propose better 3D candidates, annotators select higher quality samples, and training on these improves the model further."
+  },
+  {
+    "id": 55,
+    "source": "SAM 3D Objects",
+    "context": "Input: An object in a cluttered scene\nGoal: Maximize information for accurate reconstruction",
+    "question": "Why does SAM 3D use both cropped object and full image as inputs?",
+    "options": {
+      "A": "To increase batch size",
+      "B": "Cropped view provides detail while full image provides context and recognition cues",
+      "C": "To reduce memory usage",
+      "D": "To speed up inference"
+    },
+    "answer": "B",
+    "explanation": "The trade-off is detail vs. context—crops give high-resolution object features but lose scene cues; full images provide recognition context but at lower object resolution. Using both captures complementary information."
+  },
+  {
+    "id": 56,
+    "source": "SAM 3D Objects",
+    "context": "Input: Multiple output modalities (shape, rotation, translation, scale)\nGoal: Train flexibly on datasets with partial labels while maintaining consistency",
+    "question": "What problem does the Mixture-of-Transformers (MoT) architecture solve?",
+    "options": {
+      "A": "Reducing training time",
+      "B": "Enabling independent training of different modalities while maintaining cross-modal interaction",
+      "C": "Increasing model size",
+      "D": "Improving image quality"
+    },
+    "answer": "B",
+    "explanation": "Use MoT with structured attention masks. The trade-off is modularity vs. joint reasoning—separate transformers allow training on shape-only data, but shared attention ensures rotation predictions are consistent with the predicted shape."
+  },
+  {
+    "id": 57,
+    "source": "SAM 3D Objects",
+    "context": "Input: A 2D image where depth information is lost\nGoal: Handle inherent ambiguity in single-view reconstruction",
+    "question": "Why does SAM 3D model reconstruction as a conditional distribution rather than a deterministic function?",
+    "options": {
+      "A": "To use less memory",
+      "B": "Because the 3D-to-2D mapping is lossy and multiple valid 3D shapes can explain one image",
+      "C": "To speed up training",
+      "D": "To simplify the architecture"
+    },
+    "answer": "B",
+    "explanation": "Model p(S,T,R,t,s|I,M) as a distribution. The trade-off is certainty vs. realism—a deterministic model would give one answer but might be wrong; a generative model can sample multiple plausible reconstructions, better reflecting true uncertainty."
+  },
+  {
+    "id": 58,
+    "source": "SAM 3D Objects",
+    "context": "Input: Ambiguous layout from RGB alone\nGoal: Improve translation and scale accuracy",
+    "question": "What is the purpose of using point maps as optional conditioning?",
+    "options": {
+      "A": "To replace the image encoder",
+      "B": "To provide additional depth cues that help with layout estimation",
+      "C": "To reduce model parameters",
+      "D": "To improve texture quality"
+    },
+    "answer": "B",
+    "explanation": "Optionally condition on point maps from LiDAR or monocular depth. The trade-off is accessibility vs. accuracy—RGB-only works everywhere but has layout ambiguity; point maps add geometric constraints but require additional sensors or estimation."
+  },
+  {
+    "id": 59,
+    "source": "SAM 3D Objects",
+    "context": "Input: Need to predict object orientation\nGoal: Learn rotation prediction effectively with neural networks",
+    "question": "Why did the authors choose 6D rotation representation instead of Euler angles or quaternions?",
+    "options": {
+      "A": "It uses less memory",
+      "B": "6D representation is continuous and avoids discontinuities in neural network learning",
+      "C": "It's faster to compute",
+      "D": "It's more intuitive for humans"
+    },
+    "answer": "B",
+    "explanation": "Use 6D continuous rotation representation. The trade-off is compactness vs. learnability—Euler angles (3D) and quaternions (4D) have discontinuities or constraints that make gradient-based learning harder; 6D is redundant but continuous and easier to learn."
+  },
+  {
+    "id": 60,
+    "source": "SAM 3D Objects",
+    "context": "Input: Various 3D reconstruction methods\nGoal: Enable practical real-world 3D perception",
+    "question": "What distinguishes SAM 3D from methods like NeRF or 3D Gaussian Splatting?",
+    "options": {
+      "A": "SAM 3D uses more GPUs",
+      "B": "SAM 3D reconstructs from a single image at test time, while others typically need multiple views",
+      "C": "SAM 3D only works with synthetic images",
+      "D": "SAM 3D produces lower quality results"
+    },
+    "answer": "B",
+    "explanation": "Single-image reconstruction vs. multi-view. The trade-off is convenience vs. geometric precision—multi-view methods can be more geometrically accurate but require capturing multiple images; single-view is practical for any existing photo but must rely on learned priors."
+  },
+  {
+    "id": 61,
+    "source": "SAM 3D Objects",
+    "context": "Input: Need to learn 3D shape generation\nGoal: Build foundational 3D generation capabilities",
+    "question": "Why does SAM 3D use synthetic pretraining before real-world data?",
+    "options": {
+      "A": "Synthetic data is more colorful",
+      "B": "Synthetic data provides unlimited 3D ground truth to learn shape/texture vocabulary",
+      "C": "Real data is not available",
+      "D": "Synthetic data trains faster"
+    },
+    "answer": "B",
+    "explanation": "Pretrain on rendered synthetic objects with perfect ground truth. The trade-off is domain gap vs. data quality—synthetic data has perfect 3D labels at unlimited scale but differs from real images; this gap is later closed in post-training."
+  },
+  {
+    "id": 62,
+    "source": "SAM 3D Objects",
+    "context": "Input: Model trained on isolated objects\nGoal: Handle partially visible objects in real scenes",
+    "question": "What is the purpose of \"Flying Occlusions\" in mid-training?",
+    "options": {
+      "A": "To make training faster",
+      "B": "To teach the model occlusion robustness by compositing occluder-occludee pairs",
+      "C": "To reduce model size",
+      "D": "To improve color prediction"
+    },
+    "answer": "B",
+    "explanation": "Composite synthetic objects as occluders over target objects. The trade-off is realism vs. control—real occlusions are diverse but lack ground truth; synthetic occlusions give exact visibility masks for supervised learning of shape completion."
+  },
+  {
+    "id": 63,
+    "source": "SAM 3D Objects",
+    "context": "Input: Data collected across multiple iterations\nGoal: Maximize training signal quality",
+    "question": "Why is the quality threshold α in post-training increased over time?",
+    "options": {
+      "A": "To reduce training time",
+      "B": "To progressively raise the bar as the model improves, similar to curriculum learning",
+      "C": "To save storage space",
+      "D": "To decrease model size"
+    },
+    "answer": "B",
+    "explanation": "Increase acceptance threshold α over time. The trade-off is data quantity vs. quality—early on, accepting lower quality samples provides learning signal; as the model improves, stricter thresholds ensure only high-quality examples refine the model further."
+  },
+  {
+    "id": 64,
+    "source": "SAM 3D Objects",
+    "context": "Input: Need to learn object layout in scenes\nGoal: Predict translation and scale from visual cues",
+    "question": "What problem does Object Swap - Random (OS-R) solve that Flying Occlusions doesn't?",
+    "options": {
+      "A": "Color accuracy",
+      "B": "Learning translation and scale estimation with depth-aware visual cues",
+      "C": "Faster processing",
+      "D": "Better textures"
+    },
+    "answer": "B",
+    "explanation": "Replace objects with depth-aware rendering that preserves occlusion relationships. The trade-off is pose information vs. semantic relevance—Flying Occlusions teaches occlusion handling but lacks realistic layout; OS-R provides T-junction and depth ordering cues needed for layout estimation."
+  },
+  {
+    "id": 65,
+    "source": "SAM 3D Objects",
+    "context": "Input: Model after supervised fine-tuning\nGoal: Eliminate subtle undesirable outputs (floaters, asymmetry)",
+    "question": "Why does SAM 3D use DPO (Direct Preference Optimization) after SFT?",
+    "options": {
+      "A": "To reduce model size",
+      "B": "To align outputs with human aesthetic preferences like symmetry and closure",
+      "C": "To speed up inference",
+      "D": "To use less training data"
+    },
+    "answer": "B",
+    "explanation": "Use human preference pairs in DPO. The trade-off is explicit supervision vs. implicit preferences—SFT teaches correct shapes but can't capture subjective quality aspects; DPO learns from comparative judgments what humans find aesthetically pleasing."
+  },
+  {
+    "id": 66,
+    "source": "SAM 3D Objects",
+    "context": "Input: Hard examples where no model produces acceptable meshes\nGoal: Break the chicken-and-egg problem for tail distribution",
+    "question": "What is the purpose of the Art-3DO dataset created by professional 3D artists?",
+    "options": {
+      "A": "To replace all other training data",
+      "B": "To provide high-quality supervision for the hardest cases where models fail",
+      "C": "To reduce training time",
+      "D": "To improve inference speed"
+    },
+    "answer": "B",
+    "explanation": "Use skilled 3D artists to create ground truth for failure cases. The trade-off is cost vs. coverage—artists are expensive (hours per mesh) but essential for seeding model capability in regions where self-improvement can't bootstrap."
+  },
+  {
+    "id": 67,
+    "source": "SAM 3D Objects",
+    "context": "Input: Pretrained model learning new capabilities\nGoal: Add mask-following and occlusion handling without forgetting shape generation",
+    "question": "Why does mid-training use 2.7 trillion tokens, matching pretraining?",
+    "options": {
+      "A": "It's a random choice",
+      "B": "Sufficient exposure is needed to learn new skills while retaining pretraining knowledge",
+      "C": "To use all available GPUs",
+      "D": "To fill storage capacity"
+    },
+    "answer": "B",
+    "explanation": "Extensive mid-training matching pretraining scale. The trade-off is capability acquisition vs. catastrophic forgetting—too little mid-training doesn't teach new skills; this scale ensures robust skill integration while maintaining foundation capabilities."
+  },
+  {
+    "id": 68,
+    "source": "SAM 3D Objects",
+    "context": "Input: Need for generative 3D modeling\nGoal: Efficient training and inference for 3D generation",
+    "question": "What advantage does flow matching have over diffusion for SAM 3D?",
+    "options": {
+      "A": "Uses less memory",
+      "B": "Provides straight probability paths that are easier to learn and faster to sample",
+      "C": "Produces more colorful outputs",
+      "D": "Requires fewer parameters"
+    },
+    "answer": "B",
+    "explanation": "Use rectified conditional flow matching. The trade-off is sample quality vs. efficiency—diffusion models work well but require many steps; rectified flow provides straighter paths enabling fewer sampling steps with comparable quality."
+  },
+  {
+    "id": 69,
+    "source": "SAM 3D Objects",
+    "context": "Input: Trained flow matching model requiring 25 steps\nGoal: Enable real-time 3D perception",
+    "question": "Why does SAM 3D distill the model to reduce NFE from 25 to 4?",
+    "options": {
+      "A": "To improve quality",
+      "B": "To enable sub-second inference for real-time applications like robotics",
+      "C": "To increase accuracy",
+      "D": "To use more parameters"
+    },
+    "answer": "B",
+    "explanation": "Distill using shortcut models to reduce to 4 steps. The trade-off is quality vs. speed—25 steps give best quality but too slow for robotics; distillation sacrifices some quality for ~6x speedup, enabling practical deployment."
+  },
+  {
+    "id": 70,
+    "source": "SAM 3D Objects",
+    "context": "Input: Two datasets of different quality and size\nGoal: Maximize final model quality",
+    "question": "What is the significance of using both MITL-3DO and Art-3DO in SFT sequencing?",
+    "options": {
+      "A": "Random ordering",
+      "B": "Train on noisier crowd-sourced data first, then fine-tune on smaller high-quality artist data",
+      "C": "Use them simultaneously",
+      "D": "Only use Art-3DO"
+    },
+    "answer": "B",
+    "explanation": "SFT on MITL-3DO first, then Art-3DO. The trade-off is scale vs. polish—MITL-3DO (millions of samples) provides broad coverage but has annotation noise; following with smaller, pristine Art-3DO aligns outputs with artist aesthetic preferences."
+  },
+  {
+    "id": 71,
+    "source": "SAM 3D Objects",
+    "context": "Input: Multiple 3D mesh candidates to evaluate\nGoal: Collect reliable quality judgments",
+    "question": "Why do annotators make pairwise comparisons rather than rating individual meshes?",
+    "options": {
+      "A": "It's faster",
+      "B": "Relative judgments are more reliable and consistent than absolute quality scores",
+      "C": "It uses less screen space",
+      "D": "It requires less training"
+    },
+    "answer": "B",
+    "explanation": "Pairwise comparison tournament. The trade-off is information richness vs. reliability—absolute ratings vary by annotator calibration; relative comparisons (\"A is better than B\") are more consistent and avoid calibration issues."
+  },
+  {
+    "id": 72,
+    "source": "SAM 3D Objects",
+    "context": "Input: N candidates shown sequentially to annotators\nGoal: Unbiased quality assessment",
+    "question": "What is the purpose of randomizing candidate presentation order in Stage 2?",
+    "options": {
+      "A": "To confuse annotators",
+      "B": "To prevent order-based biases from affecting selection",
+      "C": "To speed up annotation",
+      "D": "To reduce storage"
+    },
+    "answer": "B",
+    "explanation": "Randomize presentation order. The trade-off is experimental rigor vs. simplicity—fixed ordering could create primacy/recency biases; randomization ensures selections reflect true quality rather than position effects."
+  },
+  {
+    "id": 73,
+    "source": "SAM 3D Objects",
+    "context": "Input: Diverse objects with varying difficulty\nGoal: Ensure successful annotation for most inputs",
+    "question": "Why does the data engine use an ensemble of different 3D generation methods?",
+    "options": {
+      "A": "To use more GPUs",
+      "B": "To maximize the chance of having at least one good candidate for any given input",
+      "C": "To increase training time",
+      "D": "To reduce model quality"
+    },
+    "answer": "B",
+    "explanation": "Combine retrieval, text-to-3D, and image-to-3D methods. The trade-off is complexity vs. coverage—single methods fail on certain inputs; ensembling different approaches (retrieval for semantic matches, generation for novel shapes) provides complementary strengths."
+  },
+  {
+    "id": 74,
+    "source": "SAM 3D Objects",
+    "context": "Input: First iteration with untrained model\nGoal: Begin collecting quality training data",
+    "question": "What is the \"cold start problem\" in SAM 3D's data engine?",
+    "options": {
+      "A": "GPU temperature issues",
+      "B": "Initial model produces few high-quality candidates because no real-world 3D data exists yet",
+      "C": "Slow network connections",
+      "D": "Memory limitations"
+    },
+    "answer": "B",
+    "explanation": "Leverage existing methods as ensemble to bootstrap. The trade-off is bootstrapping vs. self-improvement—you can't improve a model without data, but you can't get good data without a good model; external methods break this cycle initially."
+  },
+  {
+    "id": 75,
+    "source": "SAM 3D Objects",
+    "context": "Input: 3D mesh needing pose alignment\nGoal: Accurate and consistent R, t, s annotations",
+    "question": "Why does Stage 3 use point clouds rather than RGB images for pose annotation?",
+    "options": {
+      "A": "Point clouds are more colorful",
+      "B": "Point clouds provide explicit 3D structure that enables consistent placement",
+      "C": "They load faster",
+      "D": "They use less memory"
+    },
+    "answer": "B",
+    "explanation": "Align mesh to 2.5D point cloud from depth estimation. The trade-off is annotation difficulty vs. accuracy—placing 3D objects in 2D images is ambiguous; point clouds make depth explicit, enabling annotators to anchor meshes to physical scene structure."
+  },
+  {
+    "id": 76,
+    "source": "SAM 3D Objects",
+    "context": "Input: Rejected mesh candidates from annotation\nGoal: Extract value from failed annotations",
+    "question": "What happens to mesh candidates that don't meet the quality threshold?",
+    "options": {
+      "A": "They are deleted",
+      "B": "They become negative examples for preference alignment (DPO)",
+      "C": "They are used for pretraining",
+      "D": "They are sent to artists"
+    },
+    "answer": "B",
+    "explanation": "Use as negative examples in preference pairs. The trade-off is data utilization vs. quality—rejected meshes aren't good enough for SFT but still provide signal; pairing them with accepted meshes teaches the model what NOT to produce."
+  },
+  {
+    "id": 77,
+    "source": "SAM 3D Objects",
+    "context": "Input: Examples where standard sampling fails\nGoal: Recover training data from difficult inputs",
+    "question": "Why does the reward model pipeline generate 50 seeds for hard examples?",
+    "options": {
+      "A": "It's a random number",
+      "B": "Higher N increases probability of finding at least one acceptable output for tail distribution",
+      "C": "To fill GPU memory",
+      "D": "To slow down training"
+    },
+    "answer": "B",
+    "explanation": "Scale up best-of-N search from 8 to 50. The trade-off is compute vs. coverage—50 samples is expensive but dramatically increases success probability for hard cases (food category improved 9x from 4% to 36%)."
+  },
+  {
+    "id": 78,
+    "source": "SAM 3D Objects",
+    "context": "Input: Need for large-scale 3D annotation\nGoal: Scale annotation to millions of samples",
+    "question": "Why can't annotators directly edit meshes in Stage 2?",
+    "options": {
+      "A": "The software doesn't support it",
+      "B": "Editing requires specialized skills; selection/verification scales better with generalist annotators",
+      "C": "It would be too fast",
+      "D": "Copyright restrictions"
+    },
+    "answer": "B",
+    "explanation": "Restrict annotators to selection only. The trade-off is flexibility vs. scalability—mesh editing requires training and produces variable quality; binary selection is a simpler task that generalists can perform reliably and quickly."
+  },
+  {
+    "id": 79,
+    "source": "SAM 3D Objects",
+    "context": "Input: Examples where all model candidates are rejected\nGoal: Provide data for model blind spots",
+    "question": "What determines whether an example is routed to 3D artists in Stage 2.5?",
+    "options": {
+      "A": "Random selection",
+      "B": "When no model in the ensemble produces a mesh meeting the quality threshold",
+      "C": "Based on image size",
+      "D": "Based on file format"
+    },
+    "answer": "B",
+    "explanation": "Route genuine failure cases to artists. The trade-off is artist cost vs. model improvement—artists are expensive so we only use them where essential; failure filtering ensures each artist-created mesh addresses a real model limitation."
+  },
+  {
+    "id": 80,
+    "source": "SAM 3D Objects",
+    "context": "Input: Diverse object categories with varying difficulty\nGoal: Balanced coverage across all categories",
+    "question": "How does the data engine handle the object category distribution?",
+    "options": {
+      "A": "Random sampling",
+      "B": "Curriculum-inspired sampling progressing from simple to complex, with adaptive rebalancing",
+      "C": "Alphabetical ordering",
+      "D": "Size-based ordering"
+    },
+    "answer": "B",
+    "explanation": "Start with simple shapes, progressively add complex/deformable objects, monitor and rebalance. The trade-off is learning efficiency vs. coverage—starting with hard examples wastes annotation effort; curriculum lets the model build capability before tackling challenging categories."
+  },
+  {
+    "id": 81,
+    "source": "SAM 3D Objects",
+    "context": "Input: Need for benchmark ground truth\nGoal: Establish gold standard for evaluation",
+    "question": "Why does SA-3DAO use professional 3D artists to create ground truth?",
+    "options": {
+      "A": "It's cheaper",
+      "B": "Artists represent expert human upper bound for visually grounded 3D reconstruction",
+      "C": "They work faster",
+      "D": "They have more GPUs"
+    },
+    "answer": "B",
+    "explanation": "Use professional 3D artists. The trade-off is cost vs. quality—automated methods would introduce their own biases; human artists provide the best possible reference for what a perfect reconstruction should look like."
+  },
+  {
+    "id": 82,
+    "source": "SAM 3D Objects",
+    "context": "Input: Two different evaluation benchmarks\nGoal: Understand where SAM 3D's advantages lie",
+    "question": "Why does SAM 3D significantly outperform baselines on SA-3DAO but show smaller gaps on ISO3D?",
+    "options": {
+      "A": "Random variation",
+      "B": "SA-3DAO tests real-world conditions (occlusion, clutter) where SAM 3D's training excels",
+      "C": "ISO3D is harder",
+      "D": "Different image formats"
+    },
+    "answer": "B",
+    "explanation": "Compare performance across datasets. The trade-off revealed is specialization vs. generalization—baselines trained on isolated objects do okay on similar ISO3D images; SAM 3D's real-world training pays off on challenging SA-3DAO conditions."
+  },
+  {
+    "id": 83,
+    "source": "SAM 3D Objects",
+    "context": "Input: Pairwise human evaluations\nGoal: Measure perceptual quality beyond metrics",
+    "question": "What does the 5:1 win rate in human preference tests indicate?",
+    "options": {
+      "A": "SAM 3D is 5 times faster",
+      "B": "Humans prefer SAM 3D outputs 5 times more often than alternatives",
+      "C": "SAM 3D uses 5 times more parameters",
+      "D": "SAM 3D costs 5 times more"
+    },
+    "answer": "B",
+    "explanation": "Head-to-head preference comparison. The trade-off is objectivity vs. relevance—automated metrics are consistent but may not capture what matters to users; human preference directly measures practical quality."
+  },
+  {
+    "id": 84,
+    "source": "SAM 3D Objects",
+    "context": "Input: Need to fairly evaluate texture generation\nGoal: Measure texture quality independent of geometry",
+    "question": "Why does SAM 3D evaluate texture separately using its own geometry?",
+    "options": {
+      "A": "To hide poor geometry",
+      "B": "To isolate texture quality assessment—better geometry from SAM 3D actually helps competing texture methods",
+      "C": "It's faster",
+      "D": "To reduce memory"
+    },
+    "answer": "B",
+    "explanation": "Use SAM 3D geometry for all texture methods. The trade-off is fairness vs. end-to-end evaluation—poor geometry makes texture look bad regardless of texture quality; providing good geometry isolates what we're measuring."
+  },
+  {
+    "id": 85,
+    "source": "SAM 3D Objects",
+    "context": "Input: Need to evaluate 3D layout prediction\nGoal: Measure pose accuracy appropriately",
+    "question": "What does the ADD-S metric measure that IoU doesn't capture?",
+    "options": {
+      "A": "Color accuracy",
+      "B": "Pose accuracy through surface distance normalized by object diameter",
+      "C": "Training time",
+      "D": "Memory usage"
+    },
+    "answer": "B",
+    "explanation": "Use ADD-S (Average Distance of Distinguishable points - Symmetric). The trade-off is what aspect to measure—IoU captures overlap but doesn't penalize rotation errors well; ADD-S directly measures how close predicted surfaces are to ground truth."
+  },
+  {
+    "id": 86,
+    "source": "SAM 3D Objects",
+    "context": "Input: Two approaches: pipeline vs. joint generation\nGoal: Best overall layout prediction",
+    "question": "Why do pipeline approaches (shape model + pose estimator) underperform joint SAM 3D?",
+    "options": {
+      "A": "They use more memory",
+      "B": "Errors compound across stages and shape/pose are estimated independently without mutual consistency",
+      "C": "They're newer",
+      "D": "They use different GPUs"
+    },
+    "answer": "B",
+    "explanation": "Compare separate shape+pose pipeline vs. joint prediction. The trade-off is modularity vs. consistency—pipelines allow mixing different methods but lose the benefit of joint reasoning; SAM 3D's joint prediction ensures shape and pose are mutually consistent."
+  },
+  {
+    "id": 87,
+    "source": "SAM 3D Objects",
+    "context": "Input: Predicted and ground truth meshes\nGoal: Measure rotation accuracy specifically",
+    "question": "What does the ICP-Rotation metric measure?",
+    "options": {
+      "A": "Image quality",
+      "B": "Rotation error in degrees after optimal alignment",
+      "C": "Color precision",
+      "D": "Training speed"
+    },
+    "answer": "B",
+    "explanation": "ICP (Iterative Closest Point) alignment then measure residual rotation. The trade-off is metric interpretability vs. completeness—raw rotation error is intuitive (degrees off) but requires alignment; ICP provides that alignment baseline."
+  },
+  {
+    "id": 88,
+    "source": "SAM 3D Objects",
+    "context": "Input: Need to track model improvement over time\nGoal: Quantify progress meaningfully",
+    "question": "Why does SAM 3D use Elo ratings to track historical model improvements?",
+    "options": {
+      "A": "It's a gaming reference",
+      "B": "Elo provides a continuous scale where differences map to win probabilities",
+      "C": "It's faster to compute",
+      "D": "It uses less storage"
+    },
+    "answer": "B",
+    "explanation": "Use Elo rating system. The trade-off is interpretability vs. simplicity—raw win rates are hard to compare across different matchups; Elo provides a unified scale where 400 points = 10:1 odds, enabling fair comparison."
+  },
+  {
+    "id": 89,
+    "source": "SAM 3D Objects",
+    "context": "Input: Historical checkpoints over development\nGoal: Validate the training approach",
+    "question": "What does the near-linear Elo scaling in Figure 10a demonstrate?",
+    "options": {
+      "A": "Random fluctuation",
+      "B": "Consistent improvement from cumulative training stages and data engine iterations",
+      "C": "Model degradation",
+      "D": "Hardware improvements"
+    },
+    "answer": "B",
+    "explanation": "Track Elo over time. The trade-off validated is development complexity vs. payoff—multi-stage training with data engine iteration is complex but the linear Elo improvement confirms each component contributes measurable gains."
+  },
+  {
+    "id": 90,
+    "source": "SAM 3D Objects",
+    "context": "Input: Cascaded training stages with metrics\nGoal: Understand contribution of each stage",
+    "question": "Why does Table 4 show diminishing returns for later training stages?",
+    "options": {
+      "A": "Bugs in the code",
+      "B": "Each stage addresses remaining errors, which become progressively harder to fix",
+      "C": "Less data",
+      "D": "Smaller models"
+    },
+    "answer": "B",
+    "explanation": "Ablation showing incremental improvements. The trade-off is effort vs. marginal gain—early stages fix common errors for large improvements; later stages (Art-3DO, DPO) address subtle issues with smaller but still valuable gains."
+  },
+  {
+    "id": 91,
+    "source": "SAM 3D Objects",
+    "context": "Input: Need to generate complex 3D outputs\nGoal: Efficient and high-quality 3D generation",
+    "question": "Why does SAM 3D use VAE latent space rather than direct mesh prediction?",
+    "options": {
+      "A": "It's simpler",
+      "B": "Latent space enables efficient generative modeling and consistent structured representations",
+      "C": "It uses less memory",
+      "D": "It's faster at inference"
+    },
+    "answer": "B",
+    "explanation": "Generate in VAE latent space then decode. The trade-off is representation complexity vs. generation quality—direct mesh prediction is hard due to variable topology; VAE latents provide fixed-size, structured representations that flow models can generate effectively."
+  },
+  {
+    "id": 92,
+    "source": "SAM 3D Objects",
+    "context": "Input: Coarse 64³ shape from Geometry model\nGoal: Add geometric detail and texture efficiently",
+    "question": "What is the purpose of the sparse latent flow transformer in the Texture & Refinement model?",
+    "options": {
+      "A": "To increase model size",
+      "B": "To efficiently process only active voxels rather than the full volume",
+      "C": "To reduce quality",
+      "D": "To slow down training"
+    },
+    "answer": "B",
+    "explanation": "Sparse transformer operating on active voxels only. The trade-off is computation vs. resolution—dense processing of high-res volumes is expensive; sparse attention only computes on occupied regions, enabling detail refinement at practical cost."
+  },
+  {
+    "id": 93,
+    "source": "SAM 3D Objects",
+    "context": "Input: Single learned latent representation\nGoal: Support diverse downstream applications",
+    "question": "Why does SAM 3D support both mesh and 3D Gaussian splat outputs?",
+    "options": {
+      "A": "To confuse users",
+      "B": "Different applications need different representations—meshes for editing, splats for novel view synthesis",
+      "C": "It was accidental",
+      "D": "To use more storage"
+    },
+    "answer": "B",
+    "explanation": "Two decoders sharing the same encoder/latent space. The trade-off is universality vs. specialization—meshes are standard for graphics/robotics, splats excel at view synthesis; shared latents enable both without retraining."
+  },
+  {
+    "id": 94,
+    "source": "SAM 3D Objects",
+    "context": "Input: Novel objects not in training set\nGoal: Generalize to unseen object categories",
+    "question": "What enables SAM 3D to handle objects it has never seen before?",
+    "options": {
+      "A": "Memorization of all objects",
+      "B": "Objects are composed of parts and shapes learned during training that generalize compositionally",
+      "C": "Internet lookup",
+      "D": "User specification"
+    },
+    "answer": "B",
+    "explanation": "Learn compositional shape vocabulary. The trade-off is specificity vs. generalization—memorizing exact objects wouldn't generalize; learning parts and shapes that compose allows reconstructing novel objects from familiar components."
+  },
+  {
+    "id": 95,
+    "source": "SAM 3D Objects",
+    "context": "Input: Image with multiple objects\nGoal: Reconstruct user-specified object",
+    "question": "Why is mask-following important for SAM 3D's practical use?",
+    "options": {
+      "A": "It's not important",
+      "B": "Users can specify exactly which object to reconstruct in multi-object scenes",
+      "C": "It speeds up training",
+      "D": "It reduces memory"
+    },
+    "answer": "B",
+    "explanation": "Condition on mask input. The trade-off is automation vs. control—fully automatic methods might reconstruct the wrong object; mask conditioning gives users precise control over which object to 3Dfy."
+  },
+  {
+    "id": 96,
+    "source": "SAM 3D Objects",
+    "context": "Input: Conditional generation at inference\nGoal: Outputs that closely match input image/mask",
+    "question": "What role does CFG (Classifier-Free Guidance) play in SAM 3D?",
+    "options": {
+      "A": "Classification",
+      "B": "Strengthening conditioning signal for higher quality outputs aligned with input",
+      "C": "File formatting",
+      "D": "Memory management"
+    },
+    "answer": "B",
+    "explanation": "Apply CFG to balance unconditional and conditional predictions. The trade-off is diversity vs. fidelity—pure conditional sampling might be noisy; CFG with weight 2.0 pushes outputs to more strongly match the conditioning."
+  },
+  {
+    "id": 97,
+    "source": "SAM 3D Objects",
+    "context": "Input: Trained model being distilled\nGoal: Add shortcut capability without degrading existing quality",
+    "question": "Why does the shortcut distillation initialize step-size embedder weights to zero?",
+    "options": {
+      "A": "Random choice",
+      "B": "Ensures the model initially behaves identically to the pre-distillation model",
+      "C": "To save memory",
+      "D": "To increase speed"
+    },
+    "answer": "B",
+    "explanation": "Zero-initialize new step-size parameters. The trade-off is stability vs. flexibility—random initialization would disrupt learned behavior; zero init means d=0 recovers original model exactly, and shortcut capability is learned incrementally."
+  },
+  {
+    "id": 98,
+    "source": "SAM 3D Objects",
+    "context": "Input: Robot needing 3D scene understanding\nGoal: Enable real-time 3D perception from camera",
+    "question": "What makes SAM 3D suitable for robotics applications?",
+    "options": {
+      "A": "It only works with robots",
+      "B": "Single-image input, joint shape+pose prediction, and sub-second inference after distillation",
+      "C": "It's very large",
+      "D": "It requires special hardware"
+    },
+    "answer": "B",
+    "explanation": "Fast single-image 3D reconstruction with layout. The trade-off is information vs. practicality—multi-view methods need robot movement; SAM 3D gives instant 3D understanding from any single camera frame at interactive speeds."
+  },
+  {
+    "id": 99,
+    "source": "SAM 3D Objects",
+    "context": "Input: Large-scale 3D assets of variable quality\nGoal: Effective pretraining",
+    "question": "Why does SAM 3D filter Iso-3DO pretraining data for geometry quality?",
+    "options": {
+      "A": "To reduce dataset size",
+      "B": "Poor quality meshes (degenerate shapes, outliers) can harm model learning even at scale",
+      "C": "To speed up training",
+      "D": "To change colors"
+    },
+    "answer": "B",
+    "explanation": "Rule-based filtering for geometry quality. The trade-off is quantity vs. quality—more data usually helps but degenerate meshes (point-like structures, flat sheets) teach wrong priors; filtering removes harmful examples while keeping useful diversity."
+  },
+  {
+    "id": 100,
+    "source": "SAM 3D Objects",
+    "context": "Input: Layout prediction on challenging real-world benchmark\nGoal: Evaluate practical 3D scene understanding",
+    "question": "What is the significance of SAM 3D achieving ADD-S @ 0.1 of 77% compared to 2% for baselines on SA-3DAO?",
+    "options": {
+      "A": "It's a minor improvement",
+      "B": "It demonstrates SAM 3D's breakthrough capability for joint shape and layout prediction in real-world conditions",
+      "C": "It indicates worse performance",
+      "D": "It measures color accuracy"
+    },
+    "answer": "B",
+    "explanation": "ADD-S @ 0.1 threshold metric. The trade-off this reveals is joint vs. pipeline approaches—2% for baselines means they essentially fail on real-world layout; 77% for SAM 3D demonstrates a qualitative leap in capability for visually grounded 3D reconstruction."
+  }
+]
