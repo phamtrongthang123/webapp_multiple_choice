@@ -96,7 +96,7 @@ After=network.target
 Type=simple
 User=ptthang
 WorkingDirectory=/home/ptthang/cursor/webapp_multiple_choice
-ExecStart=/home/ptthang/.local/bin/uv run quiz
+ExecStart=/home/ptthang/miniforge3/bin/uvrun quiz
 Restart=always
 RestartSec=3
 
