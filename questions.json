@@ -934,5 +934,1073 @@
     },
     "answer": "B",
     "explanation": "Cold start refers to new items or users with no interaction history. Multi-task learning helps by leveraging correlations - if we can predict one signal (e.g., from content features), related signals (engagement) can be inferred through learned correlations."
+  },
+  {
+    "source": "[choudhuri] 3D Vision-Language Gaussian Splatting",
+    "question": "In the context of 3D Vision-Language Gaussian Splatting, what is the primary motivation for introducing a 'smoothed semantic indicator' instead of relying solely on color opacity for semantic rasterization?",
+    "options": {
+      "A": "To reduce the memory footprint of the 3D Gaussian primitives.",
+      "B": "To allow the semantic field to be independent of visual opacity, preventing artifacts in translucent or reflective regions where visual opacity might be low but semantic relevance is high.",
+      "C": "To speed up the training process by simplifying the gradient computation for the semantic branch.",
+      "D": "To enforce a strictly binary classification of semantic regions, ensuring crisp boundaries between objects."
+    },
+    "answer": "B",
+    "explanation": "The paper highlights that re-using color opacity for language features harms semantic accuracy for complex visual properties like translucency or reflections. A learnable smoothed semantic indicator disentangles these properties, allowing the model to maintain high semantic relevance even when visual opacity is low."
+  },
+  {
+    "source": "[choudhuri] 3D Vision-Language Gaussian Splatting",
+    "question": "Your team is designing a 3D scene understanding system that needs to handle open-vocabulary queries. Why might a 'camera-view blending' augmentation strategy be superior to a naive approach of training solely on the provided static views?",
+    "options": {
+      "A": "It artificially increases the dataset size, which is the only factor that matters for generalization.",
+      "B": "It allows the model to learn to ignore the camera pose entirely, making it view-invariant.",
+      "C": "It acts as a regularizer that mitigates overfitting to the specific training views, ensuring semantic consistency across both existing and novel (synthesized) viewpoints.",
+      "D": "It reduces the computational cost of rendering by averaging adjacent views."
+    },
+    "answer": "C",
+    "explanation": "The paper proposes camera-view blending (using interpolation between views) specifically to mitigate overfitting. Standard training on sparse static views can lead to inconsistent semantic representations for unseen angles; blending enforces consistency."
+  },
+  {
+    "source": "[choudhuri] 3D Vision-Language Gaussian Splatting",
+    "question": "When designing the architecture for a multi-modal Gaussian Splatting model, you must decide how to fuse visual and semantic features. What is a key trade-off when choosing 'Self-attention Modality Fusion' over a simple 'Single-layer MLP Fusion'?",
+    "options": {
+      "A": "Self-attention requires significantly less memory but is slower to converge.",
+      "B": "Self-attention provides a richer incorporation of prior knowledge and context between modalities but comes with higher computational complexity than a simple MLP.",
+      "C": "MLP fusion is incapable of processing high-dimensional vectors.",
+      "D": "Self-attention forces the model to ignore visual features and focus only on language features."
+    },
+    "answer": "B",
+    "explanation": "The ablation studies in the paper show that Self-attention Modality Fusion outperforms simpler methods (No Fusion, MLP) by effectively capturing the relationship between visual and semantic modalities, though attention mechanisms generally incur higher compute costs than simple linear layers."
+  },
+  {
+    "source": "[choudhuri] 3D Vision-Language Gaussian Splatting",
+    "question": "You are evaluating the efficiency of your 3D language field model. Which metric combination would best indicate a successful deployment for a real-time interactive application?",
+    "options": {
+      "A": "High training time, High FPS, Low Storage Size",
+      "B": "Low training time, High FPS, High Peak Signal-to-Noise Ratio (PSNR)",
+      "C": "Low training time, Low FPS, Low Storage Size",
+      "D": "High training time, Low FPS, High mIoU"
+    },
+    "answer": "B",
+    "explanation": "For a real-time interactive application, High FPS (rendering speed) is critical. Low training time allows for rapid iteration or deployment, and High PSNR ensures visual quality. The paper emphasizes achieving state-of-the-art performance in these metrics simultaneously."
+  },
+  {
+    "source": "[choudhuri] 7DGS: Unified Spatial-Temporal-Angular Gaussian Splatting",
+    "question": "Why is the standard 3D Gaussian Splatting (3DGS) representation insufficient for rendering complex dynamic scenes with view-dependent effects like moving specular highlights?",
+    "options": {
+      "A": "3DGS cannot handle high-resolution images.",
+      "B": "3DGS lacks a temporal dimension and its spherical harmonics are static, failing to model the interdependence between geometry, motion, and changing light transport over time.",
+      "C": "3DGS requires ground-truth depth maps which are rarely available.",
+      "D": "3DGS rendering is too slow for any practical application."
+    },
+    "answer": "B",
+    "explanation": "The core problem framing of 7DGS is that 3DGS is static. While 4DGS adds time and 6DGS adds direction, 7DGS is needed to jointly model the *interdependencies* (e.g., a moving object with a shifting specular highlight) using a unified 7D representation."
+  },
+  {
+    "source": "[choudhuri] 7DGS: Unified Spatial-Temporal-Angular Gaussian Splatting",
+    "question": "In the context of 7DGS, what is the primary engineering advantage of the 'Conditional Slicing Mechanism'?",
+    "options": {
+      "A": "It allows the model to be trained on 2D images instead of 3D volumes.",
+      "B": "It projects high-dimensional 7D Gaussians into standard 3D Gaussians at render time, enabling the use of existing, highly optimized 3DGS rasterization pipelines without writing a custom 7D rasterizer.",
+      "C": "It reduces the dimensionality of the input data, making the dataset smaller.",
+      "D": "It automatically segments the scene into foreground and background."
+    },
+    "answer": "B",
+    "explanation": "The 'Conditional Slicing' is a key architectural choice that bridges the gap between the rich 7D representation and the efficiency of standard 3DGS rendering. It avoids the need for a complex and potentially slow high-dimensional rasterization process."
+  },
+  {
+    "source": "[choudhuri] 7DGS: Unified Spatial-Temporal-Angular Gaussian Splatting",
+    "question": "The 7DGS model introduces 'Adaptive Gaussian Refinement' (AGR). What specific limitation of the basic conditional slicing approach does AGR address?",
+    "options": {
+      "A": "The slicing mechanism is too slow to run in real-time.",
+      "B": "Basic slicing assumes the intrinsic shape (covariance) of the Gaussian remains static over time, limiting the ability to model complex non-rigid deformations.",
+      "C": "Slicing causes color artifacts in static regions.",
+      "D": "Slicing cannot handle occlusions properly."
+    },
+    "answer": "B",
+    "explanation": "While slicing adjusts the mean and opacity based on time/view, the underlying covariance shape is static. AGR uses a lightweight MLP to predict residual deformations, allowing the Gaussian shape itself to evolve, which is crucial for non-rigid dynamics (like a beating heart)."
+  },
+  {
+    "source": "[choudhuri] 7DGS: Unified Spatial-Temporal-Angular Gaussian Splatting",
+    "question": "When serving the 7DGS model at scale, what is a potential latency bottleneck compared to static 3DGS, and how does the architecture attempt to mitigate it?",
+    "options": {
+      "A": "The bottleneck is the rasterizer; it uses a slower ray-tracing engine.",
+      "B": "The bottleneck is the network inference for Adaptive Gaussian Refinement; it uses small, lightweight MLPs and only modifies parameters before the standard fast rasterization.",
+      "C": "The bottleneck is disk I/O; 7DGS files are 100x larger than 3DGS.",
+      "D": "The bottleneck is the conditional slicing; it requires solving a differential equation per pixel."
+    },
+    "answer": "B",
+    "explanation": "The AGR introduces a neural network evaluation at render time, which is a bottleneck compared to pure rasterization. The design choice to use *lightweight* (small) MLPs ensures this overhead is minimized, preserving real-time performance."
+  },
+  {
+    "source": "[choudhuri] Render-FM: A Foundation Model for Real-time Photorealistic Volumetric Rendering",
+    "question": "Why is per-scene optimization (as used in NeRF or standard 3DGS) considered a 'bad solution' for clinical CT visualization workflows?",
+    "options": {
+      "A": "It produces lower quality images than feed-forward methods.",
+      "B": "It requires manual labeling of every slice.",
+      "C": "The significant time delay (minutes to hours) prevents real-time interaction and immediate clinical decision-making, which is critical in medical settings.",
+      "D": "Optimization-based methods cannot handle grayscale data."
+    },
+    "answer": "C",
+    "explanation": "The paper frames the problem around the 'optimization bottleneck'. Clinicians need immediate visualization. Waiting 30+ minutes for a model to train on a single patient's scan is operationally infeasible for routine diagnostics."
+  },
+  {
+    "source": "[choudhuri] Render-FM: A Foundation Model for Real-time Photorealistic Volumetric Rendering",
+    "question": "Render-FM uses an encoder-decoder architecture to regress 6DGS parameters directly from the CT volume. What is the primary advantage of this 'Foundation Model' approach over training a separate model for each patient?",
+    "options": {
+      "A": "It allows the model to overfit to a single patient's anatomy.",
+      "B": "It leverages learned priors from a large dataset to generalize to new scans instantly, enabling feed-forward inference in seconds.",
+      "C": "It eliminates the need for a GPU during inference.",
+      "D": "It ensures that the model only visualizes bones and ignores soft tissue."
+    },
+    "answer": "B",
+    "explanation": "This tests the concept of Foundation Models. The key advantage is generalization and speed: learning priors from many scans allows the model to 'understand' CT physics and anatomy, permitting instant rendering of unseen data without retraining."
+  },
+  {
+    "source": "[choudhuri] Render-FM: A Foundation Model for Real-time Photorealistic Volumetric Rendering",
+    "question": "What is the role of 'Anatomy-Guided Priming' (AGP) in the Render-FM framework, and why is it preferred over random initialization?",
+    "options": {
+      "A": "It randomly scatters points to ensure coverage of the empty space.",
+      "B": "It uses the voxel grid to set positions and leverages segmentation masks/transfer functions to initialize semantics and opacity, providing a robust, domain-aware starting point.",
+      "C": "It is a post-processing step that filters out noise.",
+      "D": "It is used to generate the ground truth labels for the training loss."
+    },
+    "answer": "B",
+    "explanation": "Random initialization (standard in 3DGS) is inefficient for volumes where most space is empty air. AGP utilizes the known structure of CT data (voxels) and domain knowledge (segmentation/TF) to place primitives only where anatomy exists, improving convergence and quality."
+  },
+  {
+    "source": "[choudhuri] Render-FM: A Foundation Model for Real-time Photorealistic Volumetric Rendering",
+    "question": "You are designing the evaluation protocol for Render-FM. Why is it important to evaluate on 'Unseen Transfer Functions' (TF) in addition to standard metrics?",
+    "options": {
+      "A": "To check if the model creates new colors not present in the training set.",
+      "B": "To test the model's ability to generalize to new visualization styles (e.g., changing opacity/color mapping) without retraining, which is a common user interaction in medical software.",
+      "C": "To ensure the model works on black and white monitors.",
+      "D": "Because unseen TFs usually hide artifacts better than seen TFs."
+    },
+    "answer": "B",
+    "explanation": "Radiologists frequently adjust transfer functions (window/level, color maps) to highlight different tissues. A useful system must generalize to these adjustments (Unseen TF) instantly; otherwise, it is brittle and limited to fixed visualizations."
+  },
+  {
+    "source": "[kowshik] continual learning",
+    "question": "In the SACK framework, what is the primary motivation for 'Concept-Based Scoring' of incoming data?",
+    "options": {
+      "A": "To balance the class distribution in the replay buffer.",
+      "B": "To mimic human learning by prioritizing new examples that are conceptually related to previously acquired knowledge, easing the integration of new information.",
+      "C": "To filter out noisy images from the dataset.",
+      "D": "To automatically generate captions for the images."
+    },
+    "answer": "B",
+    "explanation": "SACK frames the problem around the intuition that humans learn better when new information builds upon known concepts. Scoring effectively creates a curriculum where the model focuses on 'relatable' concepts first, improving plasticity and stability."
+  },
+  {
+    "source": "[kowshik] continual learning",
+    "question": "Why is 'random sampling' of the replay buffer or incoming data stream considered a suboptimal strategy in the context of this paper?",
+    "options": {
+      "A": "Random sampling is computationally expensive.",
+      "B": "Random sampling treats all examples as equally informative, ignoring the fact that some examples may reinforce known concepts while others introduce radical shifts that destabilize the model.",
+      "C": "Random sampling always leads to overfitting.",
+      "D": "Random sampling violates the i.i.d. assumption."
+    },
+    "answer": "B",
+    "explanation": "The paper argues against the standard assumption that all samples are equal. By ignoring the semantic relationship between new and old data, random sampling can lead to inefficient learning (struggling with dissimilar concepts) or catastrophic forgetting."
+  },
+  {
+    "source": "[kowshik] continual learning",
+    "question": "Your system needs to extract concepts from the model's internal representations to compute alignment scores. Why use a tool like CLIP-Dissect over simple neuron activation maximization?",
+    "options": {
+      "A": "CLIP-Dissect is faster to run on CPU.",
+      "B": "Activation maximization only produces visual patterns, whereas CLIP-Dissect maps neurons to human-interpretable natural language concepts, allowing for semantic comparison with the new data labels.",
+      "C": "CLIP-Dissect provides a binary mask of the neuron's receptive field.",
+      "D": "Neuron activation maximization requires a labeled dataset."
+    },
+    "answer": "B",
+    "explanation": "To compare 'what the model knows' with 'what the new data is' (labels), we need a shared semantic space. CLIP-Dissect translates internal activations into language concepts, enabling the calculation of semantic similarity scores."
+  },
+  {
+    "source": "[kowshik] continual learning",
+    "question": "In the SACK sampler, the mixing coefficient $\\lambda$ scales from 0 (uniform) to 1 (concept-weighted) over epochs. What is the reasoning behind this specific scheduling?",
+    "options": {
+      "A": "To confuse the model initially and then clarify the task.",
+      "B": "To start with broad exploration (uniform) to avoid bias, then gradually focus on the most conceptually relevant/aligned samples to refine the learned representations.",
+      "C": "To save computational resources in the early epochs.",
+      "D": "It is an arbitrary choice with no impact on performance."
+    },
+    "answer": "B",
+    "explanation": "This follows an anti-curriculum or exploration-exploitation strategy. Starting uniform ensures the model isn't starved of hard examples initially, but shifting to concept-weighted sampling prioritizes consolidating knowledge that integrates well with existing structures."
+  },
+  {
+    "source": "[kowshik] interpretable",
+    "question": "Why is visualizing all extracted Sparse Autoencoder (SAE) features simultaneously considered a 'poor choice' for interpretability?",
+    "options": {
+      "A": "Current GPUs cannot render that many points.",
+      "B": "The sheer volume (millions) and the presence of polysemantic/noisy features create cognitive overload and visual clutter, making it impossible to discern meaningful structure.",
+      "C": "SAE features are all identical, so visualizing one is enough.",
+      "D": "Dimensionality reduction algorithms like UMAP cannot handle more than 100 points."
+    },
+    "answer": "B",
+    "explanation": "The paper argues for 'focused exploration' because the vast scale and noise levels of raw SAE features render global visualizations uninformative. Targeted analysis of curated concepts is more effective for human understanding."
+  },
+  {
+    "source": "[kowshik] interpretable",
+    "question": "What specific distortion issue does the 'Ball Mapper' visualization address that standard UMAP projections often suffer from?",
+    "options": {
+      "A": "UMAP cannot handle categorical colors.",
+      "B": "UMAP distorts local neighborhood relationships and global structure to fit points into 2D, potentially splitting clusters or merging unrelated ones. Ball Mapper preserves topology by explicitly modeling overlaps.",
+      "C": "UMAP is strictly linear, while Ball Mapper is non-linear.",
+      "D": "UMAP requires labels, while Ball Mapper is unsupervised."
+    },
+    "answer": "B",
+    "explanation": "A key technical point is the reliability of the visualization. UMAP's compression artifacts can mislead researchers about feature relationships. Ball Mapper uses a topological graph approach that faithfully represents connectivity and overlaps without forcing a 2D spatial layout."
+  },
+  {
+    "source": "[kowshik] interpretable",
+    "question": "Your analysis reveals that concept representations evolve from 'densely clustered' to 'separated' and back to 'integrated' across layers. What does this suggest about the LLM's internal processing?",
+    "options": {
+      "A": "The model is forgetting information in the middle layers.",
+      "B": "The model processes information cyclically without any clear progression.",
+      "C": "The model likely progresses from broad general representations, to specialized differentiation (middle layers), to high-level abstract integration (deep layers).",
+      "D": "The SAE is failing to extract features in the middle layers."
+    },
+    "answer": "C",
+    "explanation": "This observation aligns with the 'evolution of knowledge' hypothesis. The structural changes in the feature space reflect the model's computational hierarchy: generalized input -> specific feature extraction -> abstract reasoning/output generation."
+  },
+  {
+    "source": "[personal] CTScanGaze",
+    "question": "Why can't existing 2D scanpath prediction models (like those for X-rays) be directly applied to the CTScanGaze dataset with high performance?",
+    "options": {
+      "A": "CT scans are grayscale, while 2D models require RGB input.",
+      "B": "2D models lack the mechanism to model volumetric inter-slice navigation (z-axis) and the complex 'back-and-forth' verification strategies used by radiologists in 3D.",
+      "C": "The resolution of CT slices is too low for 2D models.",
+      "D": "2D models are not robust to the noise in CT data."
+    },
+    "answer": "B",
+    "explanation": "The problem framing emphasizes the *volumetric nature* of the task. Radiologists don't just look at a flat image; they scroll through depth ($z$-axis) and revisit slices. A 2D model treats slices independently or lacks the spatial-temporal context to predict this 3D navigation."
+  },
+  {
+    "source": "[personal] CTScanGaze",
+    "question": "You are training a 3D scanpath predictor (CT-Searcher) but have limited real gaze data (909 scans). What is the primary motivation for the '2D-to-3D' pretraining pipeline?",
+    "options": {
+      "A": "To convert the CT scans into X-rays to save storage.",
+      "B": "To leverage larger existing 2D gaze datasets by synthetically lifting them to 3D, establishing robust initial weights and inductive biases for fixation prediction before fine-tuning on the scarce 3D data.",
+      "C": "To validate that the model works on 2D data.",
+      "D": "To increase the difficulty of the training task to prevent overfitting."
+    },
+    "answer": "B",
+    "explanation": "This addresses the 'Data & Features' constraint. Deep learning requires massive data. The pretraining strategy is a form of transfer learning or domain adaptation, bridging the gap between data-rich 2D domains and the data-scarce 3D domain."
+  },
+  {
+    "source": "[personal] CTScanGaze",
+    "question": "In the architecture of CT-Searcher, what role does the '3D Positional Encoding' play, and why is it critical?",
+    "options": {
+      "A": "It tells the model which hospital the scan came from.",
+      "B": "It provides essential spatial context ($x, y, z$) to the transformer, enabling it to distinguish between identical visual features located at different depths or positions in the volume.",
+      "C": "It compresses the input volume into a single vector.",
+      "D": "It is used to encode the timestamp of the fixation."
+    },
+    "answer": "B",
+    "explanation": "Transformers are permutation-invariant. Without positional encodings, the model sees a bag of features. In 3D, knowing *where* a feature is (especially depth/slice $z$) is crucial for predicting navigation paths. The ablation study confirms its high impact."
+  },
+  {
+    "source": "[personal] CTScanGaze",
+    "question": "Which evaluation metric would be most informative for assessing if the predicted scanpath captures the *temporal dynamics* (e.g., speed, pauses) of a radiologist, rather than just the spatial location?",
+    "options": {
+      "A": "NSS (Normalized Scanpath Saliency)",
+      "B": "CC (Correlation Coefficient)",
+      "C": "MultiMatch (specifically the Duration and Length dimensions)",
+      "D": "KL Divergence"
+    },
+    "answer": "C",
+    "explanation": "Saliency metrics (NSS, CC, KL) only measure spatial heatmap overlap. Scanpath metrics like MultiMatch compare the *sequence*. Specifically, 'Duration' measures temporal alignment, which is key to capturing 'how long' a radiologist looks at a specific anomaly."
+  },
+  {
+    "source": "[choudhuri] 3D Vision-Language Gaussian Splatting",
+    "question": "Why might rendering high-dimensional language features in real-time be a system bottleneck compared to rendering simple RGB colors?",
+    "options": {
+      "A": "Language features are discrete tokens.",
+      "B": "Language features (e.g., 512 dimensions) require significantly more memory bandwidth and compute for rasterization than 3-channel RGB, necessitating optimized CUDA kernels.",
+      "C": "Language features are only defined for the background.",
+      "D": "Rendering language features requires a connection to an LLM API at runtime."
+    },
+    "answer": "B",
+    "explanation": "System Design: Scale & Inference. Rasterizing a 512-dim vector for every pixel is much more expensive than a 3-dim vector. The paper's contribution of a custom CUDA rasterizer addresses this specific throughput bottleneck."
+  },
+  {
+    "source": "[choudhuri] 3D Vision-Language Gaussian Splatting",
+    "question": "What is the 'Cross-modal Rasterizer' in the proposed architecture designed to achieve?",
+    "options": {
+      "A": "To convert 3D points into 2D pixels.",
+      "B": "To fuse visual and linguistic features *before* projection, ensuring that the rendered semantic map is consistent with the visual geometry.",
+      "C": "To rasterize images on CPU.",
+      "D": "To generate text captions from images."
+    },
+    "answer": "B",
+    "explanation": "Architecture choice. Instead of two separate passes, the cross-modal rasterizer handles the fusion, leveraging the 'smoothed semantic indicator' to modulate how language features are blended based on geometry."
+  },
+  {
+    "source": "[choudhuri] 3D Vision-Language Gaussian Splatting",
+    "question": "Why is the LERF (Language Embedded Radiance Fields) method used as a baseline for comparison?",
+    "options": {
+      "A": "It is the only other method that exists.",
+      "B": "It represents the state-of-the-art in NeRF-based language fields, serving as a benchmark for quality and speed against the proposed 3DGS-based approach.",
+      "C": "It is faster than 3DGS.",
+      "D": "It uses the same codebase."
+    },
+    "answer": "B",
+    "explanation": "Evaluation framing. LERF is the standard NeRF-based competitor. Comparing against it highlights the specific advantages (speed, boundary precision) of the 3DGS approach."
+  },
+  {
+    "source": "[choudhuri] 3D Vision-Language Gaussian Splatting",
+    "question": "What does 'Open-vocabulary' mean in the context of the data and features for this system?",
+    "options": {
+      "A": "The model can only recognize 1000 predefined classes.",
+      "B": "The model uses CLIP features, allowing it to query for *any* text description (e.g., 'a red toy') without being retrained on specific class labels.",
+      "C": "The source code is open source.",
+      "D": "The vocabulary is spoken aloud."
+    },
+    "answer": "B",
+    "explanation": "Data & Features. The use of CLIP embeddings as the 'language feature' allows the system to handle arbitrary text queries at inference time, a key system requirement for flexible robotics or search."
+  },
+  {
+    "source": "[choudhuri] 3D Vision-Language Gaussian Splatting",
+    "question": "When training on a large dataset, what is a potential strategy to manage the storage cost of high-dimensional language features?",
+    "options": {
+      "A": "Store them as strings.",
+      "B": "Dimensionality reduction (PCA) or Distillation into a lower-dimensional student network.",
+      "C": "Delete half the features.",
+      "D": "Use higher precision floats."
+    },
+    "answer": "B",
+    "explanation": "Scale/System Design thought. While the paper focuses on the primary method, a standard system design optimization for high-dim features (like CLIP's 512D) is distillation or compression to save VRAM."
+  },
+  {
+    "source": "[choudhuri] 3D Vision-Language Gaussian Splatting",
+    "question": "Why are 'pixel-aligned' features important for the training data in this system?",
+    "options": {
+      "A": "To ensure the image is square.",
+      "B": "To map specific 2D image regions (semantics) to specific 3D Gaussians during backpropagation, enabling precise spatial learning.",
+      "C": "To align the camera horizontally.",
+      "D": "To speed up loading."
+    },
+    "answer": "B",
+    "explanation": "Data processing. The training signal comes from 2D semantic maps (e.g., from SAM/CLIP). These must align pixel-perfectly with the rendered image to correctly update the 3D Gaussians."
+  },
+  {
+    "source": "[choudhuri] 3D Vision-Language Gaussian Splatting",
+    "question": "What is the primary objective of the Semantic Loss function in this architecture?",
+    "options": {
+      "A": "To make the image look realistic.",
+      "B": "To minimize the distance between the rendered semantic feature vector and the ground-truth CLIP/SAM feature vector for each pixel.",
+      "C": "To classify pixels into 10 categories.",
+      "D": "To reduce the file size."
+    },
+    "answer": "B",
+    "explanation": "ML Objective. The semantic loss directly optimizes the alignment in the feature space, ensuring the 3D field captures the 'meaning' of the object."
+  },
+  {
+    "source": "[choudhuri] 3D Vision-Language Gaussian Splatting",
+    "question": "In a real-time inference scenario, what is the trade-off when increasing the number of Gaussians?",
+    "options": {
+      "A": "Higher quality, Higher FPS.",
+      "B": "Higher quality (better detail), Lower FPS (slower rendering and sorting).",
+      "C": "Lower quality, Higher FPS.",
+      "D": "No trade-off."
+    },
+    "answer": "B",
+    "explanation": "Inference & Scale. More primitives mean more sorting and rasterization work per frame. System design requires balancing the 'budget' of primitives against target hardware capabilities."
+  },
+  {
+    "source": "[choudhuri] 3D Vision-Language Gaussian Splatting",
+    "question": "What specific problem does the system face regarding 'Multi-view Consistency' when using 2D foundation models like SAM?",
+    "options": {
+      "A": "SAM is 3D aware.",
+      "B": "SAM generates segmentation masks independently for each view, which may be inconsistent (jittery) across views, creating noisy training signals for the 3D model.",
+      "C": "SAM is too slow.",
+      "D": "SAM only works on black and white images."
+    },
+    "answer": "B",
+    "explanation": "Problem Framing. A major challenge in lifting 2D priors to 3D is that 2D models don't know about 3D geometry, so their outputs fluctuate. The 3DGS model acts as a consistency enforcer."
+  },
+  {
+    "source": "[choudhuri] 3D Vision-Language Gaussian Splatting",
+    "question": "Why is the 'Sparse Views' constraint a critical challenge for this system?",
+    "options": {
+      "A": "It saves hard drive space.",
+      "B": "With few views, the model can easily overfit to those specific angles, failing to render correct geometry or semantics from novel viewpoints.",
+      "C": "It makes training faster.",
+      "D": "It allows using low-resolution cameras."
+    },
+    "answer": "B",
+    "explanation": "Problem Framing. The paper addresses this explicitly with the augmentation strategy. Sparse views lead to 'floaters' or artifacts in unseen angles without regularization."
+  },
+  {
+    "source": "[choudhuri] 3D Vision-Language Gaussian Splatting",
+    "question": "Which evaluation metric best captures the 'precision' of the semantic boundaries in the rendered output?",
+    "options": {
+      "A": "FPS.",
+      "B": "mIoU (mean Intersection over Union) at higher resolutions.",
+      "C": "Training time.",
+      "D": "Disk usage."
+    },
+    "answer": "B",
+    "explanation": "Evaluation. mIoU measures the overlap between predicted and ground truth segments. High mIoU implies the model respects the fine boundaries of objects."
+  },
+  {
+    "source": "[choudhuri] 7DGS: Unified Spatial-Temporal-Angular Gaussian Splatting",
+    "question": "In the 7DGS framework, what problem arises if you simply treat time as an independent variable without correlating it to space?",
+    "options": {
+      "A": "The model becomes 4D.",
+      "B": "You cannot model motion; the Gaussians would fade in and out in place rather than moving continuously along a trajectory.",
+      "C": "It would be too fast.",
+      "D": "It would only work for static scenes."
+    },
+    "answer": "B",
+    "explanation": "Problem Framing. Modeling the *correlation* ($\\Sigma_{pt}$) between position and time is what allows the Gaussian to represent velocity/motion. Independent variables would just look like a temporal dissolve."
+  },
+  {
+    "source": "[choudhuri] 7DGS: Unified Spatial-Temporal-Angular Gaussian Splatting",
+    "question": "What is the specific role of the 'Directional' input in the Adaptive Gaussian Refinement (AGR) MLP?",
+    "options": {
+      "A": "To tell the model where the sun is.",
+      "B": "To allow the Gaussian's shape or position to subtly deform based on viewing angle, mimicking complex view-dependent geometric effects (like parallax on non-planar surfaces).",
+      "C": "To increase the parameter count.",
+      "D": "To compute the shadows."
+    },
+    "answer": "B",
+    "explanation": "Architecture. While the 7D covariance handles linear view-dependence, the AGR MLP allows for non-linear, view-dependent corrections to the primitive's parameters."
+  },
+  {
+    "source": "[choudhuri] 7DGS: Unified Spatial-Temporal-Angular Gaussian Splatting",
+    "question": "Why is the Cholesky decomposition $LL^T$ used to parameterize the covariance matrix in the optimization?",
+    "options": {
+      "A": "It is faster to compute.",
+      "B": "It ensures the resulting covariance matrix is always positive semi-definite, which is a mathematical requirement for a valid Gaussian distribution.",
+      "C": "It compresses the matrix.",
+      "D": "It looks cooler."
+    },
+    "answer": "B",
+    "explanation": "Architecture/Math. Optimization can push parameters anywhere. Cholesky is a standard 'system constraint' to enforce valid physical/statistical properties (valid covariance) during gradient descent."
+  },
+  {
+    "source": "[choudhuri] 7DGS: Unified Spatial-Temporal-Angular Gaussian Splatting",
+    "question": "What is the composition of the '7DGS-PBR' dataset and why was it created?",
+    "options": {
+      "A": "Real-world photos of statues; for static analysis.",
+      "B": "Physically-Based Renderings of dynamic scenes (heart, clouds) with ground truth view-dependent effects; created because existing datasets didn't sufficiently test complex light transport in motion.",
+      "C": "Drawings of cartoons.",
+      "D": "Videos of traffic."
+    },
+    "answer": "B",
+    "explanation": "Data. System design often requires creating new evaluation benchmarks when existing ones (like D-NeRF) are too simple (diffuse, simple motion) to stress-test the new architecture (specular, volumetric motion)."
+  },
+  {
+    "source": "[choudhuri] 7DGS: Unified Spatial-Temporal-Angular Gaussian Splatting",
+    "question": "Which factor primarily enables 7DGS to achieve 'Real-time' inference speeds?",
+    "options": {
+      "A": "Using a supercomputer.",
+      "B": "The 'slicing' operation reduces the problem to 3D Gaussian rendering, which leverages hardware-accelerated rasterization (Gaussian Splatting) rather than expensive volumetric ray-marching.",
+      "C": "Ignoring the time dimension.",
+      "D": "Rendering at 240p resolution."
+    },
+    "answer": "B",
+    "explanation": "Inference. The architectural choice to project/slice to 3D GS allows reusing the highly optimized rasterizer pipeline, which is orders of magnitude faster than NeRF-style ray marching."
+  },
+  {
+    "source": "[choudhuri] 7DGS: Unified Spatial-Temporal-Angular Gaussian Splatting",
+    "question": "Why is 'Temporal Smoothness' an important objective in the loss function or regularization?",
+    "options": {
+      "A": "To make the video slower.",
+      "B": "To prevent jittering or flickering of artifacts between frames, ensuring a coherent visual experience for the user.",
+      "C": "To reduce the frame rate.",
+      "D": "To blur the background."
+    },
+    "answer": "B",
+    "explanation": "Objective/Quality. In dynamic scene modeling, independent per-frame optimization leads to temporal instability. Smoothness constraints ensure physical plausibility and visual comfort."
+  },
+  {
+    "source": "[choudhuri] 7DGS: Unified Spatial-Temporal-Angular Gaussian Splatting",
+    "question": "What is the difference between 'Slicing' a 7D Gaussian and 'Projecting' it?",
+    "options": {
+      "A": "There is no difference.",
+      "B": "Slicing (conditioning) looks at the cross-section at a specific time $t$, while projecting would integrate (marginalize) over time. Slicing is correct for rendering a specific moment.",
+      "C": "Slicing is slower.",
+      "D": "Projecting is for 2D, Slicing is for 3D."
+    },
+    "answer": "B",
+    "explanation": "Math/Architecture. To render frame $t$, we observe the state *at* $t$ (conditional probability), not the average state over all time (marginal probability)."
+  },
+  {
+    "source": "[choudhuri] 7DGS: Unified Spatial-Temporal-Angular Gaussian Splatting",
+    "question": "Why use synthetic data (like the PBR dataset) for training or evaluation in this system?",
+    "options": {
+      "A": "It is cheaper than buying a camera.",
+      "B": "It provides perfect ground truth (geometry, lighting, time) that is impossible to obtain with real cameras, allowing for precise debugging and metric validation.",
+      "C": "Real data is illegal.",
+      "D": "Synthetic data is smaller."
+    },
+    "answer": "B",
+    "explanation": "Data. Synthetic data allows isolating variables. If the model fails on perfect data, it's an architecture bug. If it works on synthetic but fails on real, it's a noise/domain gap issue."
+  },
+  {
+    "source": "[choudhuri] 7DGS: Unified Spatial-Temporal-Angular Gaussian Splatting",
+    "question": "In evaluating dynamic view synthesis, why might LPIPS be preferred over PSNR?",
+    "options": {
+      "A": "LPIPS is faster to calculate.",
+      "B": "PSNR favors blurry, average images (minimizing MSE), while LPIPS better captures perceptual similarity and high-frequency details consistent with human vision.",
+      "C": "PSNR is deprecated.",
+      "D": "LPIPS numbers are higher."
+    },
+    "answer": "B",
+    "explanation": "Evaluation. A standard ML System Design concept. MSE/PSNR penalizes slight spatial misalignments heavily, leading models to blur. Perceptual metrics (LPIPS) align better with human judgment of 'realism.'"
+  },
+  {
+    "source": "[choudhuri] 7DGS: Unified Spatial-Temporal-Angular Gaussian Splatting",
+    "question": "What is the storage cost implication of moving from 3D to 7D Gaussians?",
+    "options": {
+      "A": "It reduces storage.",
+      "B": "It increases storage per Gaussian (more covariance parameters), but might require fewer Gaussians to represent dynamic effects compared to naive frame-by-frame 3DGS.",
+      "C": "It requires 7 times more storage.",
+      "D": "It requires infinite storage."
+    },
+    "answer": "B",
+    "explanation": "Scale. The parameter vector per primitive is larger ($21+$ parameters for covariance vs 6), but a unified model is more compact than storing a separate 3DGS model for every timestep (4DGS naive approach)."
+  },
+  {
+    "source": "[choudhuri] 7DGS: Unified Spatial-Temporal-Angular Gaussian Splatting",
+    "question": "Why doesn't 7DGS need 'Temporal Spherical Harmonics'?",
+    "options": {
+      "A": "It uses them.",
+      "B": "The 'Directional' ($X_d$) dimension in the Gaussian itself handles the view-dependence and its correlation with time ($X_t$), making explicit temporal SH coefficients redundant.",
+      "C": "SH are too slow.",
+      "D": "Color doesn't change over time."
+    },
+    "answer": "B",
+    "explanation": "Architecture. The unified covariance matrix captures $\\Sigma_{td}$ (Time-Direction correlation), which inherently models how the appearance (directionality) changes over time."
+  },
+  {
+    "source": "[choudhuri] Render-FM: A Foundation Model for Real-time Photorealistic Volumetric Rendering",
+    "question": "What is the 'generalization' problem Render-FM attempts to solve?",
+    "options": {
+      "A": "Generalizing to video.",
+      "B": "The inability of standard 3DGS optimization to work on a new patient's CT scan without retraining from scratch.",
+      "C": "Generalizing to MRI.",
+      "D": "Generalizing to text."
+    },
+    "answer": "B",
+    "explanation": "Problem Framing. The core value prop is 'zero-shot' or 'feed-forward' rendering of *unseen* data, which optimization-based methods cannot do."
+  },
+  {
+    "source": "[choudhuri] Render-FM: A Foundation Model for Real-time Photorealistic Volumetric Rendering",
+    "question": "Why use a 3D U-Net architecture for the encoder instead of a standard 2D ResNet?",
+    "options": {
+      "A": "3D U-Net is faster.",
+      "B": "CT scans are volumetric; a 3D U-Net captures spatial context in all three dimensions (axial, sagittal, coronal) simultaneously, which is crucial for understanding 3D anatomy.",
+      "C": "ResNets are for classification only.",
+      "D": "U-Nets are older and more reliable."
+    },
+    "answer": "B",
+    "explanation": "Architecture. The data topology dictates the architecture. Volumetric data requires volumetric convolution to capture 3D features effectively."
+  },
+  {
+    "source": "[choudhuri] Render-FM: A Foundation Model for Real-time Photorealistic Volumetric Rendering",
+    "question": "Why does the model take `Input + Mask + Transfer Function` as input channels?",
+    "options": {
+      "A": "To confuse the model.",
+      "B": "To condition the output 6DGS parameters on the specific visualization the user wants (opacity/color) and the specific anatomy (mask) to be rendered.",
+      "C": "Because the GPU requires 6 channels.",
+      "D": "To improve the resolution."
+    },
+    "answer": "B",
+    "explanation": "Data & Features. The model isn't just reconstructing the CT; it's rendering a *specific visualization*. The TF and Mask are control signals that dictate appearance (color/opacity) and visibility."
+  },
+  {
+    "source": "[choudhuri] Render-FM: A Foundation Model for Real-time Photorealistic Volumetric Rendering",
+    "question": "What is the trade-off between 'Feed-forward inference' and 'Fine-tuning' in Render-FM?",
+    "options": {
+      "A": "Feed-forward is slow, Fine-tuning is fast.",
+      "B": "Feed-forward is instant (seconds) but potentially lower fidelity; Fine-tuning takes longer (minutes) but recovers high-frequency details and removes artifacts.",
+      "C": "They are the same.",
+      "D": "Fine-tuning reduces quality."
+    },
+    "answer": "B",
+    "explanation": "Inference & Scale. A classic system design trade-off. The 'Foundation Model' gives a great starting point instantly. If the radiologist needs pixel-perfect detail for a diagnosis, a quick fine-tune step can bridge the gap."
+  },
+  {
+    "source": "[choudhuri] Render-FM: A Foundation Model for Real-time Photorealistic Volumetric Rendering",
+    "question": "What are 'floating noise' artifacts in neural rendering, and why does Render-FM struggle with them less than per-scene optimization?",
+    "options": {
+      "A": "Clouds in the sky.",
+      "B": "Random densities in empty space caused by overfitting to sparse views; Render-FM's learned priors suppress these by understanding 'empty space' from the large training set.",
+      "C": "Noise from the CT scanner.",
+      "D": "Artifacts from the monitor."
+    },
+    "answer": "B",
+    "explanation": "Evaluation/Problem. Sparse view optimization is ill-posed and puts 'stuff' where cameras don't see. A foundation model learns the structure of CTs (solid objects in void) and generalizes this prior, cleaning up the empty space."
+  },
+  {
+    "source": "[choudhuri] Render-FM: A Foundation Model for Real-time Photorealistic Volumetric Rendering",
+    "question": "How does the system integrate into a clinical workflow regarding 'latency'?",
+    "options": {
+      "A": "It requires overnight processing.",
+      "B": "It enables 'interactive' frame rates (>24 fps) after a short initial inference (seconds), allowing doctors to rotate and inspect the volume naturally.",
+      "C": "It renders one frame per minute.",
+      "D": "It is only for offline reporting."
+    },
+    "answer": "B",
+    "explanation": "Business/System Constraints. 'Interactive' is the key requirement. Static images aren't enough; doctors need to rotate the model. 6DGS rasterization enables this interaction speed."
+  },
+  {
+    "source": "[choudhuri] Render-FM: A Foundation Model for Real-time Photorealistic Volumetric Rendering",
+    "question": "Why regress 6DGS parameters rather than predicting pixels directly (like a generative video model)?",
+    "options": {
+      "A": "Pixels are too many.",
+      "B": "Predicting a 3D representation (6DGS) allows for multi-view consistent rendering from *any* angle, whereas pixel prediction doesn't guarantee 3D consistency or allow free camera movement.",
+      "C": "Generative models don't exist.",
+      "D": "6DGS is easier to train."
+    },
+    "answer": "B",
+    "explanation": "Architecture. This distinguishes 'Neural Rendering' (3D consistent) from 'Image Generation' (2D). For medical diagnosis, 3D consistency is non-negotiable; you can't have a tumor appear in one angle and disappear in another."
+  },
+  {
+    "source": "[choudhuri] Render-FM: A Foundation Model for Real-time Photorealistic Volumetric Rendering",
+    "question": "What is the scaling bottleneck for processing large CT volumes (e.g., 512x512x512) with 3D CNNs?",
+    "options": {
+      "A": "CPU speed.",
+      "B": "GPU VRAM; 3D activations grow cubically, quickly exceeding memory limits of standard cards.",
+      "C": "Internet bandwidth.",
+      "D": "Disk space."
+    },
+    "answer": "B",
+    "explanation": "Scale. 3D data is massive ($O(N^3)$). A major engineering constraint in this paper is fitting the training batches into GPU memory, necessitating optimizations or crop-based training."
+  },
+  {
+    "source": "[choudhuri] Render-FM: A Foundation Model for Real-time Photorealistic Volumetric Rendering",
+    "question": "Why use the TotalSegmentator dataset for training?",
+    "options": {
+      "A": "It is small and easy to download.",
+      "B": "It provides large-scale, diverse CT scans with high-quality anatomical labels, essential for learning robust, generalizable priors.",
+      "C": "It only contains brain scans.",
+      "D": "It is synthetic data."
+    },
+    "answer": "B",
+    "explanation": "Data. Foundation models require data diversity. TotalSegmentator is a de facto standard for diverse anatomical coverage."
+  },
+  {
+    "source": "[choudhuri] Render-FM: A Foundation Model for Real-time Photorealistic Volumetric Rendering",
+    "question": "Why combine L1 loss and SSIM loss for training?",
+    "options": {
+      "A": "To make training harder.",
+      "B": "L1 optimizes pixel accuracy (colors), while SSIM optimizes structural fidelity (edges/textures); combined, they produce images that are both accurate and perceptually sharp.",
+      "C": "L1 is for classification.",
+      "D": "SSIM is for audio."
+    },
+    "answer": "B",
+    "explanation": "Objective. A standard loss combination in image restoration/synthesis. L1 alone causes blur; SSIM enforces local structural consistency."
+  },
+  {
+    "source": "[choudhuri] Render-FM: A Foundation Model for Real-time Photorealistic Volumetric Rendering",
+    "question": "What is a limitation of the current Render-FM regarding 'Relighting'?",
+    "options": {
+      "A": "It is too bright.",
+      "B": "The current model bakes lighting into the SH coefficients; it cannot dynamically change the light source position (e.g., for shadowing) without retraining/regressing new parameters.",
+      "C": "It has no limitations.",
+      "D": "It renders in the dark."
+    },
+    "answer": "B",
+    "explanation": "Problem/Limitations. While it handles view-dependence, true 'relighting' (changing the light source, not just the camera) requires separating material properties (BRDF) from lighting, which this specific architecture doesn't explicitly disentangle."
+  },
+  {
+    "source": "[kowshik] continual learning",
+    "question": "Define the 'Stability-Plasticity Dilemma' in the context of this system.",
+    "options": {
+      "A": "The model is stable on the table but plastic in software.",
+      "B": "The trade-off between the ability to learn new tasks (Plasticity) and the ability to remember old tasks (Stability).",
+      "C": "The trade-off between training speed and inference speed.",
+      "D": "The difference between hard and soft labels."
+    },
+    "answer": "B",
+    "explanation": "Problem Framing. This is the fundamental theoretical constraint of Continual Learning. Improving one often degrades the other."
+  },
+  {
+    "source": "[kowshik] continual learning",
+    "question": "What components comprise the 'Concept Extractor' in the SACK architecture?",
+    "options": {
+      "A": "A random number generator.",
+      "B": "An LLM (like GPT-4) to generate class descriptors and a Vision-Language model (like CLIP) to align visual features with those descriptors.",
+      "C": "A CNN classifier.",
+      "D": "A database of rules."
+    },
+    "answer": "B",
+    "explanation": "Architecture. SACK relies on bridging the pixel world and the semantic world. LLMs provide the text concepts; CLIP provides the shared embedding space."
+  },
+  {
+    "source": "[kowshik] continual learning",
+    "question": "How does 'Class Imbalance' typically manifest in a continual learning stream?",
+    "options": {
+      "A": "All classes appear equally.",
+      "B": "New tasks may have few examples, or the stream may be dominated by old concepts, biasing the model against learning the new information effectively.",
+      "C": "The model crashes.",
+      "D": "The learning rate changes."
+    },
+    "answer": "B",
+    "explanation": "Data. Real-world streams are rarely balanced. The system must be robust to bursts of new classes or long tails of old ones."
+  },
+  {
+    "source": "[kowshik] continual learning",
+    "question": "What is the 'Forgetting' (BWT - Backward Transfer) metric specifically measure?",
+    "options": {
+      "A": "How much the model accuracy on *previous* tasks decreases after learning a *new* task.",
+      "B": "How slow the model becomes.",
+      "C": "How much data is lost.",
+      "D": "How much accuracy improves on future tasks."
+    },
+    "answer": "A",
+    "explanation": "Evaluation. BWT < 0 implies forgetting. This is the key metric for 'Stability'."
+  },
+  {
+    "source": "[kowshik] continual learning",
+    "question": "Does SACK introduce computational overhead at *Inference* time?",
+    "options": {
+      "A": "Yes, massive overhead.",
+      "B": "No, SACK only modifies the training sampling strategy; the final model architecture and inference path remain unchanged.",
+      "C": "Yes, it requires GPT-4 at inference.",
+      "D": "It depends on the GPU."
+    },
+    "answer": "B",
+    "explanation": "Inference/System Design. A key advantage. Complexity is pushed to training (curriculum generation). The deployed model is a standard efficient backbone."
+  },
+  {
+    "source": "[kowshik] continual learning",
+    "question": "How is the 'Similarity Matrix' computed in the concept scoring phase?",
+    "options": {
+      "A": "Euclidean distance between pixels.",
+      "B": "Cosine similarity between the CLIP embeddings of the model's learned concepts and the CLIP embeddings of the new class descriptions.",
+      "C": "Manually by humans.",
+      "D": "Random assignment."
+    },
+    "answer": "B",
+    "explanation": "Architecture. This matrix quantifies the 'relevance' of the new data to the old knowledge, driving the sampling weights."
+  },
+  {
+    "source": "[kowshik] continual learning",
+    "question": "What is the rationale for the 'Anti-curriculum' (Uniform -> Weighted) strategy in SACK?",
+    "options": {
+      "A": "It is random.",
+      "B": "Starting uniform allows broad exploration of the new task (plasticity); shifting to weighted prioritizes samples aligned with existing knowledge to consolidate and stabilize (stability).",
+      "C": "It is faster.",
+      "D": "It is standard practice."
+    },
+    "answer": "B",
+    "explanation": "Objective/Strategy. Counter-intuitive but effective. If you only show 'easy' (aligned) examples first, the model may never learn the 'hard' (novel) parts of the new task. Uniform start ensures coverage."
+  },
+  {
+    "source": "[kowshik] continual learning",
+    "question": "What is the primary scalability bottleneck of the SACK framework during training?",
+    "options": {
+      "A": "The forward pass of the model.",
+      "B": "The concept extraction step involves running CLIP on activations and querying an LLM, which can be slow and costly compared to standard backprop.",
+      "C": "The replay buffer size.",
+      "D": "The learning rate scheduler."
+    },
+    "answer": "B",
+    "explanation": "Scale. While inference is fast, the *training* pipeline is heavy due to the interpretability / VLM loop. This might limit online learning speed."
+  },
+  {
+    "source": "[kowshik] continual learning",
+    "question": "What is the difference between Class-Incremental (CIL) and Task-Incremental (TIL) learning?",
+    "options": {
+      "A": "No difference.",
+      "B": "In TIL, the model is told which task ID it is solving (easier); in CIL, the model must classify inputs without knowing the task ID (harder, more realistic).",
+      "C": "CIL is for text, TIL is for images.",
+      "D": "TIL uses larger batches."
+    },
+    "answer": "B",
+    "explanation": "Problem Framing. CIL is the harder, more 'system design' relevant setting (user sends an image, model must just 'know' what it is)."
+  },
+  {
+    "source": "[kowshik] continual learning",
+    "question": "Why use natural language concepts as the intermediary for scoring?",
+    "options": {
+      "A": "Computers speak English.",
+      "B": "It provides an interpretable, universal interface between the model's internal state (neurons) and the external world (class labels/descriptions).",
+      "C": "It is faster than vectors.",
+      "D": "It reduces accuracy."
+    },
+    "answer": "B",
+    "explanation": "Data/Architecture. The 'semantic gap' is bridged by language. Direct vector comparison between neuron activations and class labels is impossible without a shared space (CLIP)."
+  },
+  {
+    "source": "[kowshik] continual learning",
+    "question": "Why is the ImageNet-R dataset used for evaluation in this paper?",
+    "options": {
+      "A": "It is small.",
+      "B": "It contains 'renditions' (art, sketches) of ImageNet classes, testing out-of-distribution robustness and transfer, which is critical for continual learning systems in the wild.",
+      "C": "It is the only dataset available.",
+      "D": "It has no labels."
+    },
+    "answer": "B",
+    "explanation": "Evaluation. Standard ImageNet is too clean. ImageNet-R tests if the model truly understands the *concept* (e.g., a sketch of a dog) or just the *texture* (a photo of a dog)."
+  },
+  {
+    "source": "[kowshik] interpretable",
+    "question": "What are 'Dead Neurons' in the context of Sparse Autoencoders (SAEs)?",
+    "options": {
+      "A": "Neurons that have stopped working.",
+      "B": "Latent features that never activate for any input in the dataset, representing wasted capacity or poor optimization.",
+      "C": "Neurons that output negative numbers.",
+      "D": "Neurons that are too active."
+    },
+    "answer": "B",
+    "explanation": "Problem Framing. A common failure mode in SAE training. If a feature never fires, it's useless. Managing sparsity vs. dead neurons is the core engineering challenge."
+  },
+  {
+    "source": "[kowshik] interpretable",
+    "question": "What is the role of the $L_1$ penalty in the SAE loss function?",
+    "options": {
+      "A": "To make weights large.",
+      "B": "To induce sparsity in the hidden activations, forcing the model to decompose inputs into a small number of active components.",
+      "C": "To smooth the output.",
+      "D": "To encrypt the data."
+    },
+    "answer": "B",
+    "explanation": "Architecture/Objective. The defining characteristic of SAEs. $L_1$ regularization pushes most activations to zero, yielding the 'sparse' representation."
+  },
+  {
+    "source": "[kowshik] interpretable",
+    "question": "Why is 'Local vs Global' structure analysis important for SAE features?",
+    "options": {
+      "A": "It isn't.",
+      "B": "Global structure reveals high-level organization (e.g., 'all animals'), while local structure reveals fine-grained distinctions (e.g., 'dogs vs wolves'); a good visualization must capture both.",
+      "C": "Global structure is for managers, local for engineers.",
+      "D": "Local structure is just noise."
+    },
+    "answer": "B",
+    "explanation": "Visualization/Evaluation. Understanding the model requires zooming in and out. UMAP often distorts one at the expense of the other."
+  },
+  {
+    "source": "[kowshik] interpretable",
+    "question": "What is 'Overplotting' in UMAP and why is it a problem?",
+    "options": {
+      "A": "Drawing too many lines.",
+      "B": "When thousands of points are projected onto the same 2D pixels, rendering dense clusters as solid blobs where internal structure is invisible.",
+      "C": "Plotting data that doesn't exist.",
+      "D": "Using too many colors."
+    },
+    "answer": "B",
+    "explanation": "Visualization problem. With millions of features, a 2D scatter plot becomes a useless blob. The paper proposes topological methods (Ball Mapper) to disentangle these blobs."
+  },
+  {
+    "source": "[kowshik] interpretable",
+    "question": "How is 'Feature Interpretability' quantitatively scored in recent research (e.g., auto-interp)?",
+    "options": {
+      "A": "By human voting.",
+      "B": "By asking an LLM to predict the activating tokens for a feature based on its top-activating examples, and measuring prediction accuracy.",
+      "C": "By measuring the magnitude of the vector.",
+      "D": "By checking if the feature name is in the dictionary."
+    },
+    "answer": "B",
+    "explanation": "Evaluation. 'Auto-interp' is the standard metric. If an LLM can guess what activates the feature, the feature is likely interpretable."
+  },
+  {
+    "source": "[kowshik] interpretable",
+    "question": "Why are hierarchical concept sets like 'THINGSplus' used in the analysis?",
+    "options": {
+      "A": "They are free.",
+      "B": "They provide a ground-truth taxonomy (e.g., Animal -> Mammal -> Dog) to validate if the SAE's unsupervised features align with human semantic structures.",
+      "C": "To train the SAE.",
+      "D": "To increase dataset size."
+    },
+    "answer": "B",
+    "explanation": "Data/Evaluation. We need a ruler to measure the model against. Human taxonomies provide that ruler."
+  },
+  {
+    "source": "[kowshik] interpretable",
+    "question": "What is the 'Scalability' challenge for SAE visualization tools?",
+    "options": {
+      "A": "Monitors are small.",
+      "B": "Loading, processing, and rendering millions of high-dimensional vectors in a web browser requires optimized data structures and backend processing.",
+      "C": "Users get bored.",
+      "D": "JavaScript is slow."
+    },
+    "answer": "B",
+    "explanation": "System Design/Scale. Frontend engineering challenge. You can't just `json.load()` a 1GB feature file in React."
+  },
+  {
+    "source": "[kowshik] interpretable",
+    "question": "In an SAE, what is the relationship between the Encoder and Decoder weights?",
+    "options": {
+      "A": "They are unrelated.",
+      "B": "They are often tied (transposed) or initialized as such, but in modern SAEs, they are usually trained separately to allow for distinct recognition and reconstruction geometries.",
+      "C": "The encoder is fixed.",
+      "D": "The decoder is random."
+    },
+    "answer": "B",
+    "explanation": "Architecture. Early autoencoders tied weights. SAEs often untie them to allow the encoder to find the 'direction' and the decoder to reconstruct the 'magnitude'."
+  },
+  {
+    "source": "[kowshik] interpretable",
+    "question": "Why is 'Interactive Exploration' necessary for SAE analysis?",
+    "options": {
+      "A": "It looks nice.",
+      "B": "Static plots cannot convey the complexity of high-dimensional space; users need to filter, zoom, and query (e.g., 'show me features related to 'fox'') to verify hypotheses.",
+      "C": "To justify the tool development.",
+      "D": "Interactive tools are easier to build."
+    },
+    "answer": "B",
+    "explanation": "Visualization principle. 'Overview first, zoom and filter, then details-on-demand'. The scale of data necessitates interaction."
+  },
+  {
+    "source": "[kowshik] interpretable",
+    "question": "What does 'Semantic Coherence' of a cluster in the Ball Mapper graph indicate?",
+    "options": {
+      "A": "The points are the same color.",
+      "B": "The features within that topological node share related meanings (e.g., all are math concepts), suggesting the SAE has learned a meaningful abstraction.",
+      "C": "The cluster is circular.",
+      "D": "The model is overfitting."
+    },
+    "answer": "B",
+    "explanation": "Evaluation. If a cluster contains 'dog', 'algebra', and 'red', it's incoherent. If it contains 'algebra', 'calculus', and 'geometry', it's coherent."
+  },
+  {
+    "source": "[kowshik] interpretable",
+    "question": "How does feature organization typically evolve from early to late layers in an LLM?",
+    "options": {
+      "A": "It stays the same.",
+      "B": "From concrete/surface-level (syntax, simple concepts) to abstract/integrated (high-level reasoning, complex topics).",
+      "C": "From abstract to concrete.",
+      "D": "It becomes random."
+    },
+    "answer": "B",
+    "explanation": "Scale/Analysis. This is a standard finding in interpretability. Early layers process tokens; late layers process thoughts."
+  },
+  {
+    "source": "[personal] CTScanGaze",
+    "question": "What makes the gaze data in CTScanGaze '4-dimensional'?",
+    "options": {
+      "A": "It includes smell.",
+      "B": "It includes $x, y$ (screen coordinates), $z$ (slice depth), and $t$ (time/duration).",
+      "C": "It includes RGB and Alpha.",
+      "D": "It includes sound."
+    },
+    "answer": "B",
+    "explanation": "Problem Framing. The dimensionality is key. Standard gaze is $(x,y,t)$. CT gaze adds the critical $z$ dimension of the slice stack."
+  },
+  {
+    "source": "[personal] CTScanGaze",
+    "question": "What is the 'Windowing' effect in CT data and how does it affect gaze?",
+    "options": {
+      "A": "Opening windows in the room.",
+      "B": "Radiologists adjust contrast/brightness (window/level) to see specific tissues; gaze behavior is conditioned on *what is currently visible*, not just the raw pixel values.",
+      "C": "Using Microsoft Windows.",
+      "D": "A sliding window attention mechanism."
+    },
+    "answer": "B",
+    "explanation": "Data/Domain. A CT scan isn't a fixed image. The same pixel can look black or white depending on the window setting. A system design must account for this input state."
+  },
+  {
+    "source": "[personal] CTScanGaze",
+    "question": "Why choose a Transformer over an LSTM for the scanpath predictor?",
+    "options": {
+      "A": "Transformers are popular.",
+      "B": "Transformers capture long-range dependencies (e.g., returning to a slice viewed 10 seconds ago) better than LSTMs, which struggle with long sequences.",
+      "C": "LSTMs cannot handle 3D data.",
+      "D": "Transformers are smaller."
+    },
+    "answer": "B",
+    "explanation": "Architecture. Radiologists' search is non-linear and long-term (checking slice 10, then 50, then back to 10). Transformers handle this global context better."
+  },
+  {
+    "source": "[personal] CTScanGaze",
+    "question": "What does the 'ScanMatch' metric evaluate?",
+    "options": {
+      "A": "The color of the scan.",
+      "B": "The similarity between the predicted sequence of fixations and the ground truth sequence, often using alignment algorithms like Needleman-Wunsch.",
+      "C": "Whether the scan matches the patient.",
+      "D": "The speed of the scan."
+    },
+    "answer": "B",
+    "explanation": "Evaluation. Scanpath metrics compare the *order* and *location* of sequence. It's like 'text edit distance' but for 3D coordinate sequences."
+  },
+  {
+    "source": "[personal] CTScanGaze",
+    "question": "Why is data anonymization critical in the CTScanGaze dataset design?",
+    "options": {
+      "A": "To save space.",
+      "B": "CT scans contain PHI (Protected Health Information) embedded in pixels or metadata; legal/ethical compliance (HIPAA) requires rigorous scrubbing before public release.",
+      "C": "To make the data harder to use.",
+      "D": "To remove the radiologist's name."
+    },
+    "answer": "B",
+    "explanation": "Data/System Design constraints. Medical data requires strict governance. Releasing `[personal]` data implies strict de-identification steps were taken."
+  },
+  {
+    "source": "[personal] CTScanGaze",
+    "question": "How does the system convert a sequence of coordinates into a fixation heatmap for visualization?",
+    "options": {
+      "A": "By drawing lines.",
+      "B": "By placing 3D Gaussian kernels at each fixation point, weighted by duration, and summing them up.",
+      "C": "By taking a screenshot.",
+      "D": "By using a heatmap camera."
+    },
+    "answer": "B",
+    "explanation": "Inference/Vis. The raw output is a sparse set of points. A dense heatmap (probability map) is generated via Gaussian splatting (in the 2D sense, not 3DGS) over the volume."
+  },
+  {
+    "source": "[personal] CTScanGaze",
+    "question": "What is the potential bias introduced by having only two radiologists in the dataset?",
+    "options": {
+      "A": "No bias.",
+      "B": "The model might overfit to the specific search styles or idiosyncrasies of those two individuals rather than learning a generalized 'expert' search pattern.",
+      "C": "The model will be too accurate.",
+      "D": "The dataset is too large."
+    },
+    "answer": "B",
+    "explanation": "Problem Framing/Data. A classic 'small N' problem. System design must acknowledge this limitation in generalization claims."
+  },
+  {
+    "source": "[personal] CTScanGaze",
+    "question": "Why uses Swin UNETR as the backbone for feature extraction?",
+    "options": {
+      "A": "It is a CNN.",
+      "B": "It is a state-of-the-art 3D Transformer-based architecture designed for medical segmentation, effectively capturing volumetric spatial hierarchies.",
+      "C": "It is the fastest model.",
+      "D": "It is trained on ImageNet."
+    },
+    "answer": "B",
+    "explanation": "Architecture. Swin UNETR is the standard SOTA for 3D medical imaging tasks (segmentation), making it a robust feature extractor for this task."
+  },
+  {
+    "source": "[personal] CTScanGaze",
+    "question": "Why is L1 loss used for duration prediction instead of Cross-Entropy?",
+    "options": {
+      "A": "Duration is a categorical variable.",
+      "B": "Duration is a continuous variable; L1 regression is robust to outliers and directly measures the time error in milliseconds.",
+      "C": "Cross-Entropy is for regression.",
+      "D": "L1 loss is faster."
+    },
+    "answer": "B",
+    "explanation": "Objective. Predicting 'how long' (100ms vs 200ms) is a regression task. Cross-entropy would require binning time into classes."
+  },
+  {
+    "source": "[personal] CTScanGaze",
+    "question": "What is the purpose of generating synthetic 3D gaze data from 2D datasets?",
+    "options": {
+      "A": "To replace real data.",
+      "B": "To create a large-scale pretraining dataset to warm-start the model weights, preventing overfitting to the small real 3D dataset.",
+      "C": "To test the 2D model.",
+      "D": "To create a video game."
+    },
+    "answer": "B",
+    "explanation": "Data Strategy. Addressing data scarcity. The '2D-to-3D' lifting pipeline allows leveraging abundant 2D data (CXR gaze) to learn general gaze dynamics before fine-tuning."
+  },
+  {
+    "source": "[personal] CTScanGaze",
+    "question": "In comparing Saliency vs Scanpath metrics, which one evaluates the *order* of viewing?",
+    "options": {
+      "A": "Saliency (NSS, CC).",
+      "B": "Scanpath (MultiMatch, ScanMatch).",
+      "C": "Both.",
+      "D": "Neither."
+    },
+    "answer": "B",
+    "explanation": "Evaluation. Saliency measures 'where did they look eventually?'. Scanpath measures 'where did they look first, then second...'. Order matters for diagnostic strategy."
   }
 ]
