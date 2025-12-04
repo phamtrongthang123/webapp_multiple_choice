@@ -355,6 +355,27 @@
             color: var(--accent-green);
         }
 
+        .attempt-stats {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            padding: 0.15rem 0.4rem;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+        }
+
+        .attempt-stats .correct {
+            color: var(--accent-green);
+        }
+
+        .attempt-stats .wrong {
+            color: var(--accent-red);
+        }
+
+        .attempt-stats .ratio {
+            color: var(--accent-yellow);
+            margin-left: 0.25rem;
+        }
+
         .empty-state {
             text-align: center;
             padding: 3rem;
@@ -364,6 +385,255 @@
         .empty-state .icon {
             font-size: 3rem;
             margin-bottom: 1rem;
+        }
+
+        .category-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .category-header:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .category-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .category-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .category-stats {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .cat-stat.correct { color: var(--accent-green); }
+        .cat-stat.incorrect { color: var(--accent-red); }
+        .cat-stat.unanswered { color: var(--text-secondary); }
+
+        .category-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .btn-small.btn-primary {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            color: white;
+        }
+
+        .btn-small.btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(88, 166, 255, 0.3);
+        }
+
+        .complete-badge {
+            padding: 0.3rem 0.6rem;
+            background: rgba(63, 185, 80, 0.2);
+            color: var(--accent-green);
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 4px;
+        }
+
+        .expand-icon {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            transition: transform 0.2s ease;
+        }
+
+        .category-questions {
+            border-top: 1px solid var(--border-color);
+            padding: 1rem;
+            background: var(--bg-primary);
+        }
+
+        .question-card-wrapper {
+            position: relative;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .question-card-wrapper:hover .delete-btn {
+            opacity: 1;
+        }
+
+        .delete-btn:hover {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        /* Import Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 1.25rem;
+            overflow-y: auto;
+        }
+
+        .modal-body textarea {
+            width: 100%;
+            height: 200px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            padding: 1rem;
+            resize: vertical;
+        }
+
+        .modal-body textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .modal-hint {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.75rem;
+        }
+
+        .modal-hint code {
+            background: var(--bg-tertiary);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            z-index: 1001;
+            animation: slideUp 0.3s ease;
+        }
+
+        .toast.success {
+            background: rgba(63, 185, 80, 0.9);
+            color: white;
+        }
+
+        .toast.error {
+            background: rgba(248, 81, 73, 0.9);
+            color: white;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @media (max-width: 600px) {
@@ -391,10 +661,13 @@
         <header>
             <div class="logo">SAM 3D Quiz</div>
             <div class="header-actions">
+                <button class="btn btn-secondary" onclick="openImportModal()">
+                    <span>+</span> Import
+                </button>
                 <a href="/quiz" class="btn btn-primary">
                     <span>▶</span> Continue Quiz
                 </a>
-                <form action="/reset" method="POST" style="display: inline;" 
+                <form action="/reset" method="POST" style="display: inline;"
                       onsubmit="return confirm('Are you sure you want to reset all progress?');">
                     <button type="submit" class="btn btn-danger">
                         <span>↺</span> Reset
@@ -447,53 +720,76 @@
             </div>
         </div>
 
-        <h2 class="section-title">📋 All Questions</h2>
+        <h2 class="section-title">📋 Questions by Category</h2>
 
-        <div class="filter-tabs">
-            <button class="filter-tab active" onclick="filterQuestions('all')">
-                All ({{ stats.total }})
-            </button>
-            <button class="filter-tab" onclick="filterQuestions('unanswered')">
-                Unanswered ({{ stats.unanswered }})
-            </button>
-            <button class="filter-tab" onclick="filterQuestions('correct')">
-                Correct ({{ stats.correct }})
-            </button>
-            <button class="filter-tab" onclick="filterQuestions('incorrect')">
-                Incorrect ({{ stats.incorrect }})
-            </button>
-        </div>
-
-        <div class="questions-grid" id="questions-grid">
-            {% for q in questions %}
-            <a href="/question/{{ q.id }}" class="question-card {{ q.status }}" data-status="{{ q.status }}">
-                <div class="question-header">
-                    <span class="question-number">#{{ q.id + 1 }}</span>
-                    <span class="question-status {{ q.status }}">
-                        {% if q.status == 'correct' %}✓ Correct
-                        {% elif q.status == 'incorrect' %}✗ Incorrect
-                        {% else %}○ Unanswered{% endif %}
+        {% for category in categories %}
+        <div class="category-section" id="category-{{ loop.index }}">
+            <div class="category-header" onclick="toggleCategory({{ loop.index }})">
+                <div class="category-info">
+                    <span class="category-name">{{ category.name }}</span>
+                    <span class="category-stats">
+                        <span class="cat-stat correct">{{ category.correct }}</span> /
+                        <span class="cat-stat incorrect">{{ category.incorrect }}</span> /
+                        <span class="cat-stat unanswered">{{ category.unanswered }}</span>
                     </span>
                 </div>
-                <div class="question-text">{{ q.question }}</div>
-                <div class="question-meta">
-                    <span class="source-badge">{{ q.source }}</span>
-                    {% if q.status == 'incorrect' %}
-                    <span class="answer-info">
-                        <span class="yours">{{ q.selected_answer }}</span> → 
-                        <span class="correct-ans">{{ q.correct_answer }}</span>
-                    </span>
-                    {% elif q.status == 'correct' %}
-                    <span class="answer-info">
-                        <span class="correct-ans">{{ q.correct_answer }}</span>
-                    </span>
+                <div class="category-actions">
+                    {% if not category.complete %}
+                    <a href="/quiz?source={{ category.name | urlencode }}" class="btn-small btn-primary" onclick="event.stopPropagation();">
+                        Start
+                    </a>
+                    {% else %}
+                    <span class="complete-badge">Complete</span>
                     {% endif %}
+                    <span class="expand-icon" id="icon-{{ loop.index }}">▼</span>
                 </div>
-            </a>
-            {% endfor %}
+            </div>
+            <div class="category-questions" id="questions-{{ loop.index }}">
+                <div class="questions-grid">
+                    {% for q in category.questions %}
+                    <div class="question-card-wrapper">
+                        <a href="/question/{{ q.id }}" class="question-card {{ q.status }}">
+                            <div class="question-header">
+                                <span class="question-number">#{{ q.id + 1 }}</span>
+                                <span class="question-status {{ q.status }}">
+                                    {% if q.status == 'correct' %}✓ Correct
+                                    {% elif q.status == 'incorrect' %}✗ Incorrect
+                                    {% else %}○ Unanswered{% endif %}
+                                </span>
+                            </div>
+                            <div class="question-text">{{ q.question }}</div>
+                            <div class="question-meta">
+                                {% if q.attempts.total > 0 %}
+                                <span class="attempt-stats" title="Correct / Wrong attempts">
+                                    <span class="correct">{{ q.attempts.correct }}</span>/<span class="wrong">{{ q.attempts.wrong }}</span>
+                                    {% if q.attempts.wrong_ratio > 0 %}
+                                    <span class="ratio">({{ q.attempts.wrong_ratio }}%)</span>
+                                    {% endif %}
+                                </span>
+                                {% endif %}
+                                {% if q.status == 'incorrect' %}
+                                <span class="answer-info">
+                                    <span class="yours">{{ q.selected_answer }}</span> →
+                                    <span class="correct-ans">{{ q.correct_answer }}</span>
+                                </span>
+                                {% elif q.status == 'correct' %}
+                                <span class="answer-info">
+                                    <span class="correct-ans">{{ q.correct_answer }}</span>
+                                </span>
+                                {% endif %}
+                            </div>
+                        </a>
+                        <button class="delete-btn" onclick="deleteQuestion({{ q.id }}, event)" title="Delete question">
+                            ✕
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
+        {% endfor %}
 
-        {% if questions|length == 0 %}
+        {% if categories|length == 0 %}
         <div class="empty-state">
             <div class="icon">📝</div>
             <p>No questions available</p>
@@ -501,22 +797,158 @@
         {% endif %}
     </div>
 
+    <!-- Import Modal -->
+    <div class="modal-overlay" id="import-modal" onclick="closeImportModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span class="modal-title">Import Questions</span>
+                <button class="modal-close" onclick="closeImportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <textarea id="import-json" placeholder='[
+  {
+    "source": "Category Name",
+    "question": "Your question?",
+    "options": {"A": "Option 1", "B": "Option 2", "C": "Option 3", "D": "Option 4"},
+    "answer": "B",
+    "explanation": "Why B is correct..."
+  }
+]'></textarea>
+                <div class="modal-hint">
+                    Paste a JSON array of questions. Required fields: <code>source</code>, <code>question</code>, <code>options</code>, <code>answer</code>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeImportModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="importQuestions()">Import</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        function filterQuestions(status) {
-            const cards = document.querySelectorAll('.question-card');
-            const tabs = document.querySelectorAll('.filter-tab');
-            
-            tabs.forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            cards.forEach(card => {
-                if (status === 'all' || card.dataset.status === status) {
-                    card.style.display = 'flex';
+        function toggleCategory(index) {
+            const questions = document.getElementById('questions-' + index);
+            const icon = document.getElementById('icon-' + index);
+
+            if (questions.style.display === 'none') {
+                questions.style.display = 'block';
+                icon.textContent = '▼';
+            } else {
+                questions.style.display = 'none';
+                icon.textContent = '▶';
+            }
+        }
+
+        // Collapse all categories by default except the first incomplete one
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.category-section');
+            let foundIncomplete = false;
+
+            sections.forEach((section, index) => {
+                const idx = index + 1;
+                const questions = document.getElementById('questions-' + idx);
+                const icon = document.getElementById('icon-' + idx);
+                const hasIncomplete = section.querySelector('.btn-small.btn-primary');
+
+                if (!foundIncomplete && hasIncomplete) {
+                    foundIncomplete = true;
+                    questions.style.display = 'block';
+                    icon.textContent = '▼';
                 } else {
-                    card.style.display = 'none';
+                    questions.style.display = 'none';
+                    icon.textContent = '▶';
                 }
             });
+        });
+
+        // Import Modal Functions
+        function openImportModal() {
+            document.getElementById('import-modal').classList.add('active');
         }
+
+        function closeImportModal(event) {
+            if (!event || event.target === event.currentTarget) {
+                document.getElementById('import-modal').classList.remove('active');
+                document.getElementById('import-json').value = '';
+            }
+        }
+
+        function showToast(message, type) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        async function importQuestions() {
+            const jsonText = document.getElementById('import-json').value.trim();
+
+            if (!jsonText) {
+                showToast('Please paste JSON data', 'error');
+                return;
+            }
+
+            try {
+                JSON.parse(jsonText); // Validate JSON
+            } catch (e) {
+                showToast('Invalid JSON format', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/questions/import', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: jsonText
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showToast(result.message, 'success');
+                    closeImportModal();
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast(result.error, 'error');
+                }
+            } catch (e) {
+                showToast('Failed to import questions', 'error');
+            }
+        }
+
+        async function deleteQuestion(questionId, event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (!confirm('Delete this question?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/questions/${questionId}`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showToast('Question deleted', 'success');
+                    setTimeout(() => location.reload(), 500);
+                } else {
+                    showToast(result.error, 'error');
+                }
+            } catch (e) {
+                showToast('Failed to delete question', 'error');
+            }
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeImportModal();
+            }
+        });
     </script>
 </body>
 </html>

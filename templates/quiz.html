@@ -444,8 +444,8 @@
                     <span class="icon">◀</span>
                     Dashboard
                 </a>
-                <a href="/next" class="btn btn-primary">
-                    Next Question
+                <a href="/next?same_source=1&source={{ question.source | urlencode }}" class="btn btn-primary">
+                    Next in Category
                     <span class="icon">→</span>
                 </a>
             </div>

@@ -1,1402 +1,938 @@
 [
   {
-    "id": 1,
-    "source": "SAM 3D Body",
-    "context": "Input: Single RGB image of a human\nGoal: Recover full-body 3D mesh",
-    "question": "What approach does SAM 3D Body use?",
+    "source": "[Hello Interview] ML System Design Framework",
+    "question": "In the ML System Design interview delivery framework, what is the recommended order of steps?",
     "options": {
-      "A": "Multi-view stereo reconstruction requiring multiple cameras",
-      "B": "Encoder-decoder architecture with promptable inference",
-      "C": "Template fitting without learning",
-      "D": "Depth sensor fusion"
+      "A": "Modeling → Data → Problem Framing → Evaluation",
+      "B": "Problem Framing → High-level Design → Data and Features → Modeling → Inference and Evaluation",
+      "C": "Data Collection → Feature Engineering → Model Training → Deployment",
+      "D": "Business Requirements → Technical Implementation → Testing → Launch"
     },
     "answer": "B",
-    "explanation": "Approach: Encoder-decoder architecture with promptable inference. This allows the model to learn robust representations from single images while supporting user guidance through prompts (2D keypoints, masks), trading off full automation for improved accuracy in challenging cases where user input can resolve ambiguities."
+    "explanation": "The recommended framework follows: Problem Framing (5-7 min) → High-level Design (2-3 min) → Data and Features (10 min) → Modeling (10 min) → Inference and Evaluation (7 min). This structure ensures you cover all important aspects while demonstrating systematic thinking."
   },
   {
-    "id": 2,
-    "source": "SAM 3D Body",
-    "context": "Input: Existing parametric human models (SMPL, SMPL-X)\nGoal: Better represent skeletal structure and surface shape independently",
-    "question": "What did the researchers introduce?",
+    "source": "[Hello Interview] ML System Design Framework",
+    "question": "During the Problem Framing phase, what three things should you accomplish?",
     "options": {
-      "A": "A modified version of SMPL",
-      "B": "Momentum Human Rig (MHR)",
-      "C": "A neural implicit representation",
-      "D": "A voxel-based model"
+      "A": "Define metrics, choose model architecture, select features",
+      "B": "Clarify the problem, establish business objective, decide on ML objective",
+      "C": "Gather data, clean data, split data",
+      "D": "Design API, choose database, set up infrastructure"
     },
     "answer": "B",
-    "explanation": "Approach: Momentum Human Rig (MHR) that decouples skeletal structure and surface shape. Traditional representations like SMPL couple skeleton and shape, making it harder to generalize across different body types and poses. MHR trades increased model complexity for improved accuracy and interpretability."
+    "explanation": "Problem Framing involves: 1) Clarifying the problem and constraints through targeted questions, 2) Establishing a clear business objective that the ML system will help achieve, and 3) Translating that into a concrete ML objective you can build around."
   },
   {
-    "id": 3,
-    "source": "SAM 3D Body",
-    "context": "Input: Need for model that works in diverse real-world conditions\nGoal: Ensure robustness across varied poses and imaging conditions",
-    "question": "What strategy does the data engine employ?",
+    "source": "[Hello Interview] ML System Design Framework",
+    "question": "Why is 'maximize model accuracy' often a poor business objective?",
     "options": {
-      "A": "Use only high-quality studio images",
-      "B": "Generate purely synthetic data",
-      "C": "Efficiently select and process data for diversity, including unusual poses and rare imaging conditions",
-      "D": "Random sampling from existing datasets"
+      "A": "It's too easy to achieve",
+      "B": "Accuracy doesn't reflect what users/business actually care about and can be misleading with class imbalance",
+      "C": "It requires too much data",
+      "D": "It's only useful for regression problems"
+    },
+    "answer": "B",
+    "explanation": "End-users and business don't care about model accuracy - they care about outcomes like user experience or cost reduction. Accuracy is also a poor proxy for harm in imbalanced datasets, where a model could achieve 99% accuracy by always predicting the majority class."
+  },
+  {
+    "source": "[Hello Interview] ML System Design Framework",
+    "question": "What is the key difference between a business objective and an ML objective?",
+    "options": {
+      "A": "Business objectives are about profit, ML objectives are about data",
+      "B": "Business objectives are what success looks like for the organization, ML objectives translate that into trainable targets",
+      "C": "Business objectives are long-term, ML objectives are short-term",
+      "D": "There is no difference; they are the same thing"
+    },
+    "answer": "B",
+    "explanation": "The business objective represents the end-goal the business cares about (e.g., reducing costs, improving retention). The ML objective translates this into something you can optimize (e.g., a classification or ranking task with specific metrics). They're related but distinct."
+  },
+  {
+    "source": "[Hello Interview] ML System Design Framework",
+    "question": "In the Data and Features discussion, what three categories of training data should you consider?",
+    "options": {
+      "A": "Text, images, and video",
+      "B": "Supervised, semi-supervised, and self-supervised/unsupervised",
+      "C": "Training, validation, and test",
+      "D": "Batch, streaming, and real-time"
+    },
+    "answer": "B",
+    "explanation": "Great solutions often leverage: 1) Supervised data with explicit labels, 2) Semi-supervised data like user reports or weak labels, and 3) Self-supervised data like predicting comments from posts. The latter categories often have orders of magnitude more data available."
+  },
+  {
+    "source": "[Hello Interview] ML System Design Framework",
+    "question": "What is 'earmarking' in the context of an ML design interview?",
+    "options": {
+      "A": "A technique for labeling data",
+      "B": "Making a verbal note to your interviewer about a topic you'll cover later",
+      "C": "A method for feature selection",
+      "D": "A way to prioritize model architectures"
+    },
+    "answer": "B",
+    "explanation": "Earmarking is verbally noting to your interviewer that you'd expect to cover a specific topic later. It prevents a red-flag from being raised that you 'missed it' while avoiding burning time in the moment. If the interviewer thinks it's important, they'll probe with questions."
+  },
+  {
+    "source": "[Hello Interview] ML System Design Framework",
+    "question": "Why should you establish benchmark models before diving into complex architectures?",
+    "options": {
+      "A": "To show you know multiple techniques",
+      "B": "Because simple models are always better",
+      "C": "To provide a baseline for comparison and demonstrate engineering maturity",
+      "D": "Because interviewers always ask about logistic regression"
     },
     "answer": "C",
-    "explanation": "Approach: Data engine that efficiently selects diverse data including unusual poses and rare imaging conditions. Models trained only on common poses fail in real-world scenarios. This approach trades higher annotation costs for significantly better generalization, ensuring the model doesn't just memorize common patterns."
+    "explanation": "Starting with benchmark models: 1) Provides a yardstick to evaluate added complexity, 2) Shows engineering maturity, 3) Moves the conversation from theoretical to practical tradeoffs, and 4) Acts as a gap-filler if you need multiple models. Sometimes simple is all you need!"
   },
   {
-    "id": 4,
-    "source": "SAM 3D Body",
-    "context": "Input: Raw images without annotations\nGoal: Create high-quality training data at scale",
-    "question": "What annotation strategy does SAM 3D Body use?",
+    "source": "[Hello Interview] ML System Design Framework",
+    "question": "What is a common mistake candidates make when discussing features?",
     "options": {
-      "A": "Pure manual annotation by humans",
-      "B": "Fully automatic pseudo-labeling",
-      "C": "Multi-stage pipeline combining manual annotation, differentiable optimization, multi-view geometry, and dense keypoint detection",
-      "D": "Transfer learning from 2D pose datasets only"
-    },
-    "answer": "C",
-    "explanation": "Approach: Multi-stage annotation pipeline using various complementary techniques. Pure manual annotation doesn't scale and pure automatic methods aren't accurate enough. This hybrid approach trades pipeline complexity for both scale and quality, leveraging each method's strengths."
-  },
-  {
-    "id": 5,
-    "source": "SAM 3D Body",
-    "context": "Input: Desire for user control over reconstruction\nGoal: Allow users to guide inference when automatic results need refinement",
-    "question": "What feature does 3DB include?",
-    "options": {
-      "A": "Fully automatic with no user interaction",
-      "B": "Auxiliary prompts including 2D keypoints and masks",
-      "C": "Text-based descriptions only",
-      "D": "Voice commands"
+      "A": "Not mentioning enough features",
+      "B": "Dumping a laundry list of features without considering impact or practicality",
+      "C": "Only discussing numerical features",
+      "D": "Spending too little time on features"
     },
     "answer": "B",
-    "explanation": "Approach: Support for auxiliary prompts (2D keypoints and masks) similar to SAM family. Fully automatic methods can fail on ambiguous or challenging cases. This trades simplicity for versatility, allowing users to correct errors by providing additional hints while maintaining automatic capability."
+    "explanation": "Feature discussions are the biggest tarpit for candidates. Rather than rattling off as many features as possible, senior candidates demonstrate they can generate hypotheses about what data is useful and prioritize evaluation. It's more important to justify choices than be exhaustive."
   },
   {
-    "id": 6,
-    "source": "SAM 3D Body",
-    "context": "Input: Need to evaluate model performance comprehensively\nGoal: Understand model behavior across different scenarios",
-    "question": "How is the evaluation dataset organized?",
+    "source": "[Hello Interview] ML System Design Framework",
+    "question": "When would a 'classical' ML model like logistic regression or GBDT be preferable to deep learning?",
     "options": {
-      "A": "Single aggregated benchmark score",
-      "B": "Random test set only",
-      "C": "Organized by pose and appearance categories",
-      "D": "Only synthetic test cases"
+      "A": "Never - deep learning is always better",
+      "B": "When you have limited data only",
+      "C": "When compute constraints are high, latency is critical, or the performance gap doesn't justify complexity",
+      "D": "Only for regression problems"
     },
     "answer": "C",
-    "explanation": "Approach: Evaluation dataset organized by pose and appearance categories. Aggregated metrics hide specific failure modes. This organization trades simple single-number metrics for nuanced understanding, enabling researchers to identify exactly where the model excels or struggles."
+    "explanation": "Classical ML approaches can still be competitive in environments with heavy compute pressure, strict latency requirements, or when the performance improvement from deep learning doesn't justify the added complexity. Demonstrating this knowledge shows practical experience."
   },
   {
-    "id": 7,
-    "source": "SAM 3D Body",
-    "context": "Input: Challenge of occluded body parts in images\nGoal: Recover complete 3D mesh even with missing information",
-    "question": "How does SAM 3D Body handle occlusions?",
+    "source": "[Hello Interview] ML System Design Framework",
+    "question": "What should you avoid doing with the whiteboard diagram during an ML design interview?",
     "options": {
-      "A": "Requires all body parts to be visible",
-      "B": "Uses learned priors and context to infer occluded parts",
-      "C": "Marks occluded regions as invalid",
-      "D": "Only works with full-body visibility"
+      "A": "Drawing boxes and arrows",
+      "B": "Over-optimizing the diagram at the expense of mental bandwidth and interviewer's time",
+      "C": "Showing the high-level architecture",
+      "D": "Communicating how pieces fit together"
     },
     "answer": "B",
-    "explanation": "Approach: Leverages learned priors from diverse training data to infer occluded geometry. Real-world images often have occlusions (objects, other people, self-occlusion). The model trades perfect accuracy in visible regions for reasonable complete body estimates, using statistical knowledge of human body structure."
+    "explanation": "Some candidates spend too much time perfecting diagrams, which distracts from the real signal interviewers look for. The whiteboard is a communication aid, not a final product. Your job is to get on the same page and minimize miscommunication, not to create perfect drawings."
   },
   {
-    "id": 8,
-    "source": "SAM 3D Body",
-    "context": "Input: Existing HMR methods' limited pose coverage\nGoal: Work reliably on unusual and extreme poses",
-    "question": "What data collection priority does 3DB emphasize?",
+    "source": "[Hello Interview] ML System Design Evaluation",
+    "question": "What is the recommended structure for approaching evaluation in ML system design?",
     "options": {
-      "A": "Only common standing poses",
-      "B": "Balanced dataset with equal representation",
-      "C": "Actively collecting unusual poses and rare imaging conditions",
-      "D": "Focus on athletic poses only"
+      "A": "Online metrics → Offline metrics → A/B testing",
+      "B": "Business Objective → Product Metrics → ML Metrics → Evaluation Methodology → Address Challenges",
+      "C": "Precision → Recall → F1 Score → ROC-AUC",
+      "D": "Train metrics → Validation metrics → Test metrics"
+    },
+    "answer": "B",
+    "explanation": "The recommended evaluation structure: 1) Start with business objective, 2) Define product metrics that indicate user-facing success, 3) Detail ML metrics aligned with product goals, 4) Outline online/offline evaluation approaches, 5) Address potential challenges like imbalanced data or fairness."
+  },
+  {
+    "source": "[Hello Interview] ML System Design Evaluation",
+    "question": "For classification problems with strong class imbalance (e.g., 99% negative, 1% positive), which metric is preferred over ROC-AUC?",
+    "options": {
+      "A": "Accuracy",
+      "B": "F1 Score",
+      "C": "PR-AUC (Precision-Recall AUC)",
+      "D": "Mean Squared Error"
     },
     "answer": "C",
-    "explanation": "Approach: Data engine actively seeks unusual poses and rare conditions. Models fail on out-of-distribution poses if trained only on common ones. This trades training efficiency (harder to find/annotate rare poses) for robustness, ensuring the model generalizes beyond typical scenarios."
+    "explanation": "PR-AUC is far better than ROC-AUC for highly imbalanced problems. ROC-AUC can look fantastic even if the classifier is completely useless for imbalanced data because it considers true negatives, which dominate in imbalanced datasets."
   },
   {
-    "id": 9,
-    "source": "SAM 3D Body",
-    "context": "Input: Trade-off between model size and performance\nGoal: Achieve state-of-the-art results",
-    "question": "What does SAM 3D Body prioritize?",
+    "source": "[Hello Interview] ML System Design Evaluation",
+    "question": "What is the main advantage of interleaving tests over traditional A/B tests for recommender systems?",
     "options": {
-      "A": "Smallest possible model size",
-      "B": "Fastest inference speed only",
-      "C": "Superior performance and generalization",
-      "D": "Lowest memory footprint"
-    },
-    "answer": "C",
-    "explanation": "Approach: Encoder-decoder architecture optimized for accuracy and robustness. While model efficiency matters, SAM 3D Body prioritizes generalization and accuracy over extreme compression. It trades some computational cost for substantially better performance across diverse conditions."
-  },
-  {
-    "id": 10,
-    "source": "SAM 3D Body",
-    "context": "Input: Need for both body pose and hand details\nGoal: Capture fine-grained hand articulation",
-    "question": "What optional component does 3DB include?",
-    "options": {
-      "A": "Facial expression decoder",
-      "B": "Hand decoder for refinement",
-      "C": "Foot pose estimator",
-      "D": "Hair geometry module"
+      "A": "They're cheaper to implement",
+      "B": "They require 10-20x less traffic to detect the same effect size",
+      "C": "They don't require randomization",
+      "D": "They always show larger effects"
     },
     "answer": "B",
-    "explanation": "Approach: Optional hand decoder that can refine hand pose details. Hands are complex with many degrees of freedom. The optional design trades model simplicity for flexibility—users can enable detailed hand recovery when needed without always incurring the computational cost."
+    "explanation": "A/B tests assign different users to different rankers (unpaired comparison). Interleaving shows one mixed list to the same user (paired test). Because every click simultaneously provides evidence for one ranker and against another, variance drops sharply - typically 10-20x less traffic needed."
   },
   {
-    "id": 11,
-    "source": "SAM 3D Body",
-    "context": "Input: Requirement for reproducible research\nGoal: Enable community to build upon this work",
-    "question": "What is the release strategy for SAM 3D Body?",
+    "source": "[Hello Interview] ML System Design Evaluation",
+    "question": "What is the 'feedback loop' problem in ML evaluation?",
     "options": {
-      "A": "Proprietary and closed-source",
-      "B": "API access only",
-      "C": "Open-source code, weights, and datasets",
-      "D": "Academic license with restrictions"
-    },
-    "answer": "C",
-    "explanation": "Approach: Full open-source release including model, MHR, code, and datasets. Open research accelerates progress but requires engineering effort for public release. Meta trades competitive advantage for community advancement, aligning with open science principles."
-  },
-  {
-    "id": 12,
-    "source": "SAM 3D Body",
-    "context": "Input: Diverse encoder backbones available (ResNet, ViT, etc.)\nGoal: Leverage best visual representations",
-    "question": "What encoder options does 3DB support?",
-    "options": {
-      "A": "Only ResNet architectures",
-      "B": "ViT and DINOv3 among others",
-      "C": "Custom proprietary encoder only",
-      "D": "MobileNet exclusively for efficiency"
+      "A": "Users providing too much feedback",
+      "B": "The model's predictions influence future training data, potentially amplifying biases",
+      "C": "Feedback arriving too slowly",
+      "D": "Negative feedback being more common than positive"
     },
     "answer": "B",
-    "explanation": "Approach: Support for modern vision transformers like ViT and DINOv3. Different encoders offer different trade-offs (speed vs. accuracy, generalization vs. specialization). Supporting multiple encoders trades implementation complexity for flexibility in deployment scenarios."
+    "explanation": "Feedback loops occur when model predictions influence future data, potentially amplifying biases or errors over time. Solutions include: injecting randomness, maintaining golden sets unaffected by the model, counterfactual logging, and careful exploration strategies."
   },
   {
-    "id": 13,
-    "source": "SAM 3D Body",
-    "context": "Input: Challenge of ground truth 3D data acquisition\nGoal: Create reliable training labels without expensive motion capture",
-    "question": "What techniques does the annotation pipeline combine?",
+    "source": "[Hello Interview] ML System Design Evaluation",
+    "question": "For recommender systems, why might optimizing for short-term metrics cannibalize long-term results?",
     "options": {
-      "A": "Motion capture only",
-      "B": "Manual annotation only",
-      "C": "Differentiable optimization and multi-view geometry alongside manual annotation",
-      "D": "Synthetic generation exclusively"
-    },
-    "answer": "C",
-    "explanation": "Approach: Hybrid pipeline combining manual keypoints, optimization, and multi-view constraints. Motion capture doesn't scale to in-the-wild images, but pure manual annotation lacks 3D precision. This trades pipeline complexity for scalable, accurate annotations that work on diverse real-world imagery."
-  },
-  {
-    "id": 14,
-    "source": "SAM 3D Body",
-    "context": "Input: Comparison with prior state-of-the-art methods\nGoal: Validate improvements objectively",
-    "question": "What evaluation approaches does the paper use?",
-    "options": {
-      "A": "Quantitative metrics only",
-      "B": "User studies only",
-      "C": "Both qualitative user preference studies and traditional quantitative analysis",
-      "D": "Synthetic benchmarks exclusively"
-    },
-    "answer": "C",
-    "explanation": "Approach: Combined qualitative and quantitative evaluation. Quantitative metrics don't always correlate with visual quality, and user studies lack precision. Using both trades evaluation complexity for comprehensive validation that captures both measurable accuracy and perceptual quality."
-  },
-  {
-    "id": 15,
-    "source": "SAM 3D Body",
-    "context": "Input: Inference on images with challenging viewpoints\nGoal: Robust reconstruction regardless of camera angle",
-    "question": "How does 3DB handle extreme viewpoints?",
-    "options": {
-      "A": "Requires frontal views only",
-      "B": "Trained on diverse viewpoints to generalize",
-      "C": "Uses camera calibration information",
-      "D": "Restricts to standard perspectives"
+      "A": "Short-term metrics are always wrong",
+      "B": "Optimizing for clicks might promote addictive content that harms retention and satisfaction",
+      "C": "Long-term metrics don't exist",
+      "D": "Short-term experiments are invalid"
     },
     "answer": "B",
-    "explanation": "Approach: Training on diverse viewpoints including challenging angles. Real-world photos come from arbitrary viewpoints. Training on diverse views trades annotation difficulty (harder to get ground truth for unusual angles) for practical robustness in uncontrolled settings."
+    "explanation": "Short-term metrics like CTR might promote clickbait or addictive content that users click but later regret, harming retention. Product metrics should accumulate over sessions, and experiments must be long enough to capture long-term effects."
   },
   {
-    "id": 16,
-    "source": "SAM 3D Body",
-    "context": "Input: Need to segment human from background\nGoal: Accurate mesh recovery without background interference",
-    "question": "What auxiliary input can help with this?",
+    "source": "[Hello Interview] ML System Design Evaluation",
+    "question": "What does NDCG@k measure in search and recommendation systems?",
     "options": {
-      "A": "Depth maps",
-      "B": "Mask prompts",
-      "C": "Semantic labels for all pixels",
-      "D": "3D bounding boxes"
+      "A": "The number of clicks in top k results",
+      "B": "Relevance with position-based discounting - higher ranked relevant items contribute more",
+      "C": "The total number of relevant documents",
+      "D": "User satisfaction score"
     },
     "answer": "B",
-    "explanation": "Approach: Optional mask prompts for segmentation guidance. Automatic segmentation can fail in cluttered scenes. Allowing optional mask prompts trades fully automatic operation for improved accuracy when users can provide simple segmentation hints."
+    "explanation": "NDCG (Normalized Discounted Cumulative Gain) discounts relevance by log-rank position. It's a good all-rounder metric that weights high-rank relevance more heavily, reflecting that users care more about top results being relevant."
   },
   {
-    "id": 17,
-    "source": "SAM 3D Body",
-    "context": "Input: Dense keypoint detection technology advancement\nGoal: Leverage this for better annotations",
-    "question": "What role does dense keypoint detection play?",
+    "source": "[Hello Interview] ML System Design Evaluation",
+    "question": "What is 'presentation bias' in search evaluation and how can it be addressed?",
     "options": {
-      "A": "Not used in the pipeline",
-      "B": "Part of the multi-stage annotation pipeline",
-      "C": "Only for evaluation",
-      "D": "Replacement for all other methods"
+      "A": "Users prefer visually appealing results; use better CSS",
+      "B": "Click data is biased by previous rankings; use inverse-propensity weighting or interleaving",
+      "C": "Some results load faster; optimize latency",
+      "D": "Mobile users see different results; test both platforms"
     },
     "answer": "B",
-    "explanation": "Approach: Integrate dense keypoint detection into annotation pipeline. Dense keypoints provide rich spatial information beyond sparse manual annotations. Including them trades pipeline simplicity for annotation richness, helping constrain 3D reconstruction better than sparse keypoints alone."
+    "explanation": "Click logs are biased by previous rankings - users click more on top results regardless of relevance. If you build labels from clicks, you need debiasing techniques like inverse-propensity weighting or deterministic interleaving. Interviewers often probe this point."
   },
   {
-    "id": 18,
-    "source": "SAM 3D Body",
-    "context": "Input: Desire to understand skeletal motion separately from body shape\nGoal: Better interpretability and control",
-    "question": "Why does MHR decouple skeleton and shape?",
+    "source": "[Hello Interview] ML System Design Evaluation",
+    "question": "For classification systems, what is the purpose of 'shadow mode' testing?",
+    "options": {
+      "A": "Testing models in production without affecting users",
+      "B": "Running the model on synthetic data",
+      "C": "Testing only during off-peak hours",
+      "D": "Using a smaller version of the model"
+    },
+    "answer": "A",
+    "explanation": "In shadow mode, the model makes predictions but doesn't take action, allowing reviewers to validate results without affecting users. Once confidence is established, you can graduate to A/B testing that measures both technical metrics and business impacts."
+  },
+  {
+    "source": "[Hello Interview] ML System Design Evaluation",
+    "question": "Why is 'estimating prevalence' challenging for many classification problems?",
+    "options": {
+      "A": "Prevalence never changes",
+      "B": "True prevalence requires expensive resources to measure, and random sampling has high variance for rare events",
+      "C": "Models automatically output prevalence",
+      "D": "Prevalence is not important"
+    },
+    "answer": "B",
+    "explanation": "True prevalence often requires expensive manual review to determine. Random sampling for rare events (e.g., <1% positive) has high variance - sampling 100 examples might yield only 1 positive, making prevalence estimates unreliable."
+  },
+  {
+    "source": "[Hello Interview] ML System Design Evaluation",
+    "question": "What is 'label efficiency' and why is it important in classification systems?",
+    "options": {
+      "A": "How quickly labels can be stored in a database",
+      "B": "Obtaining high-quality labels efficiently, using techniques like stratified sampling or active learning",
+      "C": "How many labels can fit in memory",
+      "D": "The compression ratio of label files"
+    },
+    "answer": "B",
+    "explanation": "Obtaining high-quality labels is expensive, especially for specialized domains. Random sampling is inefficient for imbalanced problems. Stratified sampling using classifier scores or active learning to prioritize informative examples helps maximize label utility."
+  },
+  {
+    "source": "[Hello Interview] Harmful Content Detection",
+    "question": "Why is 'maximize the amount of harmful content removed' a poor business objective for content moderation?",
+    "options": {
+      "A": "It's hard to measure",
+      "B": "It incentivizes flagging all content as harmful, leading to excessive false positives",
+      "C": "Harmful content is rare",
+      "D": "It requires too much compute"
+    },
+    "answer": "B",
+    "explanation": "This objective creates perverse incentives to flag as much content as possible regardless of actual harm. With classification, there's always a tradeoff between false positives and false negatives. This objective ignores that balance and would frustrate legitimate users."
+  },
+  {
+    "source": "[Hello Interview] Harmful Content Detection",
+    "question": "What is a better business objective for content moderation than 'maximize removed content'?",
+    "options": {
+      "A": "Maximize model accuracy",
+      "B": "Minimize the number of views of harmful content, subject to precision guardrails",
+      "C": "Remove all content with profanity",
+      "D": "Maximize human reviewer workload"
+    },
+    "answer": "B",
+    "explanation": "Minimizing views focuses on actual harm caused - exposure to harmful content. The precision guardrails ensure legitimate content isn't over-restricted. This naturally prioritizes catching widely-viewed harmful content and viral content early."
+  },
+  {
+    "source": "[Hello Interview] Harmful Content Detection",
+    "question": "Why is focusing on 'views' rather than 'posts' important for content moderation?",
+    "options": {
+      "A": "Views are easier to count",
+      "B": "Posts with many views cause more harm, and posts with no views cause no harm regardless of content",
+      "C": "Users don't see posts",
+      "D": "Views are the same as posts"
+    },
+    "answer": "B",
+    "explanation": "A harmful post that gets no views causes no user harm. Posts that get many views (especially viral content) are infinitely more important. This insight also means harmful content becomes easier to detect over time as user behaviors provide additional signals."
+  },
+  {
+    "source": "[Hello Interview] Harmful Content Detection",
+    "question": "What is the advantage of using user reports as a training signal for harmful content detection?",
+    "options": {
+      "A": "They're always accurate",
+      "B": "They provide scalable semi-supervised data that's orders of magnitude larger than expert labels",
+      "C": "They're free from bias",
+      "D": "They replace the need for any other labels"
+    },
+    "answer": "B",
+    "explanation": "User reports provide a semi-supervised signal that's likely correlated with the true label. You might have 10M reports vs 50k labeled examples. While noisier than expert labels (can be adversarial or incorrect), their volume makes them invaluable for training."
+  },
+  {
+    "source": "[Hello Interview] Harmful Content Detection",
+    "question": "How can user comments on posts be leveraged for content moderation training?",
+    "options": {
+      "A": "Use them as direct labels",
+      "B": "Train a model to predict comments from post body, learning rich semantic representations",
+      "C": "Delete all posts with comments",
+      "D": "Only moderate posts with comments"
+    },
+    "answer": "B",
+    "explanation": "Comments like 'Gross!' or 'This is disgusting' correlate with harmful content. A model trained to predict comments from posts learns useful representations - this self-supervised approach provides orders of magnitude more training signal than labeled data alone."
+  },
+  {
+    "source": "[Hello Interview] Harmful Content Detection",
+    "question": "What is a 'late fusion' architecture in multi-modal classification?",
+    "options": {
+      "A": "Processing text and images together from the start",
+      "B": "Processing text and images through separate encoders, then concatenating their embeddings before classification",
+      "C": "Only using text features",
+      "D": "Using fusion reactors for processing"
+    },
+    "answer": "B",
+    "explanation": "Late fusion processes text and images through separate encoders, then concatenates their embeddings along with other features before passing through a classification head. It allows some cross-modal interaction while leveraging pre-trained models efficiently."
+  },
+  {
+    "source": "[Hello Interview] Harmful Content Detection",
+    "question": "Why might a 'lightweight update network' be useful in content moderation?",
     "options": {
       "A": "To reduce model size",
-      "B": "For improved accuracy and interpretability",
-      "C": "To speed up inference",
-      "D": "To simplify training"
+      "B": "To efficiently incorporate new behavioral signals without re-running the heavy content encoder",
+      "C": "To make the model faster",
+      "D": "To compress images"
     },
     "answer": "B",
-    "explanation": "Approach: Separate skeletal (pose) and shape parameters in MHR. Coupled representations conflate pose and shape errors, making debugging and refinement harder. Decoupling trades model simplicity for clearer attribution of errors and better control over each aspect independently."
+    "explanation": "Content features (text, image) can be computed once when posted, but behavioral features (reactions, reports) change over time. A lightweight update network can merge new behavioral inputs with cached content embeddings efficiently without re-running expensive encoders."
   },
   {
-    "id": 19,
-    "source": "SAM 3D Body",
-    "context": "Input: Limited computational resources for some users\nGoal: Make model accessible",
-    "question": "What inference options might be considered?",
+    "source": "[Hello Interview] Harmful Content Detection",
+    "question": "For handling class imbalance in harmful content detection, what combination of techniques is commonly used?",
     "options": {
-      "A": "Only high-end GPU support",
-      "B": "Various backbone options with different speed/accuracy trade-offs",
-      "C": "Cloud-only execution",
-      "D": "Fixed single configuration"
+      "A": "Only collect more harmful examples",
+      "B": "Balanced sampling during training and loss weighting to fine-tune precision-recall tradeoff",
+      "C": "Ignore the imbalance",
+      "D": "Use accuracy as the only metric"
     },
     "answer": "B",
-    "explanation": "Approach: Multiple encoder options allowing speed/accuracy trade-offs. Different applications have different resource constraints. Offering multiple backbone choices trades maintenance burden (supporting multiple configs) for accessibility across diverse hardware and latency requirements."
+    "explanation": "With harmful content being <1% of posts, a naive model would predict 'not harmful' for everything and achieve 99% accuracy. Balanced sampling ensures the model sees enough positive examples, while loss weighting helps tune the precision-recall tradeoff."
   },
   {
-    "id": 20,
-    "source": "SAM 3D Body",
-    "context": "Input: Web-based accessibility for non-technical users\nGoal: Allow anyone to test the technology",
-    "question": "What platform is provided?",
+    "source": "[Hello Interview] Harmful Content Detection",
+    "question": "What behavioral features can indicate harmful content after a post is published?",
     "options": {
-      "A": "Command-line only",
-      "B": "Web demo at Meta AI Demos",
-      "C": "Mobile app exclusively",
-      "D": "No public interface"
+      "A": "The color of the post background",
+      "B": "Negative reactions, hides, reports, and negative comment sentiment",
+      "C": "The time zone of the poster",
+      "D": "The file size of attached media"
     },
     "answer": "B",
-    "explanation": "Approach: Browser-accessible web demo alongside research release. Research code is often unusable by non-experts. Providing a web demo trades development effort for broader accessibility, enabling designers, artists, and researchers without ML expertise to explore the technology."
+    "explanation": "Behavioral signals like negative reactions (angry, hide), reports, shares-per-view ratio, and comments with negative sentiment (e.g., 'Gross!', 'This is disgusting') provide strong signals about harmful content that emerge after posting."
   },
   {
-    "id": 21,
-    "source": "SAM 3D Body",
-    "context": "Input: Model training on large-scale diverse data\nGoal: Strong generalization to unseen scenarios",
-    "question": "What is the data philosophy?",
+    "source": "[Hello Interview] Harmful Content Detection",
+    "question": "Why might content detection get easier over time after a post is published?",
     "options": {
-      "A": "Quality over quantity",
-      "B": "Quantity over quality",
-      "C": "Balance of scale with high-quality diverse annotations",
-      "D": "Synthetic data only"
+      "A": "The model trains while the post exists",
+      "B": "User behaviors (blocks, reports, negative reactions) provide additional signals that reduce classification difficulty",
+      "C": "Content naturally becomes less harmful",
+      "D": "More computing resources become available"
     },
-    "answer": "C",
-    "explanation": "Approach: Large-scale data with high-quality annotations and diversity emphasis. Pure quantity without quality leads to learning biases; small high-quality datasets don't generalize. This trades annotation cost for models that work reliably across the long tail of real-world conditions."
-  },
-  {
-    "id": 22,
-    "source": "SAM 3D Body",
-    "context": "Input: Existing benchmarks may not cover all scenarios\nGoal: Enable detailed performance analysis",
-    "question": "Why create a new evaluation dataset?",
-    "options": {
-      "A": "Existing datasets were unavailable",
-      "B": "To enable nuanced analysis organized by pose and appearance categories",
-      "C": "To make comparison easier",
-      "D": "For marketing purposes"
-    },
-    "answer": "B",
-    "explanation": "Approach: Custom evaluation set organized by specific categories. Standard benchmarks aggregate diverse scenarios into single metrics, hiding specific weaknesses. Creating a categorized dataset trades benchmark simplicity for diagnostic power, revealing exactly where models succeed or fail."
-  },
-  {
-    "id": 23,
-    "source": "SAM 3D Body",
-    "context": "Input: Desire for interpretability in predictions\nGoal: Understand what the model is predicting",
-    "question": "How does parametric representation help?",
-    "options": {
-      "A": "It doesn't aid interpretability",
-      "B": "MHR's decoupled structure makes pose and shape parameters interpretable",
-      "C": "Only through visualization",
-      "D": "Requires post-processing"
-    },
-    "answer": "B",
-    "explanation": "Approach: MHR's explicit separation of pose and shape parameters. Black-box 3D representations (implicit fields, point clouds) are hard to interpret or edit. Parametric models trade expressiveness for interpretability, allowing direct manipulation of meaningful parameters like joint angles."
-  },
-  {
-    "id": 24,
-    "source": "SAM 3D Body",
-    "context": "Input: Challenge of hand pose complexity (27+ DoF)\nGoal: Capture detailed hand articulation",
-    "question": "Why is hand recovery particularly challenging?",
-    "options": {
-      "A": "Hands are always occluded",
-      "B": "High degrees of freedom with small size in images",
-      "C": "Lack of training data",
-      "D": "Camera limitations"
-    },
-    "answer": "B",
-    "explanation": "Approach: Dedicated optional hand decoder for fine-grained recovery. Hands have many joints in a small image region, making them harder than body pose. The optional hand module trades computational cost for detail, letting users choose whether to invest in precise hand recovery."
-  },
-  {
-    "id": 25,
-    "source": "SAM 3D Body",
-    "context": "Input: Research vs. production deployment needs\nGoal: Balance research exploration and practical usability",
-    "question": "What does the open-source release enable?",
-    "options": {
-      "A": "Only academic research",
-      "B": "Both research advancement and practical applications",
-      "C": "Commercial use only",
-      "D": "Internal Meta use exclusively"
-    },
-    "answer": "B",
-    "explanation": "Approach: Open-source release under SAM License with code, weights, and datasets. Pure research releases may lack engineering for deployment; production-only releases limit innovation. Open-sourcing trades control for ecosystem growth, enabling both academic advancement and practical applications."
-  },
-  {
-    "id": 26,
-    "source": "SAM 3D Body",
-    "context": "Input: Models trained on specific datasets often fail on others\nGoal: Robust performance across different data sources",
-    "question": "How does 3DB achieve generalization?",
-    "options": {
-      "A": "Training on single high-quality dataset",
-      "B": "Diverse training data with unusual poses and rare conditions",
-      "C": "Domain adaptation techniques only",
-      "D": "Synthetic-to-real transfer"
-    },
-    "answer": "B",
-    "explanation": "Approach: Intentionally diverse training data covering edge cases. Models memorize dataset biases if trained on narrow distributions. Seeking diversity trades annotation difficulty (finding and labeling rare cases) for models that maintain performance on novel in-the-wild images."
-  },
-  {
-    "id": 27,
-    "source": "SAM 3D Body",
-    "context": "Input: Single image lacks depth information\nGoal: Recover accurate 3D structure",
-    "question": "What does the model rely on?",
-    "options": {
-      "A": "Depth sensors",
-      "B": "Learned priors about human body structure and appearance cues",
-      "C": "Multiple views synthesized from one",
-      "D": "Explicit depth prediction"
-    },
-    "answer": "B",
-    "explanation": "Approach: Learning from diverse single-view training data to infer 3D from 2D cues. Single images are inherently ambiguous about depth. The model trades perfect accuracy (impossible from one view) for reasonable estimates based on learned human body statistics and visual cues like foreshortening."
-  },
-  {
-    "id": 28,
-    "source": "SAM 3D Body",
-    "context": "Input: Need to validate against human perception\nGoal: Ensure reconstructions look correct to humans",
-    "question": "Why include user preference studies?",
-    "options": {
-      "A": "To replace quantitative metrics",
-      "B": "Quantitative metrics don't always capture perceptual quality",
-      "C": "For marketing purposes",
-      "D": "Because ground truth is unavailable"
-    },
-    "answer": "B",
-    "explanation": "Approach: User preference studies alongside quantitative benchmarks. Metrics like vertex error may not correlate with visual quality—small misalignments might score poorly but look fine, or vice versa. User studies trade objectivity for ecological validity, ensuring results matter to humans."
-  },
-  {
-    "id": 29,
-    "source": "SAM 3D Body",
-    "context": "Input: Differentiable optimization for fitting meshes\nGoal: Refine mesh to match image observations",
-    "question": "How does optimization help annotation?",
-    "options": {
-      "A": "It doesn't; only used at inference",
-      "B": "Part of annotation pipeline to fit parametric models to observations",
-      "C": "Only for synthetic data",
-      "D": "Replaces manual annotation entirely"
-    },
-    "answer": "B",
-    "explanation": "Approach: Differentiable optimization to fit MHR to multi-view and keypoint observations. Manual 3D annotation is nearly impossible and imprecise. Optimization trades computational cost for accurate 3D fits that respect image evidence, converting 2D observations into consistent 3D annotations."
-  },
-  {
-    "id": 30,
-    "source": "SAM 3D Body",
-    "context": "Input: Multi-view geometry constraints from multiple viewpoints\nGoal: Improve 3D annotation consistency",
-    "question": "Why use multi-view geometry?",
-    "options": {
-      "A": "Single views are always sufficient",
-      "B": "To constrain 3D reconstruction using geometric consistency across views",
-      "C": "Only for evaluation",
-      "D": "To generate synthetic data"
-    },
-    "answer": "B",
-    "explanation": "Approach: Leverage multi-view constraints where available during annotation. Single-view 3D annotation is ambiguous; multi-view geometry provides hard constraints. This trades data collection complexity (requiring multi-view footage) for annotation accuracy where geometric consistency resolves depth ambiguity."
-  },
-  {
-    "id": 31,
-    "source": "SAM 3D Body",
-    "context": "Input: Need for real-time or near-real-time performance\nGoal: Enable interactive applications",
-    "question": "What inference speed considerations exist?",
-    "options": {
-      "A": "Only batch processing supported",
-      "B": "Different backbone options provide speed/accuracy trade-offs",
-      "C": "Real-time is impossible",
-      "D": "Speed is not considered"
-    },
-    "answer": "B",
-    "explanation": "Approach: Flexible architecture supporting different encoder backbones. Applications range from offline high-quality reconstruction to real-time AR. Supporting multiple backbones trades engineering complexity for deployment flexibility, letting users choose their speed/accuracy point."
-  },
-  {
-    "id": 32,
-    "source": "SAM 3D Body",
-    "context": "Input: Foot pose is often neglected in HMR methods\nGoal: Complete full-body reconstruction including feet",
-    "question": "Why explicitly model feet?",
-    "options": {
-      "A": "Feet don't matter for most applications",
-      "B": "Complete body model including feet improves ground contact and realism",
-      "C": "Only for animation purposes",
-      "D": "To increase model size"
-    },
-    "answer": "B",
-    "explanation": "Approach: Full-body mesh including explicit foot modeling. Ignoring feet leads to unrealistic floating or ground penetration. Explicitly modeling feet trades model complexity for physical plausibility, crucial for applications requiring ground contact like AR placement or animation."
-  },
-  {
-    "id": 33,
-    "source": "SAM 3D Body",
-    "context": "Input: SAM family's success in promptable segmentation\nGoal: Apply similar principles to 3D HMR",
-    "question": "How does 3DB adapt SAM's philosophy?",
-    "options": {
-      "A": "Uses identical architecture",
-      "B": "Adopts promptable inference with optional user guidance",
-      "C": "Only uses the name",
-      "D": "No connection to SAM"
-    },
-    "answer": "B",
-    "explanation": "Approach: Encoder-decoder with optional prompt support (keypoints, masks). SAM showed that prompts improve model utility by letting users correct errors. Adapting this trades simpler automatic-only design for interactive capability, maintaining SAM's principle of user-guidable foundation models."
-  },
-  {
-    "id": 34,
-    "source": "SAM 3D Body",
-    "context": "Input: Challenge of ambiguous poses from single views\nGoal: Resolve ambiguity when automatic inference struggles",
-    "question": "What mechanism helps with ambiguity?",
-    "options": {
-      "A": "Multiple model runs",
-      "B": "User-provided prompts like keypoints",
-      "C": "Longer inference time",
-      "D": "Ensemble methods"
-    },
-    "answer": "B",
-    "explanation": "Approach: Optional prompt-based guidance when automatic results need refinement. Some poses are inherently ambiguous from one view (e.g., arm behind back vs. in front). Prompts trade convenience (fully automatic) for accuracy, letting users disambiguate through simple hints like keypoint positions."
-  },
-  {
-    "id": 35,
-    "source": "SAM 3D Body",
-    "context": "Input: Existing datasets like COCO, 3DPW\nGoal: Build upon while extending coverage",
-    "question": "How does 3DB dataset relate to prior work?",
-    "options": {
-      "A": "Completely independent",
-      "B": "Extends coverage with diverse poses and rare conditions",
-      "C": "Subset of existing datasets",
-      "D": "Synthetic only"
-    },
-    "answer": "B",
-    "explanation": "Approach: New dataset emphasizing diversity and edge cases. Standard datasets over-represent common poses and conditions. Creating a new diverse dataset trades collection effort for better coverage of the long tail, improving robustness on challenging real-world scenarios."
-  },
-  {
-    "id": 36,
-    "source": "SAM 3D Body",
-    "context": "Input: Model deployment in production systems\nGoal: Reliable performance across users",
-    "question": "What robustness aspects are prioritized?",
-    "options": {
-      "A": "Only accuracy on benchmarks",
-      "B": "Consistent performance across diverse in-the-wild conditions",
-      "C": "Perfect accuracy in controlled settings",
-      "D": "Speed above all else"
-    },
-    "answer": "B",
-    "explanation": "Approach: Training and evaluation emphasizing diverse, challenging, in-the-wild conditions. Benchmark performance doesn't guarantee real-world reliability. Prioritizing diverse conditions trades benchmark optimization for practical robustness, ensuring the model works for actual users across varied scenarios."
-  },
-  {
-    "id": 37,
-    "source": "SAM 3D Body",
-    "context": "Input: Balance between model capacity and overfitting\nGoal: Learn generalizable representations",
-    "question": "What regularization approaches might be used?",
-    "options": {
-      "A": "No regularization needed",
-      "B": "Diverse data acts as implicit regularization",
-      "C": "Only dropout",
-      "D": "Extreme data augmentation"
-    },
-    "answer": "B",
-    "explanation": "Approach: Diverse training data covering wide distribution of poses and conditions. Explicit regularization (dropout, weight decay) has limited effect if data is narrow. Diverse data trades collection cost for natural regularization, forcing the model to learn robust features that generalize rather than memorize."
-  },
-  {
-    "id": 38,
-    "source": "SAM 3D Body",
-    "context": "Input: Need for ablation studies\nGoal: Understand contribution of each component",
-    "question": "What analysis does rigorous evaluation require?",
-    "options": {
-      "A": "Only final model results",
-      "B": "Component-wise analysis of architecture choices",
-      "C": "Single benchmark number",
-      "D": "Visual results only"
-    },
-    "answer": "B",
-    "explanation": "Approach: Systematic evaluation of design choices (MHR, prompts, data strategy). Without ablations, it's unclear which innovations matter. This trades evaluation effort for scientific rigor, enabling future work to build on validated components rather than the whole system."
-  },
-  {
-    "id": 39,
-    "source": "SAM 3D Body",
-    "context": "Input: Continuous improvement of the model\nGoal: Update model as new data becomes available",
-    "question": "How does open-source release support this?",
-    "options": {
-      "A": "It doesn't",
-      "B": "Community can contribute improvements and adaptations",
-      "C": "Only Meta can update",
-      "D": "Model is frozen"
-    },
-    "answer": "B",
-    "explanation": "Approach: Open-source release enabling community contributions. Closed models improve only through original authors. Open-sourcing trades control for community innovation, allowing researchers worldwide to adapt, improve, and extend the work for diverse applications."
-  },
-  {
-    "id": 40,
-    "source": "SAM 3D Body",
-    "context": "Input: Different applications need different accuracy levels\nGoal: Flexible deployment for varied use cases",
-    "question": "What flexibility does the system provide?",
-    "options": {
-      "A": "Single fixed configuration",
-      "B": "Multiple backbone options and optional components",
-      "C": "Requires retraining for each application",
-      "D": "No flexibility"
-    },
-    "answer": "B",
-    "explanation": "Approach: Modular design with configurable encoders and optional hand refinement. AR apps might need speed while film production needs accuracy. Flexible architecture trades simplicity (single config) for adaptability, letting users configure the system for their specific accuracy/speed/detail requirements."
-  },
-  {
-    "id": 41,
-    "source": "SAM 3D Body",
-    "context": "Input: Learning from both posed and in-the-wild data\nGoal: Balance controlled accuracy with real-world diversity",
-    "question": "What data mixture strategy is employed?",
-    "options": {
-      "A": "Only studio data",
-      "B": "Only in-the-wild data",
-      "C": "Combination of controlled and in-the-wild sources",
-      "D": "Purely synthetic data"
-    },
-    "answer": "C",
-    "explanation": "Approach: Mixed training data from controlled and in-the-wild sources. Controlled data provides ground truth accuracy but limited diversity; wild data has diversity but noisy labels. Mixing both trades annotation complexity for models that are both accurate and robust."
-  },
-  {
-    "id": 42,
-    "source": "SAM 3D Body",
-    "context": "Input: Computational cost of training large-scale models\nGoal: Achieve strong performance efficiently",
-    "question": "What efficiency considerations exist?",
-    "options": {
-      "A": "Training cost is ignored",
-      "B": "Efficient architecture and data selection strategy",
-      "C": "Minimal training only",
-      "D": "No efficiency measures"
-    },
-    "answer": "B",
-    "explanation": "Approach: Data engine that efficiently selects informative samples, efficient architectures. Training on all possible data is wasteful. Strategic data selection and efficient architectures trade curation effort for faster convergence and lower computational cost while maintaining performance."
-  },
-  {
-    "id": 43,
-    "source": "SAM 3D Body",
-    "context": "Input: Comparison with implicit 3D representations (NeRF, etc.)\nGoal: Choose appropriate representation for HMR",
-    "question": "Why use parametric mesh representation?",
-    "options": {
-      "A": "Implicit is always better",
-      "B": "Parametric meshes are interpretable, editable, and compatible with graphics pipelines",
-      "C": "Meshes are easier to overfit",
-      "D": "Technical limitations only"
-    },
-    "answer": "B",
-    "explanation": "Approach: Parametric MHR mesh representation over implicit fields. Implicit representations are flexible but hard to edit or use in game engines. Parametric meshes trade expressiveness for compatibility with existing pipelines, interpretability, and efficient rendering in real-time applications."
-  },
-  {
-    "id": 44,
-    "source": "SAM 3D Body",
-    "context": "Input: Handling self-contact and extreme articulation\nGoal: Realistic pose recovery even in complex configurations",
-    "question": "What helps with extreme poses?",
-    "options": {
-      "A": "Pose restrictions",
-      "B": "Diverse training data including unusual articulations",
-      "C": "Physical simulation",
-      "D": "Multiple models"
-    },
-    "answer": "B",
-    "explanation": "Approach: Training data actively including extreme and unusual poses. Models fail on rare poses not seen during training. Actively collecting extreme articulations trades data collection difficulty for robustness to yoga poses, dance, sports, and other complex movements."
-  },
-  {
-    "id": 45,
-    "source": "SAM 3D Body",
-    "context": "Input: Uncertainty in single-image 3D reconstruction\nGoal: Communicate model confidence",
-    "question": "How might uncertainty be represented?",
-    "options": {
-      "A": "Not addressed",
-      "B": "Probabilistic outputs or confidence scores",
-      "C": "Binary success/failure",
-      "D": "Multiple deterministic predictions"
-    },
-    "answer": "B",
-    "explanation": "Approach: Potential for confidence estimation in predictions. Single-view 3D is inherently uncertain (e.g., depth ambiguity). Probabilistic outputs trade simpler deterministic predictions for honest uncertainty quantification, helping downstream applications make informed decisions."
-  },
-  {
-    "id": 46,
-    "source": "SAM 3D Body",
-    "context": "Input: Integration with other vision systems\nGoal: Use in broader pipelines",
-    "question": "What integration considerations exist?",
-    "options": {
-      "A": "Standalone only",
-      "B": "Compatible with standard formats and can combine with SAM 3D Objects",
-      "C": "Proprietary interfaces only",
-      "D": "No integration support"
-    },
-    "answer": "B",
-    "explanation": "Approach: Standard output formats and documented combination with SAM 3D Objects. Isolated models have limited utility. Providing integration examples (combining with SAM 3D Objects) and standard formats trades documentation effort for ecosystem compatibility, enabling complex pipelines."
-  },
-  {
-    "id": 47,
-    "source": "SAM 3D Body",
-    "context": "Input: Privacy concerns with human imagery\nGoal: Responsible deployment",
-    "question": "What considerations might apply?",
-    "options": {
-      "A": "No privacy considerations",
-      "B": "Model processes images locally without storing data",
-      "C": "All images sent to cloud",
-      "D": "Privacy is not mentioned"
-    },
-    "answer": "B",
-    "explanation": "Approach: Local inference capability without required cloud processing. Human body reconstruction raises privacy concerns. Supporting local inference trades convenience (cloud-only service) for privacy, letting sensitive applications run without transmitting personal imagery."
-  },
-  {
-    "id": 48,
-    "source": "SAM 3D Body",
-    "context": "Input: Long-term maintenance of released code\nGoal: Sustainable research artifact",
-    "question": "What supports sustainability?",
-    "options": {
-      "A": "No maintenance plan",
-      "B": "Open-source community and institutional backing",
-      "C": "Single maintainer",
-      "D": "Proprietary maintenance"
-    },
-    "answer": "B",
-    "explanation": "Approach: Open-source release with Meta's institutional support. Research code often becomes unmaintained. Community involvement plus institutional backing trades initial release effort for long-term sustainability, ensuring the work remains usable as dependencies evolve."
-  },
-  {
-    "id": 49,
-    "source": "SAM 3D Body",
-    "context": "Input: Temporal consistency for video applications\nGoal: Smooth reconstruction across frames",
-    "question": "What consideration exists for video?",
-    "options": {
-      "A": "Only single images supported",
-      "B": "Architecture could be extended with temporal modeling",
-      "C": "Video is not applicable",
-      "D": "Requires retraining"
-    },
-    "answer": "B",
-    "explanation": "Approach: Single-image model that could be extended with temporal components. Single-image models are simpler but may have temporal jitter. Focusing on single-image first trades immediate temporal smoothness for modular design, enabling frame-by-frame or future temporal extensions."
-  },
-  {
-    "id": 50,
-    "source": "SAM 3D Body",
-    "context": "Input: Balance research novelty and practical impact\nGoal: Contribute meaningfully to both science and applications",
-    "question": "What is the overall philosophy?",
-    "options": {
-      "A": "Pure research focus",
-      "B": "Only practical applications",
-      "C": "Strong performance with open release enabling both research and applications",
-      "D": "Benchmark optimization only"
-    },
-    "answer": "C",
-    "explanation": "Approach: State-of-the-art research with full open-source release (code, models, data). Research-only work has limited impact; application-only work doesn't advance science. Combining strong research contributions with open release trades simplicity for maximal impact, serving both academic and practical communities."
-  },
-  {
-    "id": 51,
-    "source": "SAM 3D Objects",
-    "context": "Input: Previous models trained on isolated synthetic objects\nGoal: Reconstruct 3D from real-world cluttered scenes",
-    "question": "Why do previous image-to-3D models struggle with natural scene images?",
-    "options": {
-      "A": "They require too much GPU memory",
-      "B": "They are trained on isolated objects and struggle with occlusion and clutter",
-      "C": "They only work with synthetic images",
-      "D": "They cannot process high-resolution images"
-    },
-    "answer": "B",
-    "explanation": "These models fail because they lack training on occluded/cluttered scenes. Training on clean, centered objects doesn't transfer to images where objects are distant, partially visible, or surrounded by visual noise—the distribution shift is too large."
-  },
-  {
-    "id": 52,
-    "source": "SAM 3D Objects",
-    "context": "Input: A single 2D image with ambiguous depth\nGoal: Recover 3D shape without multiple views",
-    "question": "What makes the \"familiar object\" cue important for single-image 3D reconstruction?",
-    "options": {
-      "A": "It allows faster processing",
-      "B": "Recognition of known object types enables inference of their 3D structure",
-      "C": "It reduces memory requirements",
-      "D": "It improves color accuracy"
-    },
-    "answer": "B",
-    "explanation": "Leverage recognition to infer structure. If we recognize a chair, we can infer it has legs, a seat, and a back—even parts we can't see. Recognition fills in geometric priors that pure geometry cannot provide from one view."
-  },
-  {
-    "id": 53,
-    "source": "SAM 3D Objects",
-    "context": "Input: Need for large-scale 3D annotations\nGoal: Collect millions of 3D training samples",
-    "question": "Why can't generalist human annotators directly create 3D shape ground truth?",
-    "options": {
-      "A": "They don't have access to computers",
-      "B": "Creating 3D meshes requires specialized skills that take hours even for trained artists",
-      "C": "3D software is too expensive",
-      "D": "There are copyright restrictions"
-    },
-    "answer": "B",
-    "explanation": "The trade-off is annotation quality vs. scalability—skilled 3D artists take hours per mesh, making it impossible to scale to millions of samples with direct creation."
-  },
-  {
-    "id": 54,
-    "source": "SAM 3D Objects",
-    "context": "Input: Initial weak model and limited training data\nGoal: Continuously improve both model and data quality",
-    "question": "What is the \"virtuous cycle\" in SAM 3D's data engine?",
-    "options": {
-      "A": "A type of neural network architecture",
-      "B": "Model improvements lead to better annotations, which further improve the model",
-      "C": "A data augmentation technique",
-      "D": "A loss function optimization method"
-    },
-    "answer": "B",
-    "explanation": "Use improved model to generate better candidates for annotation. This creates a positive feedback loop—better models propose better 3D candidates, annotators select higher quality samples, and training on these improves the model further."
-  },
-  {
-    "id": 55,
-    "source": "SAM 3D Objects",
-    "context": "Input: An object in a cluttered scene\nGoal: Maximize information for accurate reconstruction",
-    "question": "Why does SAM 3D use both cropped object and full image as inputs?",
-    "options": {
-      "A": "To increase batch size",
-      "B": "Cropped view provides detail while full image provides context and recognition cues",
-      "C": "To reduce memory usage",
-      "D": "To speed up inference"
-    },
-    "answer": "B",
-    "explanation": "The trade-off is detail vs. context—crops give high-resolution object features but lose scene cues; full images provide recognition context but at lower object resolution. Using both captures complementary information."
-  },
-  {
-    "id": 56,
-    "source": "SAM 3D Objects",
-    "context": "Input: Multiple output modalities (shape, rotation, translation, scale)\nGoal: Train flexibly on datasets with partial labels while maintaining consistency",
-    "question": "What problem does the Mixture-of-Transformers (MoT) architecture solve?",
-    "options": {
-      "A": "Reducing training time",
-      "B": "Enabling independent training of different modalities while maintaining cross-modal interaction",
-      "C": "Increasing model size",
-      "D": "Improving image quality"
-    },
-    "answer": "B",
-    "explanation": "Use MoT with structured attention masks. The trade-off is modularity vs. joint reasoning—separate transformers allow training on shape-only data, but shared attention ensures rotation predictions are consistent with the predicted shape."
-  },
-  {
-    "id": 57,
-    "source": "SAM 3D Objects",
-    "context": "Input: A 2D image where depth information is lost\nGoal: Handle inherent ambiguity in single-view reconstruction",
-    "question": "Why does SAM 3D model reconstruction as a conditional distribution rather than a deterministic function?",
-    "options": {
-      "A": "To use less memory",
-      "B": "Because the 3D-to-2D mapping is lossy and multiple valid 3D shapes can explain one image",
-      "C": "To speed up training",
-      "D": "To simplify the architecture"
-    },
-    "answer": "B",
-    "explanation": "Model p(S,T,R,t,s|I,M) as a distribution. The trade-off is certainty vs. realism—a deterministic model would give one answer but might be wrong; a generative model can sample multiple plausible reconstructions, better reflecting true uncertainty."
-  },
-  {
-    "id": 58,
-    "source": "SAM 3D Objects",
-    "context": "Input: Ambiguous layout from RGB alone\nGoal: Improve translation and scale accuracy",
-    "question": "What is the purpose of using point maps as optional conditioning?",
-    "options": {
-      "A": "To replace the image encoder",
-      "B": "To provide additional depth cues that help with layout estimation",
-      "C": "To reduce model parameters",
-      "D": "To improve texture quality"
-    },
-    "answer": "B",
-    "explanation": "Optionally condition on point maps from LiDAR or monocular depth. The trade-off is accessibility vs. accuracy—RGB-only works everywhere but has layout ambiguity; point maps add geometric constraints but require additional sensors or estimation."
-  },
-  {
-    "id": 59,
-    "source": "SAM 3D Objects",
-    "context": "Input: Need to predict object orientation\nGoal: Learn rotation prediction effectively with neural networks",
-    "question": "Why did the authors choose 6D rotation representation instead of Euler angles or quaternions?",
-    "options": {
-      "A": "It uses less memory",
-      "B": "6D representation is continuous and avoids discontinuities in neural network learning",
-      "C": "It's faster to compute",
-      "D": "It's more intuitive for humans"
-    },
-    "answer": "B",
-    "explanation": "Use 6D continuous rotation representation. The trade-off is compactness vs. learnability—Euler angles (3D) and quaternions (4D) have discontinuities or constraints that make gradient-based learning harder; 6D is redundant but continuous and easier to learn."
-  },
-  {
-    "id": 60,
-    "source": "SAM 3D Objects",
-    "context": "Input: Various 3D reconstruction methods\nGoal: Enable practical real-world 3D perception",
-    "question": "What distinguishes SAM 3D from methods like NeRF or 3D Gaussian Splatting?",
-    "options": {
-      "A": "SAM 3D uses more GPUs",
-      "B": "SAM 3D reconstructs from a single image at test time, while others typically need multiple views",
-      "C": "SAM 3D only works with synthetic images",
-      "D": "SAM 3D produces lower quality results"
-    },
-    "answer": "B",
-    "explanation": "Single-image reconstruction vs. multi-view. The trade-off is convenience vs. geometric precision—multi-view methods can be more geometrically accurate but require capturing multiple images; single-view is practical for any existing photo but must rely on learned priors."
-  },
-  {
-    "id": 61,
-    "source": "SAM 3D Objects",
-    "context": "Input: Need to learn 3D shape generation\nGoal: Build foundational 3D generation capabilities",
-    "question": "Why does SAM 3D use synthetic pretraining before real-world data?",
-    "options": {
-      "A": "Synthetic data is more colorful",
-      "B": "Synthetic data provides unlimited 3D ground truth to learn shape/texture vocabulary",
-      "C": "Real data is not available",
-      "D": "Synthetic data trains faster"
-    },
-    "answer": "B",
-    "explanation": "Pretrain on rendered synthetic objects with perfect ground truth. The trade-off is domain gap vs. data quality—synthetic data has perfect 3D labels at unlimited scale but differs from real images; this gap is later closed in post-training."
-  },
-  {
-    "id": 62,
-    "source": "SAM 3D Objects",
-    "context": "Input: Model trained on isolated objects\nGoal: Handle partially visible objects in real scenes",
-    "question": "What is the purpose of \"Flying Occlusions\" in mid-training?",
-    "options": {
-      "A": "To make training faster",
-      "B": "To teach the model occlusion robustness by compositing occluder-occludee pairs",
-      "C": "To reduce model size",
-      "D": "To improve color prediction"
-    },
-    "answer": "B",
-    "explanation": "Composite synthetic objects as occluders over target objects. The trade-off is realism vs. control—real occlusions are diverse but lack ground truth; synthetic occlusions give exact visibility masks for supervised learning of shape completion."
-  },
-  {
-    "id": 63,
-    "source": "SAM 3D Objects",
-    "context": "Input: Data collected across multiple iterations\nGoal: Maximize training signal quality",
-    "question": "Why is the quality threshold α in post-training increased over time?",
-    "options": {
-      "A": "To reduce training time",
-      "B": "To progressively raise the bar as the model improves, similar to curriculum learning",
-      "C": "To save storage space",
-      "D": "To decrease model size"
-    },
-    "answer": "B",
-    "explanation": "Increase acceptance threshold α over time. The trade-off is data quantity vs. quality—early on, accepting lower quality samples provides learning signal; as the model improves, stricter thresholds ensure only high-quality examples refine the model further."
-  },
-  {
-    "id": 64,
-    "source": "SAM 3D Objects",
-    "context": "Input: Need to learn object layout in scenes\nGoal: Predict translation and scale from visual cues",
-    "question": "What problem does Object Swap - Random (OS-R) solve that Flying Occlusions doesn't?",
-    "options": {
-      "A": "Color accuracy",
-      "B": "Learning translation and scale estimation with depth-aware visual cues",
-      "C": "Faster processing",
-      "D": "Better textures"
-    },
-    "answer": "B",
-    "explanation": "Replace objects with depth-aware rendering that preserves occlusion relationships. The trade-off is pose information vs. semantic relevance—Flying Occlusions teaches occlusion handling but lacks realistic layout; OS-R provides T-junction and depth ordering cues needed for layout estimation."
-  },
-  {
-    "id": 65,
-    "source": "SAM 3D Objects",
-    "context": "Input: Model after supervised fine-tuning\nGoal: Eliminate subtle undesirable outputs (floaters, asymmetry)",
-    "question": "Why does SAM 3D use DPO (Direct Preference Optimization) after SFT?",
-    "options": {
-      "A": "To reduce model size",
-      "B": "To align outputs with human aesthetic preferences like symmetry and closure",
-      "C": "To speed up inference",
-      "D": "To use less training data"
-    },
-    "answer": "B",
-    "explanation": "Use human preference pairs in DPO. The trade-off is explicit supervision vs. implicit preferences—SFT teaches correct shapes but can't capture subjective quality aspects; DPO learns from comparative judgments what humans find aesthetically pleasing."
-  },
-  {
-    "id": 66,
-    "source": "SAM 3D Objects",
-    "context": "Input: Hard examples where no model produces acceptable meshes\nGoal: Break the chicken-and-egg problem for tail distribution",
-    "question": "What is the purpose of the Art-3DO dataset created by professional 3D artists?",
-    "options": {
-      "A": "To replace all other training data",
-      "B": "To provide high-quality supervision for the hardest cases where models fail",
-      "C": "To reduce training time",
-      "D": "To improve inference speed"
-    },
-    "answer": "B",
-    "explanation": "Use skilled 3D artists to create ground truth for failure cases. The trade-off is cost vs. coverage—artists are expensive (hours per mesh) but essential for seeding model capability in regions where self-improvement can't bootstrap."
-  },
-  {
-    "id": 67,
-    "source": "SAM 3D Objects",
-    "context": "Input: Pretrained model learning new capabilities\nGoal: Add mask-following and occlusion handling without forgetting shape generation",
-    "question": "Why does mid-training use 2.7 trillion tokens, matching pretraining?",
-    "options": {
-      "A": "It's a random choice",
-      "B": "Sufficient exposure is needed to learn new skills while retaining pretraining knowledge",
-      "C": "To use all available GPUs",
-      "D": "To fill storage capacity"
-    },
-    "answer": "B",
-    "explanation": "Extensive mid-training matching pretraining scale. The trade-off is capability acquisition vs. catastrophic forgetting—too little mid-training doesn't teach new skills; this scale ensures robust skill integration while maintaining foundation capabilities."
-  },
-  {
-    "id": 68,
-    "source": "SAM 3D Objects",
-    "context": "Input: Need for generative 3D modeling\nGoal: Efficient training and inference for 3D generation",
-    "question": "What advantage does flow matching have over diffusion for SAM 3D?",
-    "options": {
-      "A": "Uses less memory",
-      "B": "Provides straight probability paths that are easier to learn and faster to sample",
-      "C": "Produces more colorful outputs",
-      "D": "Requires fewer parameters"
-    },
-    "answer": "B",
-    "explanation": "Use rectified conditional flow matching. The trade-off is sample quality vs. efficiency—diffusion models work well but require many steps; rectified flow provides straighter paths enabling fewer sampling steps with comparable quality."
-  },
-  {
-    "id": 69,
-    "source": "SAM 3D Objects",
-    "context": "Input: Trained flow matching model requiring 25 steps\nGoal: Enable real-time 3D perception",
-    "question": "Why does SAM 3D distill the model to reduce NFE from 25 to 4?",
-    "options": {
-      "A": "To improve quality",
-      "B": "To enable sub-second inference for real-time applications like robotics",
-      "C": "To increase accuracy",
-      "D": "To use more parameters"
-    },
-    "answer": "B",
-    "explanation": "Distill using shortcut models to reduce to 4 steps. The trade-off is quality vs. speed—25 steps give best quality but too slow for robotics; distillation sacrifices some quality for ~6x speedup, enabling practical deployment."
-  },
-  {
-    "id": 70,
-    "source": "SAM 3D Objects",
-    "context": "Input: Two datasets of different quality and size\nGoal: Maximize final model quality",
-    "question": "What is the significance of using both MITL-3DO and Art-3DO in SFT sequencing?",
-    "options": {
-      "A": "Random ordering",
-      "B": "Train on noisier crowd-sourced data first, then fine-tune on smaller high-quality artist data",
-      "C": "Use them simultaneously",
-      "D": "Only use Art-3DO"
-    },
-    "answer": "B",
-    "explanation": "SFT on MITL-3DO first, then Art-3DO. The trade-off is scale vs. polish—MITL-3DO (millions of samples) provides broad coverage but has annotation noise; following with smaller, pristine Art-3DO aligns outputs with artist aesthetic preferences."
-  },
-  {
-    "id": 71,
-    "source": "SAM 3D Objects",
-    "context": "Input: Multiple 3D mesh candidates to evaluate\nGoal: Collect reliable quality judgments",
-    "question": "Why do annotators make pairwise comparisons rather than rating individual meshes?",
-    "options": {
-      "A": "It's faster",
-      "B": "Relative judgments are more reliable and consistent than absolute quality scores",
-      "C": "It uses less screen space",
-      "D": "It requires less training"
-    },
-    "answer": "B",
-    "explanation": "Pairwise comparison tournament. The trade-off is information richness vs. reliability—absolute ratings vary by annotator calibration; relative comparisons (\"A is better than B\") are more consistent and avoid calibration issues."
-  },
-  {
-    "id": 72,
-    "source": "SAM 3D Objects",
-    "context": "Input: N candidates shown sequentially to annotators\nGoal: Unbiased quality assessment",
-    "question": "What is the purpose of randomizing candidate presentation order in Stage 2?",
-    "options": {
-      "A": "To confuse annotators",
-      "B": "To prevent order-based biases from affecting selection",
-      "C": "To speed up annotation",
-      "D": "To reduce storage"
-    },
-    "answer": "B",
-    "explanation": "Randomize presentation order. The trade-off is experimental rigor vs. simplicity—fixed ordering could create primacy/recency biases; randomization ensures selections reflect true quality rather than position effects."
-  },
-  {
-    "id": 73,
-    "source": "SAM 3D Objects",
-    "context": "Input: Diverse objects with varying difficulty\nGoal: Ensure successful annotation for most inputs",
-    "question": "Why does the data engine use an ensemble of different 3D generation methods?",
-    "options": {
-      "A": "To use more GPUs",
-      "B": "To maximize the chance of having at least one good candidate for any given input",
-      "C": "To increase training time",
-      "D": "To reduce model quality"
-    },
     "answer": "B",
-    "explanation": "Combine retrieval, text-to-3D, and image-to-3D methods. The trade-off is complexity vs. coverage—single methods fail on certain inputs; ensembling different approaches (retrieval for semantic matches, generation for novel shapes) provides complementary strengths."
+    "explanation": "Harmful content becomes easier to detect with time because user behaviors (blocking, unliking, reporting, commenting negatively) provide additional signals. This insight allows us to trade off detection speed vs. accuracy based on our business objective."
   },
   {
-    "id": 74,
-    "source": "SAM 3D Objects",
-    "context": "Input: First iteration with untrained model\nGoal: Begin collecting quality training data",
-    "question": "What is the \"cold start problem\" in SAM 3D's data engine?",
+    "source": "[Hello Interview] Bot Detection",
+    "question": "Why is bot detection considered an 'adversarial' ML problem?",
     "options": {
-      "A": "GPU temperature issues",
-      "B": "Initial model produces few high-quality candidates because no real-world 3D data exists yet",
-      "C": "Slow network connections",
-      "D": "Memory limitations"
+      "A": "Users are hostile to bot detection",
+      "B": "Bot authors constantly adapt their tactics to evade detection systems",
+      "C": "Bots attack the detection system directly",
+      "D": "Detection systems compete with each other"
     },
     "answer": "B",
-    "explanation": "Leverage existing methods as ensemble to bootstrap. The trade-off is bootstrapping vs. self-improvement—you can't improve a model without data, but you can't get good data without a good model; external methods break this cycle initially."
+    "explanation": "Bot detection is adversarial because bot authors constantly adapt to evade detection. Patterns that work today might fail tomorrow. Early bots had obvious tells like spamming at superhuman frequencies, but modern bots are much more sophisticated."
   },
   {
-    "id": 75,
-    "source": "SAM 3D Objects",
-    "context": "Input: 3D mesh needing pose alignment\nGoal: Accurate and consistent R, t, s annotations",
-    "question": "Why does Stage 3 use point clouds rather than RGB images for pose annotation?",
+    "source": "[Hello Interview] Bot Detection",
+    "question": "Why is 'maximize bot detection rate' a better objective than 'maximize detected bots'?",
     "options": {
-      "A": "Point clouds are more colorful",
-      "B": "Point clouds provide explicit 3D structure that enables consistent placement",
-      "C": "They load faster",
-      "D": "They use less memory"
+      "A": "It sounds more professional",
+      "B": "Adding false positive constraints protects legitimate users while still enabling aggressive detection",
+      "C": "It requires less computation",
+      "D": "Bots prefer this metric"
     },
     "answer": "B",
-    "explanation": "Align mesh to 2.5D point cloud from depth estimation. The trade-off is annotation difficulty vs. accuracy—placing 3D objects in 2D images is ambiguous; point clouds make depth explicit, enabling annotators to anchor meshes to physical scene structure."
+    "explanation": "Maximizing detected bots creates incentives to be overly aggressive, catching legitimate users in the crossfire. Adding false positive rate constraints (e.g., <1%) protects user trust while still allowing aggressive bot detection within those bounds."
   },
   {
-    "id": 76,
-    "source": "SAM 3D Objects",
-    "context": "Input: Rejected mesh candidates from annotation\nGoal: Extract value from failed annotations",
-    "question": "What happens to mesh candidates that don't meet the quality threshold?",
+    "source": "[Hello Interview] Bot Detection",
+    "question": "What is the challenge with ground truth labels in bot detection?",
     "options": {
-      "A": "They are deleted",
-      "B": "They become negative examples for preference alignment (DPO)",
-      "C": "They are used for pretraining",
-      "D": "They are sent to artists"
+      "A": "There are too many labels",
+      "B": "Manual investigation is expensive and investigators can only verify hundreds of accounts per week",
+      "C": "Labels are always wrong",
+      "D": "Labels expire immediately"
     },
     "answer": "B",
-    "explanation": "Use as negative examples in preference pairs. The trade-off is data utilization vs. quality—rejected meshes aren't good enough for SFT but still provide signal; pairing them with accepted meshes teaches the model what NOT to produce."
+    "explanation": "Ground truth from investigators is the highest quality data but extremely limited - they can only investigate low hundreds of accounts per week. This scarcity means you must be strategic about which accounts to send for review."
   },
   {
-    "id": 77,
-    "source": "SAM 3D Objects",
-    "context": "Input: Examples where standard sampling fails\nGoal: Recover training data from difficult inputs",
-    "question": "Why does the reward model pipeline generate 50 seeds for hard examples?",
+    "source": "[Hello Interview] Bot Detection",
+    "question": "How can network-based features help identify bot accounts?",
     "options": {
-      "A": "It's a random number",
-      "B": "Higher N increases probability of finding at least one acceptable output for tail distribution",
-      "C": "To fill GPU memory",
-      "D": "To slow down training"
+      "A": "By measuring internet speed",
+      "B": "By identifying accounts with similar IP addresses, behavior patterns, or registration patterns as known bots",
+      "C": "By checking the router configuration",
+      "D": "By measuring packet loss"
     },
     "answer": "B",
-    "explanation": "Scale up best-of-N search from 8 to 50. The trade-off is compute vs. coverage—50 samples is expensive but dramatically increases success probability for hard cases (food category improved 9x from 4% to 36%)."
+    "explanation": "The social graph helps propagate labels: IP address clustering (accounts from malicious IPs), behavioral similarity to confirmed bots, and bulk registration patterns can identify entire bot networks rather than individual accounts."
   },
   {
-    "id": 78,
-    "source": "SAM 3D Objects",
-    "context": "Input: Need for large-scale 3D annotation\nGoal: Scale annotation to millions of samples",
-    "question": "Why can't annotators directly edit meshes in Stage 2?",
+    "source": "[Hello Interview] Bot Detection",
+    "question": "What type of synthetic data generation can help with class imbalance in bot detection?",
     "options": {
-      "A": "The software doesn't support it",
-      "B": "Editing requires specialized skills; selection/verification scales better with generalist annotators",
-      "C": "It would be too fast",
-      "D": "Copyright restrictions"
+      "A": "Random noise injection",
+      "B": "Conditional GANs that generate realistic bot behavior patterns",
+      "C": "Simple duplication of existing examples",
+      "D": "Image augmentation"
     },
     "answer": "B",
-    "explanation": "Restrict annotators to selection only. The trade-off is flexibility vs. scalability—mesh editing requires training and produces variable quality; binary selection is a simpler task that generalists can perform reliably and quickly."
+    "explanation": "Conditional GANs (like CALEB) can generate realistic bot behavior patterns across multiple dimensions: temporal activity, content generation styles, and network formation behaviors. This helps models learn sophisticated patterns underrepresented in real data."
   },
   {
-    "id": 79,
-    "source": "SAM 3D Objects",
-    "context": "Input: Examples where all model candidates are rejected\nGoal: Provide data for model blind spots",
-    "question": "What determines whether an example is routed to 3D artists in Stage 2.5?",
+    "source": "[Hello Interview] Bot Detection",
+    "question": "What is the 'survival bias' challenge in bot detection training data?",
     "options": {
-      "A": "Random selection",
-      "B": "When no model in the ensemble produces a mesh meeting the quality threshold",
-      "C": "Based on image size",
-      "D": "Based on file format"
+      "A": "Bots live longer than users",
+      "B": "As detection improves, only sophisticated bots remain, making training data naturally shift to harder examples",
+      "C": "Training data survives longer in storage",
+      "D": "Models survive longer with better data"
     },
     "answer": "B",
-    "explanation": "Route genuine failure cases to artists. The trade-off is artist cost vs. model improvement—artists are expensive so we only use them where essential; failure filtering ensures each artist-created mesh addresses a real model limitation."
+    "explanation": "The adversarial nature creates survival bias: as detection improves, simple bots are filtered out, so observed bots become more sophisticated. This means training data naturally shifts toward harder examples - both a blessing (harder training) and curse (distribution shift)."
   },
   {
-    "id": 80,
-    "source": "SAM 3D Objects",
-    "context": "Input: Diverse object categories with varying difficulty\nGoal: Balanced coverage across all categories",
-    "question": "How does the data engine handle the object category distribution?",
+    "source": "[Hello Interview] Bot Detection",
+    "question": "Why might a GRU be preferred over a transformer for bot detection sequence modeling?",
     "options": {
-      "A": "Random sampling",
-      "B": "Curriculum-inspired sampling progressing from simple to complex, with adaptive rebalancing",
-      "C": "Alphabetical ordering",
-      "D": "Size-based ordering"
+      "A": "GRUs are always better",
+      "B": "We're fitting to sketchy behaviors rather than nuanced language understanding, so simpler is sufficient",
+      "C": "Transformers don't work on sequences",
+      "D": "GRUs are more expensive"
     },
     "answer": "B",
-    "explanation": "Start with simple shapes, progressively add complex/deformable objects, monitor and rebalance. The trade-off is learning efficiency vs. coverage—starting with hard examples wastes annotation effort; curriculum lets the model build capability before tackling challenging categories."
+    "explanation": "For bot detection, we're identifying suspicious behavioral patterns, not understanding nuanced language. A GRU is simpler, faster, and sufficient for capturing temporal patterns in user actions like post frequency, login patterns, and device switches."
   },
   {
-    "id": 81,
-    "source": "SAM 3D Objects",
-    "context": "Input: Need for benchmark ground truth\nGoal: Establish gold standard for evaluation",
-    "question": "Why does SA-3DAO use professional 3D artists to create ground truth?",
+    "source": "[Hello Interview] Bot Detection",
+    "question": "What is the purpose of using GraphSAGE for bot detection?",
     "options": {
-      "A": "It's cheaper",
-      "B": "Artists represent expert human upper bound for visually grounded 3D reconstruction",
-      "C": "They work faster",
-      "D": "They have more GPUs"
+      "A": "To generate graphs",
+      "B": "It's inductive (handles new nodes without retraining) and can model social network relationships",
+      "C": "To compress graph data",
+      "D": "To visualize networks"
     },
     "answer": "B",
-    "explanation": "Use professional 3D artists. The trade-off is cost vs. quality—automated methods would introduce their own biases; human artists provide the best possible reference for what a perfect reconstruction should look like."
+    "explanation": "GraphSAGE is inductive, meaning it can embed new accounts without retraining the entire model. It also treats different edge types differently (follow vs. reply) which helps distinguish spam accounts that auto-follow thousands from well-connected legitimate users."
   },
   {
-    "id": 82,
-    "source": "SAM 3D Objects",
-    "context": "Input: Two different evaluation benchmarks\nGoal: Understand where SAM 3D's advantages lie",
-    "question": "Why does SAM 3D significantly outperform baselines on SA-3DAO but show smaller gaps on ISO3D?",
+    "source": "[Hello Interview] Bot Detection",
+    "question": "How does pretraining help bot detection models with limited labeled data?",
     "options": {
-      "A": "Random variation",
-      "B": "SA-3DAO tests real-world conditions (occlusion, clutter) where SAM 3D's training excels",
-      "C": "ISO3D is harder",
-      "D": "Different image formats"
+      "A": "It doesn't help",
+      "B": "Self-supervised tasks (predicting masked features, next events) help the model learn the 'language' of normal behavior first",
+      "C": "It makes labeling faster",
+      "D": "It creates more labeled data"
     },
     "answer": "B",
-    "explanation": "Compare performance across datasets. The trade-off revealed is specialization vs. generalization—baselines trained on isolated objects do okay on similar ISO3D images; SAM 3D's real-world training pays off on challenging SA-3DAO conditions."
+    "explanation": "With limited labels and a large model, pretraining is essential. The graph branch learns by predicting masked node attributes and identifying real vs. fake neighbor pairs. The sequence branch predicts masked/next events. This captures normal patterns before fine-tuning."
   },
   {
-    "id": 83,
-    "source": "SAM 3D Objects",
-    "context": "Input: Pairwise human evaluations\nGoal: Measure perceptual quality beyond metrics",
-    "question": "What does the 5:1 win rate in human preference tests indicate?",
+    "source": "[Hello Interview] Bot Detection",
+    "question": "Why is 'defense in depth' important for bot detection systems?",
     "options": {
-      "A": "SAM 3D is 5 times faster",
-      "B": "Humans prefer SAM 3D outputs 5 times more often than alternatives",
-      "C": "SAM 3D uses 5 times more parameters",
-      "D": "SAM 3D costs 5 times more"
+      "A": "To use more models",
+      "B": "Multiple layers provide safety nets since each stage can have gaps or be evaded differently",
+      "C": "To increase latency",
+      "D": "To make the system more complex"
     },
     "answer": "B",
-    "explanation": "Head-to-head preference comparison. The trade-off is objectivity vs. relevance—automated metrics are consistent but may not capture what matters to users; human preference directly measures practical quality."
+    "explanation": "Production safety/integrity systems are often built in layers responding to real attacks. Additional layers provide safety nets - simple heuristics catch obvious bots, supervised models catch known patterns, and unsupervised approaches can identify novel bot behaviors."
   },
   {
-    "id": 84,
-    "source": "SAM 3D Objects",
-    "context": "Input: Need to fairly evaluate texture generation\nGoal: Measure texture quality independent of geometry",
-    "question": "Why does SAM 3D evaluate texture separately using its own geometry?",
+    "source": "[Hello Interview] Bot Detection",
+    "question": "What actions can be taken besides banning when a bot is detected?",
     "options": {
-      "A": "To hide poor geometry",
-      "B": "To isolate texture quality assessment—better geometry from SAM 3D actually helps competing texture methods",
-      "C": "It's faster",
-      "D": "To reduce memory"
+      "A": "Only banning is possible",
+      "B": "Demotions (reducing visibility) and rate limits can minimize damage while reducing false positive impact",
+      "C": "Notify the bot operator",
+      "D": "Increase the account's privileges"
     },
     "answer": "B",
-    "explanation": "Use SAM 3D geometry for all texture methods. The trade-off is fairness vs. end-to-end evaluation—poor geometry makes texture look bad regardless of texture quality; providing good geometry isolates what we're measuring."
+    "explanation": "Since the objective is minimizing impact of bot activity, you can: ban when confident, demote (reduce visibility) when unsure, or rate-limit interactions. This minimizes collateral damage from false positives while still reducing bot impact."
   },
   {
-    "id": 85,
-    "source": "SAM 3D Objects",
-    "context": "Input: Need to evaluate 3D layout prediction\nGoal: Measure pose accuracy appropriately",
-    "question": "What does the ADD-S metric measure that IoU doesn't capture?",
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "Why is 'maximize click-through rate (CTR)' a poor business objective for video recommendations?",
     "options": {
-      "A": "Color accuracy",
-      "B": "Pose accuracy through surface distance normalized by object diameter",
-      "C": "Training time",
-      "D": "Memory usage"
+      "A": "CTR is hard to measure",
+      "B": "It leads to clickbait optimization - users may click on misleading thumbnails but not retain",
+      "C": "CTR is always low",
+      "D": "Videos don't have CTR"
     },
     "answer": "B",
-    "explanation": "Use ADD-S (Average Distance of Distinguishable points - Symmetric). The trade-off is what aspect to measure—IoU captures overlap but doesn't penalize rotation errors well; ADD-S directly measures how close predicted surfaces are to ground truth."
+    "explanation": "CTR optimization can lead to clickbait thumbnails and misleading titles. Users might click but if they don't retain (watch or come back), the platform loses. CTR ignores the quality of engagement that follows the click."
   },
   {
-    "id": 86,
-    "source": "SAM 3D Objects",
-    "context": "Input: Two approaches: pipeline vs. joint generation\nGoal: Best overall layout prediction",
-    "question": "Why do pipeline approaches (shape model + pose estimator) underperform joint SAM 3D?",
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "What is a better business objective than pure watch time for video recommendations?",
     "options": {
-      "A": "They use more memory",
-      "B": "Errors compound across stages and shape/pose are estimated independently without mutual consistency",
-      "C": "They're newer",
-      "D": "They use different GPUs"
+      "A": "Maximize video length",
+      "B": "Maximize quality-adjusted watch time, combining watch time with quality signals like ratings and completion",
+      "C": "Minimize buffering time",
+      "D": "Maximize upload frequency"
     },
     "answer": "B",
-    "explanation": "Compare separate shape+pose pipeline vs. joint prediction. The trade-off is modularity vs. consistency—pipelines allow mixing different methods but lose the benefit of joint reasoning; SAM 3D's joint prediction ensures shape and pose are mutually consistent."
+    "explanation": "Pure watch time can promote addictive but low-quality content and bias toward longer videos. Quality-adjusted watch time combines watch time with signals like ratings, completion rates, and sharing behavior to optimize for 'time well spent.'"
   },
   {
-    "id": 87,
-    "source": "SAM 3D Objects",
-    "context": "Input: Predicted and ground truth meshes\nGoal: Measure rotation accuracy specifically",
-    "question": "What does the ICP-Rotation metric measure?",
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "What is the purpose of the multi-stage architecture in recommendation systems?",
     "options": {
-      "A": "Image quality",
-      "B": "Rotation error in degrees after optimal alignment",
-      "C": "Color precision",
-      "D": "Training speed"
+      "A": "To make the system more complex",
+      "B": "To efficiently filter billions of candidates down to the best few through progressively more expensive ranking",
+      "C": "To increase latency",
+      "D": "To use more servers"
     },
     "answer": "B",
-    "explanation": "ICP (Iterative Closest Point) alignment then measure residual rotation. The trade-off is metric interpretability vs. completeness—raw rotation error is intuitive (degrees off) but requires alignment; ICP provides that alignment baseline."
+    "explanation": "With billions of videos and users, you can't run expensive models on everything. Candidate generators produce O(10k) candidates, a light ranker filters to O(100) optimizing for recall, then a heavy ranker scores the final set for precision."
   },
   {
-    "id": 88,
-    "source": "SAM 3D Objects",
-    "context": "Input: Need to track model improvement over time\nGoal: Quantify progress meaningfully",
-    "question": "Why does SAM 3D use Elo ratings to track historical model improvements?",
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "Why might candidate generators with limited context be highly cacheable?",
     "options": {
-      "A": "It's a gaming reference",
-      "B": "Elo provides a continuous scale where differences map to win probabilities",
-      "C": "It's faster to compute",
-      "D": "It uses less storage"
+      "A": "They use less memory",
+      "B": "Universal generators (like 'top 10k videos') can be pre-computed and reused across users",
+      "C": "They're faster to compute",
+      "D": "They don't need databases"
     },
     "answer": "B",
-    "explanation": "Use Elo rating system. The trade-off is interpretability vs. simplicity—raw win rates are hard to compare across different matchups; Elo provides a unified scale where 400 points = 10:1 odds, enabling fair comparison."
+    "explanation": "Candidate generators with limited context - like 'top 10k platform videos' - don't change per user and can be pre-computed and cached. This is a key ingredient for scaling to billions of users and requests."
   },
   {
-    "id": 89,
-    "source": "SAM 3D Objects",
-    "context": "Input: Historical checkpoints over development\nGoal: Validate the training approach",
-    "question": "What does the near-linear Elo scaling in Figure 10a demonstrate?",
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "What is the key priority for the light ranker in recommendation systems?",
     "options": {
-      "A": "Random fluctuation",
-      "B": "Consistent improvement from cumulative training stages and data engine iterations",
-      "C": "Model degradation",
-      "D": "Hardware improvements"
+      "A": "High precision",
+      "B": "High recall - don't discard potentially great recommendations",
+      "C": "High latency",
+      "D": "Complex architecture"
     },
     "answer": "B",
-    "explanation": "Track Elo over time. The trade-off validated is development complexity vs. payoff—multi-stage training with data engine iteration is complex but the linear Elo improvement confirms each component contributes measurable gains."
+    "explanation": "The light ranker's job is to filter candidates while optimizing for recall - ensuring we don't discard videos that might end up being great recommendations. Precision is the heavy ranker's job. Missing a great video at this stage can't be recovered."
   },
   {
-    "id": 90,
-    "source": "SAM 3D Objects",
-    "context": "Input: Cascaded training stages with metrics\nGoal: Understand contribution of each stage",
-    "question": "Why does Table 4 show diminishing returns for later training stages?",
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "Why might a tree-based model (GBDT) be preferred for the light ranker?",
     "options": {
-      "A": "Bugs in the code",
-      "B": "Each stage addresses remaining errors, which become progressively harder to fix",
-      "C": "Less data",
-      "D": "Smaller models"
+      "A": "Trees are more accurate",
+      "B": "They run on CPU with sub-millisecond latency, enabling processing of billions of candidates economically",
+      "C": "Trees are more interpretable",
+      "D": "GPUs can't handle ranking"
     },
     "answer": "B",
-    "explanation": "Ablation showing incremental improvements. The trade-off is effort vs. marginal gain—early stages fix common errors for large improvements; later stages (Art-3DO, DPO) address subtle issues with smaller but still valuable gains."
+    "explanation": "With heavy compute pressure and lower precision requirements, GBDTs (XGBoost, LightGBM) can run on economical CPUs with sub-millisecond latency. This allows churning through billions of candidates. GPUs are saved for the heavy ranker."
   },
   {
-    "id": 91,
-    "source": "SAM 3D Objects",
-    "context": "Input: Need to generate complex 3D outputs\nGoal: Efficient and high-quality 3D generation",
-    "question": "Why does SAM 3D use VAE latent space rather than direct mesh prediction?",
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "What is a 'two-tower' architecture and when is it used?",
     "options": {
-      "A": "It's simpler",
-      "B": "Latent space enables efficient generative modeling and consistent structured representations",
-      "C": "It uses less memory",
-      "D": "It's faster at inference"
+      "A": "An architecture with two data centers",
+      "B": "Parallel towers for user and item embeddings, trained with triplet loss for efficient retrieval",
+      "C": "An architecture with two databases",
+      "D": "Two separate models for different users"
     },
     "answer": "B",
-    "explanation": "Generate in VAE latent space then decode. The trade-off is representation complexity vs. generation quality—direct mesh prediction is hard due to variable topology; VAE latents provide fixed-size, structured representations that flow models can generate effectively."
+    "explanation": "Two-tower architectures train parallel towers to produce embeddings for users and items using triplet loss. This enables efficient retrieval via vector similarity search. Common for candidate generation where you need fast approximate matching."
   },
   {
-    "id": 92,
-    "source": "SAM 3D Objects",
-    "context": "Input: Coarse 64³ shape from Geometry model\nGoal: Add geometric detail and texture efficiently",
-    "question": "What is the purpose of the sparse latent flow transformer in the Texture & Refinement model?",
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "What is the purpose of multi-task learning in the heavy ranker?",
     "options": {
       "A": "To increase model size",
-      "B": "To efficiently process only active voxels rather than the full volume",
-      "C": "To reduce quality",
-      "D": "To slow down training"
+      "B": "Multiple prediction heads (watch time, clicks, likes, shares) act as regularizers and provide richer signals",
+      "C": "To slow down training",
+      "D": "To reduce accuracy"
     },
     "answer": "B",
-    "explanation": "Sparse transformer operating on active voxels only. The trade-off is computation vs. resolution—dense processing of high-res volumes is expensive; sparse attention only computes on occupied regions, enabling detail refinement at practical cost."
+    "explanation": "Predicting multiple outcomes (watch time, CTR, like probability, share probability, completion rate) provides: regularization against overfitting to any single metric, auxiliary training signals, better cold-start handling, and inputs to the value model."
   },
   {
-    "id": 93,
-    "source": "SAM 3D Objects",
-    "context": "Input: Single learned latent representation\nGoal: Support diverse downstream applications",
-    "question": "Why does SAM 3D support both mesh and 3D Gaussian splat outputs?",
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "Why is DLRM (Deep Learning Recommendation Model) better than a simple MLP for recommendations?",
     "options": {
-      "A": "To confuse users",
-      "B": "Different applications need different representations—meshes for editing, splats for novel view synthesis",
-      "C": "It was accidental",
-      "D": "To use more storage"
+      "A": "It's always faster",
+      "B": "It treats sparse (categorical) and dense (numerical) features differently through separate towers",
+      "C": "It's simpler to implement",
+      "D": "It uses less data"
     },
     "answer": "B",
-    "explanation": "Two decoders sharing the same encoder/latent space. The trade-off is universality vs. specialization—meshes are standard for graphics/robotics, splats excel at view synthesis; shared latents enable both without retraining."
+    "explanation": "MLPs simply concatenate all features, but DLRM uses separate internal 'towers' for sparse and dense features before fusion. This handles the heterogeneity better - categorical embeddings (creator_id) and numerical features (view_count) have different characteristics."
   },
   {
-    "id": 94,
-    "source": "SAM 3D Objects",
-    "context": "Input: Novel objects not in training set\nGoal: Generalize to unseen object categories",
-    "question": "What enables SAM 3D to handle objects it has never seen before?",
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "What advantage do transformers provide for recommendation ranking over DLRM?",
     "options": {
-      "A": "Memorization of all objects",
-      "B": "Objects are composed of parts and shapes learned during training that generalize compositionally",
-      "C": "Internet lookup",
-      "D": "User specification"
+      "A": "They're always faster",
+      "B": "They can model sequences with temporal order and capture complex interactions between items in history",
+      "C": "They use less memory",
+      "D": "They don't need training data"
     },
     "answer": "B",
-    "explanation": "Learn compositional shape vocabulary. The trade-off is specificity vs. generalization—memorizing exact objects wouldn't generalize; learning parts and shapes that compose allows reconstructing novel objects from familiar components."
+    "explanation": "DLRM treats features as a bag with no temporal ordering. Transformers can model user history as a sequence, attending to interactions between items. This captures patterns like 'users who watch A then B tend to like C' that bag-of-features approaches miss."
   },
   {
-    "id": 95,
-    "source": "SAM 3D Objects",
-    "context": "Input: Image with multiple objects\nGoal: Reconstruct user-specified object",
-    "question": "Why is mask-following important for SAM 3D's practical use?",
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "What is the role of the re-ranking layer in recommendation systems?",
     "options": {
-      "A": "It's not important",
-      "B": "Users can specify exactly which object to reconstruct in multi-object scenes",
-      "C": "It speeds up training",
-      "D": "It reduces memory"
+      "A": "To re-run the ranking model",
+      "B": "To apply the value model, ensure diversity, and handle business rules like creator promotion",
+      "C": "To compress the results",
+      "D": "To store the rankings"
     },
     "answer": "B",
-    "explanation": "Condition on mask input. The trade-off is automation vs. control—fully automatic methods might reconstruct the wrong object; mask conditioning gives users precise control over which object to 3Dfy."
+    "explanation": "Re-ranking optimizes for the overall slate by: applying the value model to balance engagement/creator success/platform health, ensuring diversity, handling special cases (new creator promotion, viral content), and avoiding showing similar videos consecutively."
   },
   {
-    "id": 96,
-    "source": "SAM 3D Objects",
-    "context": "Input: Conditional generation at inference\nGoal: Outputs that closely match input image/mask",
-    "question": "What role does CFG (Classifier-Free Guidance) play in SAM 3D?",
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "Why might explicit user 'interests' be less useful than implicit behavioral signals?",
     "options": {
-      "A": "Classification",
-      "B": "Strengthening conditioning signal for higher quality outputs aligned with input",
-      "C": "File formatting",
-      "D": "Memory management"
+      "A": "Users don't have interests",
+      "B": "Users often don't accurately know what they enjoy - revealed preferences differ from stated preferences",
+      "C": "Explicit interests are private",
+      "D": "They're harder to collect"
     },
     "answer": "B",
-    "explanation": "Apply CFG to balance unconditional and conditional predictions. The trade-off is diversity vs. fidelity—pure conditional sampling might be noisy; CFG with weight 2.0 pushes outputs to more strongly match the conditioning."
+    "explanation": "Users often don't have a solid handle on what they truly enjoy - there's a gap between explicit and 'revealed' preferences. Behavioral signals (what they actually watch and engage with) are more reliable than what they say they want."
   },
   {
-    "id": 97,
-    "source": "SAM 3D Objects",
-    "context": "Input: Trained model being distilled\nGoal: Add shortcut capability without degrading existing quality",
-    "question": "Why does the shortcut distillation initialize step-size embedder weights to zero?",
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "What signals indicate user dissatisfaction that might inform negative training examples?",
     "options": {
-      "A": "Random choice",
-      "B": "Ensures the model initially behaves identically to the pre-distillation model",
-      "C": "To save memory",
-      "D": "To increase speed"
+      "A": "Watching more videos",
+      "B": "Leaving the platform after watching a video (user attrition signal)",
+      "C": "Sharing videos",
+      "D": "Subscribing to channels"
     },
     "answer": "B",
-    "explanation": "Zero-initialize new step-size parameters. The trade-off is stability vs. flexibility—random initialization would disrupt learned behavior; zero init means d=0 recovers original model exactly, and shortcut capability is learned incrementally."
+    "explanation": "Users who leave the platform after watching a video ('nope I'm done') provide strong implicit negative signals. This is more informative than going to another video (might just be browsing). These goldmine signals help train what NOT to recommend."
   },
   {
-    "id": 98,
-    "source": "SAM 3D Objects",
-    "context": "Input: Robot needing 3D scene understanding\nGoal: Enable real-time 3D perception from camera",
-    "question": "What makes SAM 3D suitable for robotics applications?",
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "Why is matrix factorization or collaborative filtering considered outdated for modern recommendation systems?",
     "options": {
-      "A": "It only works with robots",
-      "B": "Single-image input, joint shape+pose prediction, and sub-second inference after distillation",
-      "C": "It's very large",
-      "D": "It requires special hardware"
+      "A": "They're too accurate",
+      "B": "Most important applications have graduated to more sophisticated approaches like transformers and deep learning",
+      "C": "They're too fast",
+      "D": "They don't exist anymore"
     },
     "answer": "B",
-    "explanation": "Fast single-image 3D reconstruction with layout. The trade-off is information vs. practicality—multi-view methods need robot movement; SAM 3D gives instant 3D understanding from any single camera frame at interactive speeds."
+    "explanation": "While matrix factorization and collaborative filtering appear in much online material, they're not state-of-the-art anymore. Modern applications at scale use deep learning approaches like DLRM or transformers that can model complex feature interactions and sequences."
   },
   {
-    "id": 99,
-    "source": "SAM 3D Objects",
-    "context": "Input: Large-scale 3D assets of variable quality\nGoal: Effective pretraining",
-    "question": "Why does SAM 3D filter Iso-3DO pretraining data for geometry quality?",
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "What is 'hard negative sampling' in training two-tower embedding models?",
     "options": {
-      "A": "To reduce dataset size",
-      "B": "Poor quality meshes (degenerate shapes, outliers) can harm model learning even at scale",
-      "C": "To speed up training",
-      "D": "To change colors"
+      "A": "Sampling difficult users",
+      "B": "Biasing negative samples toward videos the user might like but didn't - near misses are more informative",
+      "C": "Removing negative samples",
+      "D": "Using only negative samples"
     },
     "answer": "B",
-    "explanation": "Rule-based filtering for geometry quality. The trade-off is quantity vs. quality—more data usually helps but degenerate meshes (point-like structures, flat sheets) teach wrong priors; filtering removes harmful examples while keeping useful diversity."
+    "explanation": "Random negatives are often obviously dissimilar. Hard negative sampling biases toward videos we'd expect the user to like but they didn't engage with. These 'near misses' provide more informative training signal than random negatives."
   },
   {
-    "id": 100,
-    "source": "SAM 3D Objects",
-    "context": "Input: Layout prediction on challenging real-world benchmark\nGoal: Evaluate practical 3D scene understanding",
-    "question": "What is the significance of SAM 3D achieving ADD-S @ 0.1 of 77% compared to 2% for baselines on SA-3DAO?",
+    "source": "[Hello Interview] ML System Design Framework",
+    "question": "What question types should you ask during problem clarification in an ML interview?",
     "options": {
-      "A": "It's a minor improvement",
-      "B": "It demonstrates SAM 3D's breakthrough capability for joint shape and layout prediction in real-world conditions",
-      "C": "It indicates worse performance",
-      "D": "It measures color accuracy"
+      "A": "Questions about the interviewer's background",
+      "B": "Questions about users, pain points, scale, latency requirements, and existing solutions",
+      "C": "Questions about salary and benefits",
+      "D": "Questions about office location"
     },
     "answer": "B",
-    "explanation": "ADD-S @ 0.1 threshold metric. The trade-off this reveals is joint vs. pipeline approaches—2% for baselines means they essentially fail on real-world layout; 77% for SAM 3D demonstrates a qualitative leap in capability for visually grounded 3D reconstruction."
+    "explanation": "Start by asking targeted questions about: who the users are, what their pain points are, current solutions, scale requirements (users, requests per second), whether inference is real-time or batch, and specific constraints like latency or privacy."
+  },
+  {
+    "source": "[Hello Interview] ML System Design Framework",
+    "question": "What is a 'staff-level' behavior during problem clarification?",
+    "options": {
+      "A": "Asking many generic questions",
+      "B": "Immediately recognizing the core challenge and probing around things teams will work on for years",
+      "C": "Skipping clarification entirely",
+      "D": "Only asking about the model architecture"
+    },
+    "answer": "B",
+    "explanation": "Strong staff-level candidates quickly identify what makes a problem interesting or challenging and start probing around those areas. They demonstrate they could lead a team working on this problem for years, not just solve it once."
+  },
+  {
+    "source": "[Hello Interview] ML System Design Evaluation",
+    "question": "What is MRR (Mean Reciprocal Rank) sensitive to in search/recommendation evaluation?",
+    "options": {
+      "A": "Total number of results",
+      "B": "The rank of the very first relevant item",
+      "C": "The last relevant item",
+      "D": "The number of queries"
+    },
+    "answer": "B",
+    "explanation": "MRR is sensitive to the position of the first relevant item - it's the mean of 1/rank of first relevant result. Great for 'top pick' use-cases where you mainly care about whether the best result appears first."
+  },
+  {
+    "source": "[Hello Interview] ML System Design Evaluation",
+    "question": "What is 'query ambiguity' and how can it be addressed in search evaluation?",
+    "options": {
+      "A": "Users make typos; use spell correction",
+      "B": "Many queries have multiple interpretations; use intent classification and result diversification",
+      "C": "Queries are too long; truncate them",
+      "D": "Users don't search; send push notifications"
+    },
+    "answer": "B",
+    "explanation": "Queries like 'jaguar' could mean the animal, car, or sports team. Address this with intent classification systems, diversification strategies that cover multiple intents, and analyzing click patterns to understand intent distribution."
+  },
+  {
+    "source": "[Hello Interview] ML System Design Evaluation",
+    "question": "Why is coverage an important metric for recommender systems?",
+    "options": {
+      "A": "It measures code coverage",
+      "B": "It measures what proportion of the catalog is surfaced - critical for cold-start and long-tail content",
+      "C": "It measures server coverage",
+      "D": "It measures geographic coverage"
+    },
+    "answer": "B",
+    "explanation": "Coverage measures what proportion of the catalog is shown over time. It's critical for cold-start sellers and long-tail content - if the system only recommends popular items, new content never gets discovered and the system becomes stale."
+  },
+  {
+    "source": "[Hello Interview] Harmful Content Detection",
+    "question": "What does 'calibration' mean for a content moderation classifier?",
+    "options": {
+      "A": "Adjusting the screen brightness",
+      "B": "Ensuring the model's output scores represent true probabilities of being harmful",
+      "C": "Measuring model size",
+      "D": "Setting the threshold to 0.5"
+    },
+    "answer": "B",
+    "explanation": "A calibrated classifier's scores represent true probabilities - if the model says 95% confidence, it should be correct 95% of the time. This is essential when precision guardrails (e.g., 95% precision for auto-delete) are part of the business objective."
+  },
+  {
+    "source": "[Hello Interview] Harmful Content Detection",
+    "question": "Why are creator features useful for harmful content detection?",
+    "options": {
+      "A": "Creators always post harmful content",
+      "B": "User history and patterns indicate likelihood of posting harmful content, even before examining content",
+      "C": "Creators have more followers",
+      "D": "Creator features are easier to compute"
+    },
+    "answer": "B",
+    "explanation": "Some users are more/less likely to author harmful content based on their history. User embeddings capture profile richness (grandma in cat group vs. teenager in death videos group), and real-time tallies capture recent behavior changes."
+  },
+  {
+    "source": "[Hello Interview] Bot Detection",
+    "question": "Why might appeal outcomes be valuable training data for bot detection?",
+    "options": {
+      "A": "Appeals are automated",
+      "B": "Successful appeals provide high-confidence negative labels (accounts incorrectly flagged as bots)",
+      "C": "Appeals increase revenue",
+      "D": "Appeals are faster to process"
+    },
+    "answer": "B",
+    "explanation": "When restricted accounts successfully appeal, we get high-confidence negative labels - these were legitimate users we incorrectly flagged. This helps calibrate the model and reduce false positives."
+  },
+  {
+    "source": "[Hello Interview] Bot Detection",
+    "question": "What temporal features help distinguish bots from human users?",
+    "options": {
+      "A": "Time zone",
+      "B": "Activity patterns like circadian rhythms, burst detection, and click timing precision",
+      "C": "Account creation date only",
+      "D": "Calendar holidays"
+    },
+    "answer": "B",
+    "explanation": "Humans show clear daily patterns (circadian rhythms), natural variance in click timing, and realistic error rates (typos). Bots often have too-precise timing, inhuman activity bursts, and lack natural sleep gaps. These features resist adversarial adaptation."
+  },
+  {
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "What is a 'value model' in recommendation systems?",
+    "options": {
+      "A": "A model that predicts video value",
+      "B": "A layer that combines multiple prediction outputs to balance engagement, creator success, and platform health",
+      "C": "A model that predicts user value",
+      "D": "A pricing model"
+    },
+    "answer": "B",
+    "explanation": "The value model in re-ranking combines outputs from multiple prediction heads (watch time, CTR, like probability, etc.) to optimize for overall objectives including user engagement, creator sustainability, and platform health - not just any single metric."
+  },
+  {
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "Why is the current video the user is watching important context for 'up next' recommendations?",
+    "options": {
+      "A": "It's easier to process",
+      "B": "The current video signals user intent and interests in this session - recommendations should be contextually relevant",
+      "C": "It's required by the algorithm",
+      "D": "It reduces latency"
+    },
+    "answer": "B",
+    "explanation": "The current video is a strong signal of what the user wants to watch next. A user watching a cooking tutorial probably wants more cooking content, not random popular videos. Context makes recommendations immediately relevant."
+  },
+  {
+    "source": "[Hello Interview] ML System Design Framework",
+    "question": "What is the risk of not mentioning research from the last 5-7 years in model selection?",
+    "options": {
+      "A": "No risk at all",
+      "B": "Interviewers may see your knowledge as dated",
+      "C": "Old models are always better",
+      "D": "Research doesn't matter in interviews"
+    },
+    "answer": "B",
+    "explanation": "While you don't need cutting-edge NeurIPS papers, missing research from the last 5-7 years risks appearing dated. Interviewers want to see awareness of modern approaches (transformers, DLRM, etc.) while also valuing practical approaches that have stood the test of time."
+  },
+  {
+    "source": "[Hello Interview] ML System Design Framework",
+    "question": "Why should you discuss both qualitative and quantitative evaluation approaches?",
+    "options": {
+      "A": "To use more time",
+      "B": "Quantitative metrics don't always correlate with perceptual quality; user studies capture what matters to humans",
+      "C": "Qualitative is always better",
+      "D": "Quantitative is always better"
+    },
+    "answer": "B",
+    "explanation": "Metrics like vertex error might score poorly for small misalignments that look fine to humans, or vice versa. Combining quantitative benchmarks with user studies trades evaluation complexity for comprehensive validation that captures both accuracy and perceptual quality."
+  },
+  {
+    "source": "[Hello Interview] ML System Design Evaluation",
+    "question": "What is the 'long-tail' challenge in search evaluation?",
+    "options": {
+      "A": "Queries are too long",
+      "B": "Most queries are unique or rare, making it impractical to collect relevance judgments for every query",
+      "C": "Results load slowly",
+      "D": "Users have long attention spans"
+    },
+    "answer": "B",
+    "explanation": "The vast majority of search queries are unique or very rare (the 'long tail'). Active learning, query clustering, synthetic query generation, and transfer learning from head queries help address evaluation of tail queries."
+  },
+  {
+    "source": "[Hello Interview] Harmful Content Detection",
+    "question": "What is the advantage of multi-modal transformer architectures for content moderation?",
+    "options": {
+      "A": "They're simpler to implement",
+      "B": "True multi-modal learning with attention between text, images, and features catches subtle cross-modal harmful patterns",
+      "C": "They use less compute",
+      "D": "They only need text"
+    },
+    "answer": "B",
+    "explanation": "Multi-modal transformers can process text, images, and tabular features simultaneously with attention between all modalities. This catches harmful content where context matters - an image that's benign alone but harmful with certain text."
+  },
+  {
+    "source": "[Hello Interview] Bot Detection",
+    "question": "What is the benefit of using cross-attention between graph and sequence embeddings in bot detection?",
+    "options": {
+      "A": "It's faster",
+      "B": "It lets the timeline query the graph ('does anyone in my cluster post with this rhythm?') and vice-versa",
+      "C": "It uses less memory",
+      "D": "It's simpler"
+    },
+    "answer": "B",
+    "explanation": "Cross-attention between the graph (social network structure) and sequence (temporal behavior) branches enables queries like 'does anyone else in my cluster post with this rhythm?' This identifies coordinated bot networks that share both structural and behavioral patterns."
+  },
+  {
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "What contextual features help personalize recommendations beyond user history?",
+    "options": {
+      "A": "Only watch history",
+      "B": "Time of day, device type, previous searches, and current session behavior",
+      "C": "Only demographics",
+      "D": "Only location"
+    },
+    "answer": "B",
+    "explanation": "Context significantly impacts relevance: users might want short videos on mobile during commute but longer content on TV at night. Session context (recent searches, current video), time of day, and device type all help tailor recommendations."
+  },
+  {
+    "source": "[Hello Interview] ML System Design Framework",
+    "question": "What does data drift mean and why is it a common cause of model degradation?",
+    "options": {
+      "A": "Data moving between servers",
+      "B": "The distribution of input data changing over time, causing models trained on old data to perform poorly",
+      "C": "Data being deleted",
+      "D": "Data being duplicated"
+    },
+    "answer": "B",
+    "explanation": "Data drift occurs when the distribution of input data changes over time (e.g., user behavior evolves, new content types emerge). Models trained on old distributions may perform poorly on new data. It's a common cause of gradual performance degradation."
+  },
+  {
+    "source": "[Hello Interview] ML System Design Evaluation",
+    "question": "What is counterfactual evaluation and why is it useful for recommender systems?",
+    "options": {
+      "A": "Evaluating imaginary models",
+      "B": "Estimating what would have happened under different recommendations using importance weighting",
+      "C": "Counting facts in the data",
+      "D": "Evaluating counter-examples"
+    },
+    "answer": "B",
+    "explanation": "Counterfactual evaluation estimates how a new policy (recommender) would have performed on data collected under an old policy. It uses importance weighting to adjust for the difference in what was shown. This enables offline evaluation without live A/B tests."
+  },
+  {
+    "source": "[Hello Interview] Harmful Content Detection",
+    "question": "Why might 'user satisfaction scores' or user reports have limitations as sole metrics for content moderation?",
+    "options": {
+      "A": "Users always give accurate feedback",
+      "B": "Reports can be adversarial (disagreeing with benign content) or incorrect (unfamiliar with policies)",
+      "C": "Reports are too accurate",
+      "D": "Users don't report anything"
+    },
+    "answer": "B",
+    "explanation": "User reports aren't perfect: they may be adversarial (reporting benign content because the reporter disagrees with it) or incorrect (unfamiliar with platform policies). They're valuable signals but shouldn't be the sole metric."
+  },
+  {
+    "source": "[Hello Interview] Bot Detection",
+    "question": "Why is bot detection compute often 'net positive' for platforms?",
+    "options": {
+      "A": "Bots generate revenue",
+      "B": "The cost of detecting and preventing bot activity is often less than the compute cost of serving bot traffic",
+      "C": "Bots pay for compute",
+      "D": "Detection is free"
+    },
+    "answer": "B",
+    "explanation": "Bot remediation frequently has positive net impact on compute - detecting and blocking bots consumes less resources than serving their traffic (which can be massive). However, this doesn't mean detection can be inefficient."
+  },
+  {
+    "source": "[Hello Interview] Video Recommendation",
+    "question": "What is the 'cold start' problem and how do multiple prediction heads help?",
+    "options": {
+      "A": "Servers being too cold",
+      "B": "New items/users have no history; multi-task learning leverages correlations between metrics to make predictions",
+      "C": "Videos starting to play slowly",
+      "D": "Models starting training"
+    },
+    "answer": "B",
+    "explanation": "Cold start refers to new items or users with no interaction history. Multi-task learning helps by leveraging correlations - if we can predict one signal (e.g., from content features), related signals (engagement) can be inferred through learned correlations."
   }
 ]

@@ -63,7 +63,7 @@ def init_db():
 
 
 def get_question_stats():
-    """Get statistics for all questions."""
+    """Get statistics for all questions (latest attempt only)."""
     db = get_db()
 
     # Get the latest attempt for each question
@@ -71,8 +71,8 @@ def get_question_stats():
         SELECT question_id, selected_answer, is_correct, attempted_at
         FROM attempts a1
         WHERE attempted_at = (
-            SELECT MAX(attempted_at) 
-            FROM attempts a2 
+            SELECT MAX(attempted_at)
+            FROM attempts a2
             WHERE a2.question_id = a1.question_id
         )
         ORDER BY question_id
@@ -89,25 +89,113 @@ def get_question_stats():
     return stats
 
 
-def get_next_question_id():
-    """Get next question ID, prioritizing unanswered questions."""
+def get_attempt_counts():
+    """Get correct/wrong attempt counts for each question (for Anki-like ranking)."""
+    db = get_db()
+
+    rows = db.execute("""
+        SELECT question_id,
+               SUM(CASE WHEN is_correct THEN 1 ELSE 0 END) as correct_count,
+               SUM(CASE WHEN is_correct THEN 0 ELSE 1 END) as wrong_count
+        FROM attempts
+        GROUP BY question_id
+    """).fetchall()
+
+    counts = {}
+    for row in rows:
+        correct = row["correct_count"]
+        wrong = row["wrong_count"]
+        total = correct + wrong
+        # Calculate wrong ratio: wrong / (correct + wrong)
+        ratio = wrong / total if total > 0 else 0
+        counts[row["question_id"]] = {
+            "correct": correct,
+            "wrong": wrong,
+            "total": total,
+            "wrong_ratio": ratio,
+        }
+
+    return counts
+
+
+def get_categories():
+    """Get ordered list of unique categories/sources."""
+    seen = []
+    for q in QUESTIONS:
+        source = q.get("source", "Unknown")
+        if source not in seen:
+            seen.append(source)
+    return seen
+
+
+def get_questions_by_category():
+    """Get questions grouped by category, preserving order."""
+    categories = {}
+    for idx, q in enumerate(QUESTIONS):
+        source = q.get("source", "Unknown")
+        if source not in categories:
+            categories[source] = []
+        categories[source].append(idx)
+    return categories
+
+
+def get_next_question_id(source=None):
+    """Get next question ID using Anki-like ranking algorithm.
+
+    Priority:
+    1. Unanswered questions (in order within category)
+    2. Answered questions sorted by wrong_ratio = wrong / (correct + wrong)
+
+    Args:
+        source: If provided, only consider questions from this source/category.
+    """
     stats = get_question_stats()
-    all_ids = list(range(len(QUESTIONS)))
+    attempt_counts = get_attempt_counts()
+    categories = get_categories()
+    questions_by_cat = get_questions_by_category()
 
-    # Separate into unanswered, incorrect, and correct
-    unanswered = [qid for qid in all_ids if qid not in stats]
-    incorrect = [
-        qid for qid in all_ids if qid in stats and not stats[qid]["is_correct"]
-    ]
-    correct = [qid for qid in all_ids if qid in stats and stats[qid]["is_correct"]]
+    def get_next_in_category(cat_ids):
+        """Get next question in a category using Anki-like ranking."""
+        # Priority 1: Unanswered questions (first in order)
+        unanswered = [qid for qid in cat_ids if qid not in stats]
+        if unanswered:
+            return unanswered[0]
 
-    # Priority: unanswered > incorrect > correct
-    if unanswered:
-        return random.choice(unanswered)
-    elif incorrect:
-        return random.choice(incorrect)
-    else:
-        return random.choice(correct) if correct else random.choice(all_ids)
+        # Priority 2: Answered questions sorted by wrong_ratio (highest first)
+        answered = [qid for qid in cat_ids if qid in stats]
+        if answered:
+            # Sort by wrong_ratio descending, then by question order
+            answered_with_ratio = []
+            for qid in answered:
+                ratio = attempt_counts.get(qid, {}).get("wrong_ratio", 0)
+                answered_with_ratio.append((qid, ratio))
+
+            # Sort by ratio descending
+            answered_with_ratio.sort(key=lambda x: -x[1])
+
+            # Return the question with highest wrong ratio
+            return answered_with_ratio[0][0]
+
+        return None
+
+    # If source is specified, only look in that category
+    if source and source in questions_by_cat:
+        cat_ids = questions_by_cat[source]
+        next_id = get_next_in_category(cat_ids)
+        if next_id is not None:
+            return next_id
+        # Category complete, return first question of this category
+        return cat_ids[0] if cat_ids else 0
+
+    # Otherwise, find first category with unanswered/incorrect questions
+    for cat in categories:
+        cat_ids = questions_by_cat.get(cat, [])
+        next_id = get_next_in_category(cat_ids)
+        if next_id is not None:
+            return next_id
+
+    # All complete, return first question
+    return 0
 
 
 def record_attempt(question_id, selected_answer, is_correct):
@@ -158,43 +246,83 @@ def index():
 
 @app.route("/dashboard")
 def dashboard():
-    """Show dashboard with all questions and their status."""
+    """Show dashboard with all questions grouped by category."""
     stats = get_question_stats()
+    attempt_counts = get_attempt_counts()
     overall = get_overall_stats()
+    categories = get_categories()
+    questions_by_cat = get_questions_by_category()
 
-    # Build question list with status
-    questions_with_status = []
-    for idx, q in enumerate(QUESTIONS):
-        status = "unanswered"
-        if idx in stats:
-            status = "correct" if stats[idx]["is_correct"] else "incorrect"
+    # Build categories with questions and stats
+    categories_data = []
+    for cat in categories:
+        cat_question_ids = questions_by_cat.get(cat, [])
+        cat_questions = []
+        cat_correct = 0
+        cat_incorrect = 0
+        cat_unanswered = 0
 
-        questions_with_status.append(
+        for idx in cat_question_ids:
+            q = QUESTIONS[idx]
+            status = "unanswered"
+            if idx in stats:
+                status = "correct" if stats[idx]["is_correct"] else "incorrect"
+
+            if status == "correct":
+                cat_correct += 1
+            elif status == "incorrect":
+                cat_incorrect += 1
+            else:
+                cat_unanswered += 1
+
+            # Get attempt counts for Anki-like stats
+            q_attempts = attempt_counts.get(idx, {})
+
+            cat_questions.append(
+                {
+                    "id": idx,
+                    "question": q["question"],
+                    "source": q["source"],
+                    "status": status,
+                    "correct_answer": q["answer"] if status != "unanswered" else None,
+                    "selected_answer": stats[idx]["selected_answer"]
+                    if idx in stats
+                    else None,
+                    "attempts": {
+                        "correct": q_attempts.get("correct", 0),
+                        "wrong": q_attempts.get("wrong", 0),
+                        "total": q_attempts.get("total", 0),
+                        "wrong_ratio": round(q_attempts.get("wrong_ratio", 0) * 100),
+                    },
+                }
+            )
+
+        categories_data.append(
             {
-                "id": idx,
-                "question": q["question"],
-                "source": q["source"],
-                "status": status,
-                "correct_answer": q["answer"] if status != "unanswered" else None,
-                "selected_answer": stats[idx]["selected_answer"]
-                if idx in stats
-                else None,
+                "name": cat,
+                "questions": cat_questions,
+                "total": len(cat_questions),
+                "correct": cat_correct,
+                "incorrect": cat_incorrect,
+                "unanswered": cat_unanswered,
+                "complete": cat_unanswered == 0 and cat_incorrect == 0,
             }
         )
 
     return render_template(
-        "dashboard.html", questions=questions_with_status, stats=overall
+        "dashboard.html", categories=categories_data, stats=overall
     )
 
 
 @app.route("/quiz")
 def quiz():
-    """Display a question (random, prioritizing unanswered)."""
+    """Display a question, following category order."""
     # Get question ID from URL or pick next one
     question_id = request.args.get("q", type=int)
+    source = request.args.get("source")
 
     if question_id is None:
-        question_id = get_next_question_id()
+        question_id = get_next_question_id(source=source)
         return redirect(url_for("quiz", q=question_id))
 
     if question_id < 0 or question_id >= len(QUESTIONS):
@@ -250,12 +378,18 @@ def submit_answer():
 @app.route("/next")
 def next_question():
     """Get next random question (prioritizing unanswered)."""
+    # Check if same source filtering is requested
+    same_source = request.args.get("same_source")
+    source = request.args.get("source") if same_source else None
+
     # Clear session answer state
     for key in list(session.keys()):
         if key.startswith(("answered_", "selected_", "correct_")):
             session.pop(key, None)
 
-    return redirect(url_for("quiz"))
+    # Get next question ID with optional source filter
+    question_id = get_next_question_id(source=source)
+    return redirect(url_for("quiz", q=question_id))
 
 
 @app.route("/question/<int:question_id>")
@@ -275,6 +409,69 @@ def reset():
     reset_all_progress()
     session.clear()
     return redirect(url_for("dashboard"))
+
+
+def save_questions():
+    """Save QUESTIONS to the JSON file."""
+    questions_path = Path(__file__).parent / "questions.json"
+    with open(questions_path, "w", encoding="utf-8") as f:
+        json.dump(QUESTIONS, f, indent=2, ensure_ascii=False)
+
+
+@app.route("/api/questions/import", methods=["POST"])
+def import_questions():
+    """Import questions from JSON. Accepts an array of question objects."""
+    global QUESTIONS
+
+    data = request.get_json()
+    if not data:
+        return {"error": "No JSON data provided"}, 400
+
+    if not isinstance(data, list):
+        return {"error": "Expected a JSON array of questions"}, 400
+
+    # Validate required fields
+    required_fields = ["source", "question", "options", "answer"]
+    for i, q in enumerate(data):
+        missing = [f for f in required_fields if f not in q]
+        if missing:
+            return {"error": f"Question {i}: missing fields {missing}"}, 400
+
+    # Add questions to the list
+    added_count = len(data)
+    QUESTIONS.extend(data)
+    save_questions()
+
+    return {"message": f"Successfully imported {added_count} questions", "total": len(QUESTIONS)}
+
+
+@app.route("/api/questions/<int:question_id>", methods=["DELETE"])
+def delete_question(question_id):
+    """Delete a question by its index."""
+    global QUESTIONS
+
+    if question_id < 0 or question_id >= len(QUESTIONS):
+        return {"error": "Question not found"}, 404
+
+    # Remove the question
+    deleted = QUESTIONS.pop(question_id)
+
+    # Clean up attempts for this question and re-index higher IDs
+    db = get_db()
+    db.execute("DELETE FROM attempts WHERE question_id = ?", (question_id,))
+    # Decrement question_id for all attempts with higher IDs
+    db.execute(
+        "UPDATE attempts SET question_id = question_id - 1 WHERE question_id > ?",
+        (question_id,),
+    )
+    db.commit()
+
+    save_questions()
+
+    return {
+        "message": f"Deleted question: {deleted['question'][:50]}...",
+        "remaining": len(QUESTIONS),
+    }
 
 
 def get_local_ip():
